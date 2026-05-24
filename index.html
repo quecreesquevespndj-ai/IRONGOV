@@ -3,299 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRON ATLAS NEW GENERATION</title>
+    <title>IRON ATLAS - Network Core</title>
     <style>
-        /* === ESTILOS BASE Y VARIABLES === */
         :root {
-            --bg-color: #050505;
-            --text-main: #e0e0e0;
-            --accent: #00e5ff;
-            --accent-glow: rgba(0, 229, 255, 0.4);
-            --nav-bg: rgba(5, 5, 5, 0.7);
+            --glow-color: #00ff66;
+            --bg-color: #050b07;
+            --panel-bg: rgba(10, 25, 15, 0.85);
+            --text-color: #e0ffd0;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Courier New', Courier, monospace; /* Fuente estilo consola/hacker */
+            font-family: 'Courier New', Courier, monospace;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
-            height: 100vh;
+            color: var(--text-color);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 255, 102, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 102, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
 
-        /* === FONDO ANIMADO DE NODOS === */
-        #network-canvas {
+        /* Efecto de línea de escaneo de monitor antiguo */
+        body::after {
+            content: " ";
+            display: block;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.6;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 99999;
+            opacity: 0.8;
+            pointer-events: none;
+            background-size: 100% 4px, 6px 100%;
         }
 
-        /* === BARRA DE MENÚ (Efecto Cristal) === */
-        nav {
-            position: fixed;
-            width: 100%;
-            top: 0;
-            display: flex;
-            justify-content: center;
-            padding: 20px 0;
-            background: var(--nav-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
-            z-index: 100;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links li a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
+        header {
+            text-align: center;
+            padding: 30px 15px;
             position: relative;
         }
 
-        .nav-links li a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--accent);
-            box-shadow: 0 0 10px var(--accent);
-            transition: width 0.3s ease;
+        /* LOGO CENTRALIZADO Y ANIMADO */
+        .logo-container {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 10px;
         }
 
-        .nav-links li a:hover {
-            color: var(--accent);
-            text-shadow: 0 0 8px var(--accent-glow);
+        .logo-main {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
+            letter-spacing: 5px;
+            animation: pulse 3s infinite alternate;
         }
 
-        .nav-links li a:hover::after {
-            width: 100%;
+        .logo-sub {
+            font-size: 0.85rem;
+            letter-spacing: 8px;
+            color: var(--glow-color);
+            text-transform: uppercase;
+            margin-top: 5px;
         }
 
-        /* === SECCIÓN PRINCIPAL (HERO) === */
+        /* CONTENEDOR PRINCIPAL RESPONSIVE */
         main {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-            margin-top: 80px;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
-        .title-container {
+        @media (min-width: 768px) {
+            main {
+                grid-template-columns: 2fr 1fr;
+            }
+            .full-width {
+                grid-column: span 2;
+            }
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid rgba(0, 255, 102, 0.3);
+            border-radius: 4px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.05);
             position: relative;
         }
 
-        h1 {
-            font-size: 4vw;
-            letter-spacing: 10px;
-            color: transparent;
-            -webkit-text-stroke: 1px var(--accent);
-            text-shadow: 0 0 20px var(--accent-glow);
-            animation: pulse 4s infinite alternate;
-            margin-bottom: 20px;
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: var(--glow-color);
+            box-shadow: 0 0 10px var(--glow-color);
         }
 
-        /* Efecto de escritura para la frase */
-        .typewriter-container {
-            display: inline-block;
+        .panel-title {
+            font-size: 1.1rem;
+            color: var(--glow-color);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-bottom: 1px dashed rgba(0, 255, 102, 0.2);
+            padding-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
         }
 
-        .typewriter-text {
-            font-size: 1.5vw;
-            color: #a0a0a0;
-            letter-spacing: 3px;
-            border-right: 2px solid var(--accent);
-            white-space: nowrap;
-            overflow: hidden;
-            animation: blinkCursor 0.75s step-end infinite;
+        /* SIMULADOR DE CONSOLA / TERMINAL */
+        .terminal-box {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 3px;
+            padding: 15px;
+            height: 250px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #00ff66;
         }
 
-        /* === ANIMACIONES === */
+        .terminal-line {
+            margin-bottom: 5px;
+            white-space: pre-wrap;
+        }
+
+        /* SECCIÓN ALIANZAS / INTEGRANTES */
+        .grid-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .grid-item {
+            background: rgba(0, 255, 102, 0.05);
+            border: 1px solid rgba(0, 255, 102, 0.15);
+            padding: 12px;
+            text-align: center;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .grid-item:hover {
+            background: rgba(0, 255, 102, 0.15);
+            border-color: var(--glow-color);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .grid-item .name {
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .grid-item .role {
+            font-size: 0.75rem;
+            color: rgba(0, 255, 102, 0.7);
+            margin-top: 4px;
+        }
+
+        /* ANIMACIONES */
         @keyframes pulse {
-            0% { text-shadow: 0 0 10px var(--accent-glow); -webkit-text-stroke: 1px rgba(0, 229, 255, 0.5); }
-            100% { text-shadow: 0 0 30px var(--accent), 0 0 50px var(--accent); -webkit-text-stroke: 1px var(--accent); }
+            0% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1.02); opacity: 1; box-shadow: 0 0 30px rgba(0, 255, 102, 0.2); }
         }
 
-        @keyframes blinkCursor {
-            from, to { border-color: transparent }
-            50% { border-color: var(--accent); }
+        /* Estilo barra de scroll al estilo retro */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-
-        /* Responsive para móviles */
-        @media (max-width: 768px) {
-            .nav-links { gap: 15px; flex-wrap: wrap; justify-content: center; }
-            h1 { font-size: 8vw; }
-            .typewriter-text { font-size: 4vw; }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 102, 0.3);
+            border-radius: 3px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Fondo interactivo -->
-    <canvas id="network-canvas"></canvas>
-
-    <!-- Menú de navegación -->
-    <nav>
-        <ul class="nav-links">
-            <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#herramientas">Herramientas</a></li>
-            <li><a href="#expedientes">Expedientes</a></li>
-            <li><a href="#canales">Canales</a></li>
-        </ul>
-    </nav>
-
-    <!-- Contenido principal -->
-    <main id="inicio">
-        <div class="title-container">
-            <h1>IRON ATLAS<br>NEW GENERATION</h1>
+    <header>
+        <div class="logo-container">
+            <div class="logo-main">IRON ATLAS</div>
+            <div class="logo-sub">SYSTEM CORE v9.0</div>
         </div>
-        <div class="typewriter-container">
-            <p class="typewriter-text" id="slogan"></p>
+    </header>
+
+    <main>
+        <div class="panel">
+            <div class="panel-title">
+                <span>[⚡] LIVE INTERFACE FEED</span>
+                <span style="color: #fff; font-size: 0.8rem;" id="live-timer">00:00:00</span>
+            </div>
+            <div class="terminal-box" id="terminal">
+                </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">[🛰️] NETWORK NODE STATUS</div>
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>AWS EIP ROTATION:</span> <span style="color: var(--glow-color);">ACTIVE (30m)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>TELEGRAM POLLING:</span> <span style="color: var(--glow-color);">ONLINE</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>BYPASS FIREWALL:</span> <span style="color: var(--glow-color);">SECURE</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>ANTI-SCRIPT SHIELD:</span> <span style="color: #ff3333; font-weight: bold; text-shadow: 0 0 5px #ff3333;">MAXIMUM</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">[👥] CORE OPERATORS / INTEGRANTES</div>
+            <div class="grid-list">
+                <div class="grid-item">
+                    <div class="name">ALVAREZ</div>
+                    <div class="role">Lead Dev / CyberSec</div>
+                </div>
+                <div class="grid-item">
+                    <div class="name">ROMERO</div>
+                    <div class="role">Net Admin</div>
+                </div>
+                <div class="grid-item">
+                    <div class="name">GARCIA</div>
+                    <div class="role">SysOp Intel</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">[🤝] RECOGNIZED ALLIANCES</div>
+            <div class="grid-list">
+                <div class="grid-item">
+                    <div class="name">GITHUB NODE</div>
+                    <div class="role">Repository Sync</div>
+                </div>
+                <div class="grid-item">
+                    <div class="name">ACH TELECOM</div>
+                    <div class="role">Validated Gateway</div>
+                </div>
+            </div>
         </div>
     </main>
 
-    <!-- === SCRIPTS === -->
     <script>
-        // 1. EFECTO DE MÁQUINA DE ESCRIBIR (HACKER)
-        const phrase = "LA VERDAD NO PUEDE SER ENCRIPTADA. NOSOTROS SOMOS LA LLAVE.";
-        const sloganElement = document.getElementById("slogan");
-        let i = 0;
+        // Efecto cascada de logs falsos para que se vea activo en cámara
+        const terminal = document.getElementById('terminal');
+        const logs = [
+            " [INFO] Inicializando pasarela de bypass...",
+            " [OK] Conexión establecida con nodo remoto en AWS.",
+            " [EIP] Rotación de Elastic IP completada con éxito.",
+            " [TG] Bot escuchando actualizaciones en Telegram...",
+            " [ADRES] Cargando estructura ASP.NET (__VIEWSTATE)...",
+            " [PSE] Sesión activa interceptada de forma segura.",
+            " [SHIELD] Intento de inspección externa mitigado por Anti-Script.",
+            " [OK] Base de datos optimizada y sincronizada con GitHub Enterprise.",
+            " [SYSTEM] Monitoreo de tráfico listo en puerto 3000..."
+        ];
 
-        function typeWriter() {
-            if (i < phrase.length) {
-                sloganElement.innerHTML += phrase.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100); // Velocidad de escritura
-            }
-        }
-        
-        // Iniciar escritura después de 1 segundo
-        setTimeout(typeWriter, 1000);
-
-        // 2. EFECTO DE RED DE NODOS EN EL FONDO (CANVAS ANIMATION)
-        const canvas = document.getElementById("network-canvas");
-        const ctx = canvas.getContext("2d");
-        
-        let particlesArray;
-
-        // Ajustar tamaño del canvas al tamaño de la ventana
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            init();
-        });
-
-        // Crear objeto Partícula (Nodo)
-        class Particle {
-            constructor(x, y, directionX, directionY, size, color) {
-                this.x = x;
-                this.y = y;
-                this.directionX = directionX;
-                this.directionY = directionY;
-                this.size = size;
-                this.color = color;
-            }
-            // Dibujar punto
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-            // Mover punto y comprobar bordes
-            update() {
-                if (this.x > canvas.width || this.x < 0) {
-                    this.directionX = -this.directionX;
-                }
-                if (this.y > canvas.height || this.y < 0) {
-                    this.directionY = -this.directionY;
-                }
-                this.x += this.directionX;
-                this.y += this.directionY;
-                this.draw();
-            }
-        }
-
-        // Conectar los puntos con líneas si están cerca
-        function connect() {
-            let opacityValue = 1;
-            for (let a = 0; a < particlesArray.length; a++) {
-                for (let b = a; b < particlesArray.length; b++) {
-                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
-                    + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-                    
-                    if (distance < (canvas.width / 7) * (canvas.height / 7)) {
-                        opacityValue = 1 - (distance / 20000);
-                        ctx.strokeStyle = `rgba(0, 229, 255, ${opacityValue * 0.2})`;
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        // Inicializar la red
-        function init() {
-            particlesArray = [];
-            let numberOfParticles = (canvas.height * canvas.width) / 15000;
-            // Límite de partículas para no sobrecargar el navegador
-            if(numberOfParticles > 100) numberOfParticles = 100; 
+        function addLogLine() {
+            const randomLog = logs[Math.floor(Math.random() * logs.length)];
+            const time = new Date().toLocaleTimeString();
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.textContent = `[${time}]${randomLog}`;
+            terminal.appendChild(line);
             
-            for (let i = 0; i < numberOfParticles; i++) {
-                let size = (Math.random() * 2) + 1;
-                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                let directionX = (Math.random() * 1) - 0.5;
-                let directionY = (Math.random() * 1) - 0.5;
-                let color = '#00e5ff';
+            // Mantener el scroll abajo automáticamente
+            terminal.scrollTop = terminal.scrollHeight;
 
-                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            if(terminal.childNodes.length > 50) {
+                terminal.removeChild(terminal.firstChild);
             }
         }
 
-        // Bucle de animación
-        function animate() {
-            requestAnimationFrame(animate);
-            ctx.clearRect(0, 0, innerWidth, innerHeight);
+        // Reloj en tiempo real del panel
+        setInterval(() => {
+            document.getElementById('live-timer').textContent = new Date().toLocaleTimeString();
+        }, 1000);
 
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-            }
-            connect();
-        }
-
-        init();
-        animate();
+        // Generar logs infinitos simulados cada 1.5 a 3 segundos
+        setInterval(addLogLine, 2000);
+        // Agregar los primeros logs de golpe al cargar
+        for(let i=0; i<5; i++) { addLogLine(); }
     </script>
 </body>
 </html>
