@@ -3,309 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRON ATLAS - Network Core</title>
+    <title>IRON ATLAS // NEW GENERATION</title>
     <style>
         :root {
-            --glow-color: #00ff66;
-            --bg-color: #050b07;
-            --panel-bg: rgba(10, 25, 15, 0.85);
-            --text-color: #e0ffd0;
+            --bg-dark: #06090e;
+            --accent-cyan: #00f0ff;
+            --accent-blue: #0044ff;
+            --text-main: #d1f4ff;
+            --text-muted: #53758a;
+            --panel-border: rgba(0, 240, 255, 0.15);
+            --panel-bg: rgba(10, 17, 26, 0.7);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            background-image: 
-                linear-gradient(rgba(0, 255, 102, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 102, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
+            position: relative;
         }
 
-        /* Efecto de línea de escaneo de monitor antiguo */
-        body::after {
-            content: " ";
-            display: block;
+        /* Lienzo de Partículas de Fondo */
+        #bg-canvas {
             position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 99999;
-            opacity: 0.8;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             pointer-events: none;
-            background-size: 100% 4px, 6px 100%;
         }
 
+        /* BARRA DE NAVEGACIÓN */
         header {
-            text-align: center;
-            padding: 30px 15px;
             position: relative;
+            z-index: 10;
+            width: 100%;
+            border-bottom: 1px solid var(--panel-border);
+            background: rgba(6, 9, 14, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
-        /* LOGO CENTRALIZADO Y ANIMADO */
-        .logo-container {
-            display: inline-block;
-            position: relative;
-            margin-bottom: 10px;
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .logo-main {
-            font-size: 3rem;
-            font-weight: bold;
+        .brand {
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 0.95rem;
             color: #fff;
-            text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
-            letter-spacing: 5px;
-            animation: pulse 3s infinite alternate;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .logo-sub {
+        .brand span {
+            color: var(--accent-cyan);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
             font-size: 0.85rem;
-            letter-spacing: 8px;
-            color: var(--glow-color);
+            font-weight: 500;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            margin-top: 5px;
+            transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.4s;
         }
 
-        /* CONTENEDOR PRINCIPAL RESPONSIVE */
+        nav a:hover, nav li.active a {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+        }
+
+        /* CONTENIDO PRINCIPAL */
         main {
             flex: 1;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
             max-width: 1200px;
             width: 100%;
             margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
         }
 
-        @media (min-width: 768px) {
-            main {
-                grid-template-columns: 2fr 1fr;
-            }
-            .full-width {
-                grid-column: span 2;
-            }
-        }
-
-        .panel {
+        .hero-panel {
             background: var(--panel-bg);
-            border: 1px solid rgba(0, 255, 102, 0.3);
-            border-radius: 4px;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.05);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 750px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             position: relative;
+            overflow: hidden;
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .panel::before {
+        /* Detalle lineal estético */
+        .hero-panel::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 3px;
-            background: var(--glow-color);
-            box-shadow: 0 0 10px var(--glow-color);
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-blue));
         }
 
-        .panel-title {
-            font-size: 1.1rem;
-            color: var(--glow-color);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            border-bottom: 1px dashed rgba(0, 255, 102, 0.2);
-            padding-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* SIMULADOR DE CONSOLA / TERMINAL */
-        .terminal-box {
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 3px;
-            padding: 15px;
-            height: 250px;
-            overflow-y: auto;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            color: #00ff66;
-        }
-
-        .terminal-line {
-            margin-bottom: 5px;
-            white-space: pre-wrap;
-        }
-
-        /* SECCIÓN ALIANZAS / INTEGRANTES */
-        .grid-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .grid-item {
-            background: rgba(0, 255, 102, 0.05);
-            border: 1px solid rgba(0, 255, 102, 0.15);
-            padding: 12px;
-            text-align: center;
-            border-radius: 3px;
-            transition: all 0.3s ease;
-        }
-
-        .grid-item:hover {
-            background: rgba(0, 255, 102, 0.15);
-            border-color: var(--glow-color);
-            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .grid-item .name {
-            font-weight: bold;
-            font-size: 0.95rem;
-            color: #fff;
-        }
-
-        .grid-item .role {
+        .system-tag {
             font-size: 0.75rem;
-            color: rgba(0, 255, 102, 0.7);
-            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-cyan);
+            margin-bottom: 20px;
+            font-weight: 600;
+            opacity: 0.8;
         }
 
-        /* ANIMACIONES */
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.9; }
-            100% { transform: scale(1.02); opacity: 1; box-shadow: 0 0 30px rgba(0, 255, 102, 0.2); }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+            color: #fff;
+            margin-bottom: 25px;
         }
 
-        /* Estilo barra de scroll al estilo retro */
-        ::-webkit-scrollbar {
-            width: 6px;
+        h1 strong {
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 30%, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
+
+        .manifesto-text {
+            color: var(--text-main);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            opacity: 0.85;
+            font-weight: 300;
         }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0, 255, 102, 0.3);
-            border-radius: 3px;
+
+        /* BOTÓN DE ACCESO */
+        .cta-btn {
+            background: transparent;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 12px 28px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cta-btn:hover {
+            background: rgba(0, 240, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* AJUSTES RESPONSIVOS (MÓVILES) */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            h1 {
+                font-size: 1.85rem;
+            }
+            .hero-panel {
+                padding: 35px 25px;
+            }
+        }
+
+        /* ANIMACIONES INTERNAS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
+    <canvas id="bg-canvas"></canvas>
+
     <header>
-        <div class="logo-container">
-            <div class="logo-main">IRON ATLAS</div>
-            <div class="logo-sub">SYSTEM CORE v9.0</div>
+        <div class="nav-container">
+            <div class="brand">
+                // IRON ATLAS <span>NG</span>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#inicio">Inicio</a></li>
+                    <li><a href="#herramientas">Herramientas</a></li>
+                    <li><a href="#expedientes">Expedientes</a></li>
+                    <li><a href="#canales">Canales</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
     <main>
-        <div class="panel">
-            <div class="panel-title">
-                <span>[⚡] LIVE INTERFACE FEED</span>
-                <span style="color: #fff; font-size: 0.8rem;" id="live-timer">00:00:00</span>
-            </div>
-            <div class="terminal-box" id="terminal">
-                </div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">[🛰️] NETWORK NODE STATUS</div>
-            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;">
-                <div style="display: flex; justify-content: space-between;">
-                    <span>AWS EIP ROTATION:</span> <span style="color: var(--glow-color);">ACTIVE (30m)</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>TELEGRAM POLLING:</span> <span style="color: var(--glow-color);">ONLINE</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>BYPASS FIREWALL:</span> <span style="color: var(--glow-color);">SECURE</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>ANTI-SCRIPT SHIELD:</span> <span style="color: #ff3333; font-weight: bold; text-shadow: 0 0 5px #ff3333;">MAXIMUM</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">[👥] CORE OPERATORS / INTEGRANTES</div>
-            <div class="grid-list">
-                <div class="grid-item">
-                    <div class="name">ALVAREZ</div>
-                    <div class="role">Lead Dev / CyberSec</div>
-                </div>
-                <div class="grid-item">
-                    <div class="name">ROMERO</div>
-                    <div class="role">Net Admin</div>
-                </div>
-                <div class="grid-item">
-                    <div class="name">GARCIA</div>
-                    <div class="role">SysOp Intel</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">[🤝] RECOGNIZED ALLIANCES</div>
-            <div class="grid-list">
-                <div class="grid-item">
-                    <div class="name">GITHUB NODE</div>
-                    <div class="role">Repository Sync</div>
-                </div>
-                <div class="grid-item">
-                    <div class="name">ACH TELECOM</div>
-                    <div class="role">Validated Gateway</div>
-                </div>
-            </div>
+        <div class="hero-panel">
+            <div class="system-tag">Módulo de Red Integrado // Activo</div>
+            <h1>La información no nos pertenece, <strong>nos define.</strong></h1>
+            <p class="manifesto-text">
+                Bienvenido al núcleo de IRON ATLAS NEW GENERATION. En un entorno distribuido donde los datos fluyen de manera asimétrica, la infraestructura transparente no es una opción, sino la última capa de defensa legítima para la soberanía del conocimiento.
+            </p>
+            <button class="cta-btn" onclick="triggerScan()">Iniciar Diagnóstico</button>
         </div>
     </main>
 
     <script>
-        // Efecto cascada de logs falsos para que se vea activo en cámara
-        const terminal = document.getElementById('terminal');
-        const logs = [
-            " [INFO] Inicializando pasarela de bypass...",
-            " [OK] Conexión establecida con nodo remoto en AWS.",
-            " [EIP] Rotación de Elastic IP completada con éxito.",
-            " [TG] Bot escuchando actualizaciones en Telegram...",
-            " [ADRES] Cargando estructura ASP.NET (__VIEWSTATE)...",
-            " [PSE] Sesión activa interceptada de forma segura.",
-            " [SHIELD] Intento de inspección externa mitigado por Anti-Script.",
-            " [OK] Base de datos optimizada y sincronizada con GitHub Enterprise.",
-            " [SYSTEM] Monitoreo de tráfico listo en puerto 3000..."
-        ];
+        // FONDO DE PARTÍCULAS INTERACTIVO (Efecto sutil)
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
 
-        function addLogLine() {
-            const randomLog = logs[Math.floor(Math.random() * logs.length)];
-            const time = new Date().toLocaleTimeString();
-            const line = document.createElement('div');
-            line.className = 'terminal-line';
-            line.textContent = `[${time}]${randomLog}`;
-            terminal.appendChild(line);
-            
-            // Mantener el scroll abajo automáticamente
-            terminal.scrollTop = terminal.scrollHeight;
+        let particles = [];
+        const particleCount = 65;
 
-            if(terminal.childNodes.length > 50) {
-                terminal.removeChild(terminal.firstChild);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.25;
+                this.speedY = (Math.random() - 0.5) * 0.25;
+                this.alpha = Math.random() * 0.5 + 0.1;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = '#00f0ff';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
             }
         }
 
-        // Reloj en tiempo real del panel
-        setInterval(() => {
-            document.getElementById('live-timer').textContent = new Date().toLocaleTimeString();
-        }, 1000);
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
 
-        // Generar logs infinitos simulados cada 1.5 a 3 segundos
-        setInterval(addLogLine, 2000);
-        // Agregar los primeros logs de golpe al cargar
-        for(let i=0; i<5; i++) { addLogLine(); }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Dibujar líneas finas interconectadas de fondo
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.03)';
+            ctx.lineWidth = 0.5;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+
+        // EFECTO DE INTERACCIÓN MENÚ
+        const navItems = document.querySelectorAll('nav li');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ACCIÓN CINEMATOGRÁFICA
+        function triggerScan() {
+            const btn = document.querySelector('.cta-btn');
+            btn.textContent = "Sincronizando Core...";
+            btn.style.borderColor = "#0044ff";
+            btn.style.color = "#fff";
+            
+            setTimeout(() => {
+                btn.textContent = "Acceso Concedido";
+                btn.style.borderColor = "#00f0ff";
+                btn.style.color = "var(--accent-cyan)";
+            }, 1800);
+        }
     </script>
 </body>
 </html>
