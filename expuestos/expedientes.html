@@ -1,190 +1,661 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self'; connect-src 'none';">
-<title>Expedientes — Iron Atlas</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-<style>
-:root{--void:#050508;--deep:#0c0608;--red:#c0392b;--red-bright:#e74c3c;--red-glow:#ff4455;--cream:#f0e6d3;--parchment:#c8b89a;--ash:#7a6e6e;--line:rgba(192,57,43,0.2);--line2:rgba(192,57,43,0.07);}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-body{background:var(--void);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;overflow-x:hidden;cursor:none;}
-body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(192,57,43,0.06),transparent 60%);}
-.cursor-dot{position:fixed;width:6px;height:6px;background:var(--red-glow);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 10px var(--red-glow),0 0 20px rgba(255,68,85,0.4);}
-.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(192,57,43,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.18s cubic-bezier(.25,.46,.45,.94);}
-nav{position:fixed;top:0;left:0;right:0;z-index:800;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;height:68px;background:rgba(5,5,8,0.97);border-bottom:1px solid var(--line);}
-.nav-brand{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.35em;font-weight:500;color:var(--red);text-decoration:none;text-shadow:0 0 20px rgba(192,57,43,0.5);display:flex;align-items:center;gap:10px;}
-.nav-brand img{height:28px;width:28px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(192,57,43,0.6));opacity:.9;}
-.nav-links{display:flex;gap:2.8rem;list-style:none;align-items:center;}
-.nav-links a{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.22em;font-weight:400;color:var(--ash);text-decoration:none;transition:color 0.3s;position:relative;padding-bottom:3px;}
-.nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--red);box-shadow:0 0 8px var(--red);transform:scaleX(0);transform-origin:right;transition:transform 0.4s ease;}
-.nav-links a:hover,.nav-links a.active{color:var(--cream);}
-.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);transform-origin:left;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRON ATLAS — EXPEDIENTES EXPUESTOS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #030000;
+            --neon-red: #ff003c;
+            --neon-dark-red: #990024;
+            --text-light: #ffd6e0;
+            --text-muted: #a08a90;
+            
+            --bd-color: #ff003c;
+            --bw-color: #a0a0a0;
+            --bc-color: #00f0ff;
+            --bp-color: #bd00ff;
+            --bg-color: #ffb700;
+        }
 
-.page-hero{padding:140px 5vw 70px;border-bottom:1px solid var(--line);position:relative;z-index:1;}
-.page-badge{display:inline-flex;align-items:center;gap:0.9rem;font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:0.3em;color:var(--red);opacity:0.7;margin-bottom:2rem;}
-.page-badge::before{content:'';width:24px;height:1px;background:var(--red);}
-.page-title{font-family:'Cinzel Decorative',serif;font-size:clamp(2.5rem,7vw,6rem);font-weight:900;line-height:1;color:var(--cream);text-shadow:0 0 40px rgba(192,57,43,0.25);margin-bottom:1.5rem;}
-.page-desc{font-family:'EB Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--ash);line-height:1.9;max-width:560px;}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
 
-.filters{padding:2rem 5vw;border-bottom:1px solid var(--line2);display:flex;gap:1rem;align-items:center;position:relative;z-index:1;flex-wrap:wrap;}
-.filter-label{font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.25em;color:rgba(192,57,43,0.35);margin-right:0.5rem;}
-.filter-btn{font-family:'Cinzel',serif;font-size:0.52rem;letter-spacing:0.18em;padding:7px 20px;border:1px solid rgba(192,57,43,0.18);color:var(--ash);background:transparent;cursor:none;transition:all 0.25s;}
-.filter-btn:hover,.filter-btn.on{border-color:rgba(192,57,43,0.5);color:var(--red);box-shadow:0 0 12px rgba(192,57,43,0.08);}
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
 
-.exp-content{padding:4rem 5vw 7rem;position:relative;z-index:1;}
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
 
-.exp-table{width:100%;border-collapse:collapse;}
-.exp-table thead th{font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.25em;font-weight:500;color:rgba(192,57,43,0.4);text-align:left;padding:1rem 1.5rem;border-bottom:1px solid var(--line);}
-.exp-table tbody tr{border-bottom:1px solid var(--line2);transition:background 0.25s;cursor:none;position:relative;}
-.exp-table tbody tr:hover{background:rgba(192,57,43,0.03);}
-.exp-table tbody tr:hover .exp-name{color:var(--cream);}
-.exp-table td{padding:1.8rem 1.5rem;vertical-align:middle;}
-.exp-code{font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:0.15em;color:rgba(192,57,43,0.3);}
-.exp-name{font-family:'Cinzel Decorative',serif;font-size:0.9rem;font-weight:400;color:var(--parchment);letter-spacing:0.02em;transition:color 0.3s;}
-.exp-meta{font-family:'EB Garamond',serif;font-style:italic;font-size:0.85rem;color:var(--ash);}
-.badge{display:inline-block;font-family:'Cinzel',serif;font-size:0.45rem;letter-spacing:0.2em;font-weight:500;padding:5px 14px;border:1px solid;}
-.badge-c{border-color:rgba(164,60,60,0.5);color:#c47a7a;}
-.badge-a{border-color:rgba(60,130,100,0.5);color:#7abfa0;}
-.badge-p{border-color:rgba(192,57,43,0.4);color:var(--red);}
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background: rgba(3, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+            box-shadow: 0 4px 30px rgba(255, 0, 60, 0.1);
+            z-index: 100;
+        }
 
-.panel{position:fixed;top:0;right:-500px;width:480px;height:100vh;background:#080508;border-left:1px solid var(--line);z-index:900;padding:100px 3rem 3rem;transition:right 0.55s cubic-bezier(.16,1,.3,1);overflow-y:auto;}
-.panel.open{right:0;}
-.panel-close{position:absolute;top:76px;right:2rem;font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.2em;color:var(--ash);cursor:none;background:none;border:1px solid rgba(192,57,43,0.2);padding:8px 16px;transition:all 0.25s;}
-.panel-close:hover{border-color:var(--red);color:var(--red);}
-.panel-code{font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:0.2em;color:var(--red);opacity:0.6;margin-bottom:0.8rem;}
-.panel-name{font-family:'Cinzel Decorative',serif;font-size:1.3rem;font-weight:700;color:var(--cream);margin-bottom:2.5rem;line-height:1.3;text-shadow:0 0 20px rgba(192,57,43,0.2);}
-.panel-section{margin-bottom:2.2rem;}
-.panel-slabel{font-family:'Cinzel',serif;font-size:0.48rem;letter-spacing:0.25em;color:rgba(192,57,43,0.45);margin-bottom:0.8rem;display:block;}
-.panel-text{font-family:'EB Garamond',serif;font-style:italic;font-size:1rem;line-height:1.9;color:var(--ash);}
-.panel-row{display:flex;justify-content:space-between;padding:0.8rem 0;border-bottom:1px solid var(--line2);}
-.panel-row span:first-child{font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.15em;color:rgba(192,57,43,0.35);}
-.panel-row span:last-child{font-family:'EB Garamond',serif;font-size:0.9rem;color:var(--parchment);}
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
 
-footer{position:relative;z-index:1;padding:3rem 5vw;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);}
-.footer-brand{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.3em;color:var(--red);opacity:0.6;display:flex;align-items:center;gap:0.8rem;}
-.footer-brand img{height:22px;width:22px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(192,57,43,0.5));opacity:.7;}
-.footer-copy{font-family:'EB Garamond',serif;font-style:italic;font-size:0.85rem;color:var(--ash);opacity:0.4;}
-.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.85s ease,transform 0.85s ease;}
-.reveal.vis{opacity:1;transform:translateY(0);}
-</style>
+        .nav-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--neon-red);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--neon-red);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 8px var(--neon-red);
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: var(--neon-red);
+            border-radius: 2px;
+            box-shadow: 0 0 5px var(--neon-red);
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10rem 2rem 5rem 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 2s ease-out;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .hero-section h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5.5rem);
+            font-weight: 900;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 0, 60, 0.5), 0 0 40px rgba(255, 0, 60, 0.4), 0 0 90px var(--neon-red);
+            margin-bottom: 1.5rem;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 5rem auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(15, 0, 5, 0.6);
+            border: 2px solid rgba(255, 0, 60, 0.4);
+            border-radius: 8px;
+            padding: 1.2rem 2rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: #fff;
+            letter-spacing: 2px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            outline: none;
+            box-shadow: inset 0 0 20px rgba(255, 0, 60, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 214, 224, 0.4);
+        }
+
+        .search-input:focus {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.3), inset 0 0 20px rgba(255, 0, 60, 0.2);
+        }
+
+        .dossier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(15, 0, 5, 0.8) 0%, rgba(3, 0, 0, 0.9) 100%);
+            border: 1px solid rgba(255, 0, 60, 0.2);
+            border-radius: 4px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            text-decoration: none;
+            color: #ffffff;
+            backdrop-filter: blur(15px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border-left: 4px solid var(--neon-red);
+        }
+
+        .sweep {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 150%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.15), transparent);
+            transition: 0.6s;
+            transform: skewX(-20deg);
+            z-index: 1;
+        }
+
+        .card:hover .sweep {
+            left: 100%;
+        }
+
+        .card:hover {
+            border-color: var(--neon-red);
+            box-shadow: 0 15px 40px rgba(255, 0, 60, 0.2), inset 0 0 30px rgba(255, 0, 60, 0.1);
+            transform: scale(1.02);
+        }
+
+        .card-index {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: rgba(255, 0, 60, 0.1);
+            z-index: 2;
+            transition: color 0.4s;
+        }
+
+        .card:hover .card-index {
+            color: rgba(255, 0, 60, 0.3);
+        }
+
+        .avatar-wrap {
+            position: relative;
+            z-index: 3;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 0, 60, 0.4);
+            filter: grayscale(80%) contrast(120%);
+            transition: all 0.5s;
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
+        }
+
+        .card:hover .avatar {
+            filter: grayscale(0%) contrast(100%);
+            border-color: var(--neon-red);
+            box-shadow: 0 0 25px var(--neon-red);
+        }
+
+        .info {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            width: 100%;
+        }
+
+        .badge {
+            align-self: flex-start;
+            padding: 0.3rem 0.8rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .bd { border-color: var(--bd-color); color: var(--bd-color); background: rgba(255,0,60,0.1); }
+        .bw { border-color: var(--bw-color); color: var(--bw-color); background: rgba(160,160,160,0.1); }
+        .bc { border-color: var(--bc-color); color: var(--bc-color); background: rgba(0,240,255,0.1); }
+        .bp { border-color: var(--bp-color); color: var(--bp-color); background: rgba(189,0,255,0.1); }
+        .bg { border-color: var(--bg-color); color: var(--bg-color); background: rgba(255,183,0,0.1); }
+
+        .card-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #ffffff;
+            transition: text-shadow 0.3s;
+            text-transform: uppercase;
+        }
+
+        .card:hover .card-name {
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+
+        .card-id {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+        }
+
+        .card-alias {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-top: 0.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        .dot-r { background-color: var(--bd-color); color: var(--bd-color); }
+        .dot-a { background-color: var(--bw-color); color: var(--bw-color); }
+        .dot-b { background-color: var(--bc-color); color: var(--bc-color); }
+        .dot-p { background-color: var(--bp-color); color: var(--bp-color); }
+        .dot-g { background-color: var(--bg-color); color: var(--bg-color); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background: rgba(3, 0, 0, 0.98);
+                padding: 2rem 0;
+                text-align: center;
+                border-bottom: 1px solid var(--neon-red);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .dossier-grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                flex-direction: column;
+                text-align: center;
+            }
+            .badge {
+                align-self: center;
+            }
+            .card-alias {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="cursor-dot" id="cd"></div>
-<div class="cursor-ring" id="cr"></div>
-<nav>
-  <a href="/" class="nav-brand"><img src="/assets/iron.png" alt="Iron Atlas">Iron Atlas</a>
-  <ul class="nav-links">
-    <li><a href="/">Inicio</a></li>
-    <li><a href="/tools/">Herramientas</a></li>
-    <li><a href="/expuestos/expedientes.html" class="active">Expedientes</a></li>
-    <li><a href="/canales.html">Canales</a></li>
-  </ul>
-</nav>
-<div class="page-hero">
-  <p class="page-badge">Módulo II</p>
-  <h1 class="page-title">Expedientes</h1>
-  <p class="page-desc">Archivos documentados de operaciones en curso, clasificadas y pendientes. Cada expediente es una verdad que alguien quiso enterrar.</p>
-</div>
-<div class="filters reveal">
-  <span class="filter-label">Filtrar por</span>
-  <button class="filter-btn on" data-f="all">Todos</button>
-  <button class="filter-btn" data-f="clasificado">Clasificados</button>
-  <button class="filter-btn" data-f="activo">Activos</button>
-  <button class="filter-btn" data-f="pendiente">Pendientes</button>
-</div>
-<div class="exp-content">
-  <table class="exp-table reveal" id="expTable">
-    <thead>
-      <tr><th>Código</th><th>Expediente</th><th>Origen</th><th>Clasificación</th></tr>
-    </thead>
-    <tbody id="expBody">
-      <tr data-s="clasificado" data-id="0041" data-name="Proyecto Fénix — Fase III" data-desc="Investigación de alto secreto sobre reconversión de activos estatales hacia estructuras privadas no auditables. La Fase III documenta el cruce de información entre tres jurisdicciones distintas con evidencia de connivencia institucional." data-fecha="04 Nov 2023" data-origen="Nodo Sur" data-nivel="Máximo">
-        <td class="exp-code">XP-0041</td><td class="exp-name">Proyecto Fénix — Fase III</td><td class="exp-meta">Nodo Sur</td><td><span class="badge badge-c">Clasificado</span></td>
-      </tr>
-      <tr data-s="activo" data-id="0088" data-name="Operación Meridiano" data-desc="Seguimiento activo de flujos financieros que cruzan múltiples fronteras sin registro oficial. Operación en curso con actualizaciones cada 48 horas desde cuatro nodos independientes verificados." data-fecha="17 Feb 2024" data-origen="Nodo Central" data-nivel="Alto">
-        <td class="exp-code">XP-0088</td><td class="exp-name">Operación Meridiano</td><td class="exp-meta">Nodo Central</td><td><span class="badge badge-a">Activo</span></td>
-      </tr>
-      <tr data-s="pendiente" data-id="0112" data-name="Protocolo Lázaro" data-desc="Documentos recuperados de servidores comprometidos que detallan estructuras de comunicación paralela entre entidades de seguridad pública y organizaciones privadas sin identificar. Pendiente verificación cruzada." data-fecha="01 Abr 2024" data-origen="Nodo Este" data-nivel="Medio">
-        <td class="exp-code">XP-0112</td><td class="exp-name">Protocolo Lázaro</td><td class="exp-meta">Nodo Este</td><td><span class="badge badge-p">Pendiente</span></td>
-      </tr>
-      <tr data-s="clasificado" data-id="0129" data-name="Red Espejo — Nodo Sur" data-desc="Mapa completo de una red de duplicación de infraestructura digital utilizada para desviar comunicaciones oficiales hacia canales privados de monitoreo. Afecta a siete instituciones identificadas." data-fecha="22 Ene 2024" data-origen="Nodo Sur" data-nivel="Máximo">
-        <td class="exp-code">XP-0129</td><td class="exp-name">Red Espejo — Nodo Sur</td><td class="exp-meta">Nodo Sur</td><td><span class="badge badge-c">Clasificado</span></td>
-      </tr>
-      <tr data-s="activo" data-id="0157" data-name="Iniciativa Vortex" data-desc="Análisis en tiempo real de una campaña de desinformación coordinada que utiliza inteligencia artificial para distribuir narrativas falsas a escala masiva. Se identificaron 14 nodos de origen distintos." data-fecha="10 May 2024" data-origen="Nodo Global" data-nivel="Alto">
-        <td class="exp-code">XP-0157</td><td class="exp-name">Iniciativa Vortex</td><td class="exp-meta">Nodo Global</td><td><span class="badge badge-a">Activo</span></td>
-      </tr>
-      <tr data-s="pendiente" data-id="0203" data-name="Archivo Centinela" data-desc="Más de 4200 documentos sobre operaciones de vigilancia masiva no declaradas. Testimonios y evidencias pendientes de clasificación y verificación de autenticidad por el equipo de inteligencia." data-fecha="03 Jun 2024" data-origen="Nodo Norte" data-nivel="Medio">
-        <td class="exp-code">XP-0203</td><td class="exp-name">Archivo Centinela</td><td class="exp-meta">Nodo Norte</td><td><span class="badge badge-p">Pendiente</span></td>
-      </tr>
-      <tr data-s="clasificado" data-id="0241" data-name="Operación Crisálida" data-desc="Expediente sobre transformación identitaria de estructuras de poder. Documenta cómo determinadas entidades cambian su forma jurídica para eludir marcos de supervisión y control democrático establecido." data-fecha="29 Mar 2024" data-origen="Nodo Oeste" data-nivel="Máximo">
-        <td class="exp-code">XP-0241</td><td class="exp-name">Operación Crisálida</td><td class="exp-meta">Nodo Oeste</td><td><span class="badge badge-c">Clasificado</span></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="panel" id="panel">
-  <button class="panel-close" id="pClose">✕ Cerrar</button>
-  <p class="panel-code" id="pCode"></p>
-  <h2 class="panel-name" id="pName"></h2>
-  <div class="panel-section">
-    <span class="panel-slabel">Resumen del expediente</span>
-    <p class="panel-text" id="pDesc"></p>
-  </div>
-  <div class="panel-section">
-    <span class="panel-slabel">Datos de registro</span>
-    <div class="panel-row"><span>Fecha</span><span id="pFecha"></span></div>
-    <div class="panel-row"><span>Origen</span><span id="pOrigen"></span></div>
-    <div class="panel-row"><span>Nivel de acceso</span><span id="pNivel"></span></div>
-  </div>
-</div>
-<footer>
-  <div class="footer-brand"><img src="/assets/iron.png" alt="">Iron Atlas</div>
-  <p class="footer-copy">Expedientes — New Generation v4.1</p>
-</footer>
-<script>
-(function(){
-  var cd=document.getElementById('cd'),cr=document.getElementById('cr');
-  var mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px';});
-  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loop);})();
 
-  var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
-  document.querySelectorAll('.reveal').forEach(function(r){obs.observe(r);});
+    <canvas id="bg-canvas"></canvas>
 
-  document.querySelectorAll('.filter-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('on');});
-      btn.classList.add('on');
-      var f=btn.getAttribute('data-f');
-      document.querySelectorAll('#expBody tr').forEach(function(row){
-        row.style.display=(f==='all'||row.getAttribute('data-s')===f)?'':'none';
-      });
-    });
-  });
+    <nav class="top-nav">
+        <a href="/" class="nav-brand">
+            <span class="nav-title">IRON ATLAS</span>
+        </a>
+        <div class="hamburger" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <a href="/tools/index.html" class="nav-link">Herramientas</a>
+            <a href="/expuestos/expedientes.html" class="nav-link" style="color: #fff; text-shadow: 0 0 15px var(--neon-red);">Expedientes</a>
+            <a href="/canales.html" class="nav-link">Canales</a>
+            <a href="/404.html" class="nav-link">Laboratorio</a>
+        </div>
+    </nav>
 
-  var panel=document.getElementById('panel');
-  document.querySelectorAll('#expBody tr').forEach(function(row){
-    row.addEventListener('click',function(){
-      document.getElementById('pCode').textContent='XP-'+row.getAttribute('data-id');
-      document.getElementById('pName').textContent=row.getAttribute('data-name');
-      document.getElementById('pDesc').textContent=row.getAttribute('data-desc');
-      document.getElementById('pFecha').textContent=row.getAttribute('data-fecha');
-      document.getElementById('pOrigen').textContent=row.getAttribute('data-origen');
-      document.getElementById('pNivel').textContent=row.getAttribute('data-nivel');
-      panel.classList.add('open');
-    });
-    row.addEventListener('mouseenter',function(){cr.style.width='50px';cr.style.height='50px';cr.style.borderColor='rgba(192,57,43,0.7)';});
-    row.addEventListener('mouseleave',function(){cr.style.width='32px';cr.style.height='32px';cr.style.borderColor='rgba(192,57,43,0.5)';});
-  });
-  document.getElementById('pClose').addEventListener('click',function(){panel.classList.remove('open');});
-  document.querySelectorAll('a,button').forEach(function(el){
-    el.addEventListener('mouseenter',function(){cr.style.width='50px';cr.style.height='50px';cr.style.borderColor='rgba(192,57,43,0.7)';});
-    el.addEventListener('mouseleave',function(){cr.style.width='32px';cr.style.height='32px';cr.style.borderColor='rgba(192,57,43,0.5)';});
-  });
-})();
-</script>
+    <main class="main-content">
+        <section class="hero-section">
+            <h1>Expedientes</h1>
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="INGRESE ALIAS, ID O NOMBRE DEL OBJETIVO..." autocomplete="off">
+            </div>
+        </section>
+
+        <section class="dossier-grid" id="dossierGrid">
+            
+            <a href="targets/henxx.html" class="card" data-name="miguel ortiz henxx hexn 8404892062 estafador">
+                <div class="sweep"></div>
+                <span class="card-index">#001</span>
+                <div class="avatar-wrap">
+                    <img src="https://i.postimg.cc/ZKmC8xvc/HENXX.jpg" class="avatar" alt="objetivo" loading="lazy">
+                </div>
+                <div class="info">
+                    <span class="badge bd">⚠ ESTAFADOR</span>
+                    <div class="card-name">MIGUEL ORTIZ</div>
+                    <span class="card-id">ID TELEGRAM: 8404892062</span>
+                    <span class="card-alias"><span class="dot dot-r"></span>Alias: HENXX / HEXN</span>
+                </div>
+            </a>
+
+            <a href="targets/hector_lopez.html" class="card" data-name="hector lopez mosca muerta 7952283528 estafador abusador">
+                <div class="sweep"></div>
+                <span class="card-index">#002</span>
+                <div class="avatar-wrap">
+                    <img src="https://i.postimg.cc/rFHrb5VX/photo-2026-02-15-02-22-46.jpg" class="avatar" alt="objetivo" loading="lazy">
+                </div>
+                <div class="info">
+                    <span class="badge bd">⚠ ESTAFADOR / ABUSADOR</span>
+                    <div class="card-name">HECTOR LÓPEZ</div>
+                    <span class="card-id">ID TELEGRAM: 7952283528</span>
+                    <span class="card-alias"><span class="dot dot-r"></span>Alias: MOSCA MUERTA</span>
+                </div>
+            </a>
+
+            <a href="targets/glock.html" class="card" data-name="glock estafador 5231380522 rata">
+                <div class="sweep"></div>
+                <span class="card-index">#003</span>
+                <div class="avatar-wrap">
+                    <img src="https://i.postimg.cc/d136d5rY/580b0499209bcd461b11a170751b2a30.webp" class="avatar" alt="objetivo" loading="lazy">
+                </div>
+                <div class="info">
+                    <span class="badge bw">RATA</span>
+                    <div class="card-name">.40 GLOCK EDICIÓN 👹</div>
+                    <span class="card-id">ID TELEGRAM: 5231380522</span>
+                    <span class="card-alias"><span class="dot dot-a"></span>Alias: @HBxPP2000</span>
+                </div>
+            </a>
+
+            <a href="targets/zpequeno.html" class="card" data-name="nelson estiven barajas pinzon zpequeno 1028867220">
+                <div class="sweep"></div>
+                <span class="card-index">#004</span>
+                <div class="avatar-wrap">
+                    <img src="https://i.postimg.cc/ZnTx4Q5c/Captura-de-pantalla-2026-04-08-004755.png" class="avatar" alt="objetivo" loading="lazy">
+                </div>
+                <div class="info">
+                    <span class="badge bc">👤 OBJETIVO</span>
+                    <div class="card-name">NELSON BARAJAS</div>
+                    <span class="card-id">ID SISTEMA: 1028867220</span>
+                    <span class="card-alias"><span class="dot dot-b"></span>Alias: ZPEQUEÑO</span>
+                </div>
+            </a>
+
+            <a href="targets/igamazon.html" class="card" data-name="ingeniero amazon 8015752253 tumarido1 rata">
+                <div class="sweep"></div>
+                <span class="card-index">#005</span>
+                <div class="avatar-wrap">
+                    <img src="https://i.postimg.cc/ZKmC8xvc/HENXX.jpg" class="avatar" alt="objetivo" loading="lazy">
+                </div>
+                <div class="info">
+                    <span class="badge bp">🟣 RATA</span>
+                    <div class="card-name">INGENIERO AMAZON</div>
+                    <span class="card-id">ID TELEGRAM: 8015752253</span>
+                    <span class="card-alias"><span class="dot dot-p"></span>Alias: 💻tumarido1</span>
+                </div>
+            </a>
+
+            <a href="targets/objetivo_06.html" class="card" data-name="andres vargas escorpion 5544332211 fraude">
+                <div class="sweep"></div>
+                <span class="card-index">#006</span>
+                <div class="avatar-wrap">
+                    <img src="https://i.postimg.cc/ZKmC8xvc/HENXX.jpg" class="avatar" alt="objetivo" loading="lazy">
+                </div>
+                <div class="info">
+                    <span class="badge bg">⬤ FRAUDE MAYOR</span>
+                    <div class="card-name">ANDRES VARGAS</div>
+                    <span class="card-id">ID TELEGRAM: 5544332211</span>
+                    <span class="card-alias"><span class="dot dot-g"></span>Alias: ESCORPIÓN</span>
+                </div>
+            </a>
+
+        </section>
+    </main>
+
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        const cards = document.querySelectorAll('.card');
+
+        searchInput.addEventListener('input', function() {
+            const filter = this.value.toLowerCase().trim();
+            cards.forEach(card => {
+                const searchData = card.getAttribute('data-name').toLowerCase();
+                if (searchData.includes(filter)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 250 };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Node {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 1.8;
+                this.vy = (Math.random() - 0.5) * 1.8;
+                this.radius = Math.random() * 2 + 1.5;
+                this.baseX = this.x;
+                this.baseY = this.y;
+            }
+
+            update() {
+                if (mouse.x !== null) {
+                    let dx = this.x - mouse.x;
+                    let dy = this.y - mouse.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouse.radius) {
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        this.x += (dx / distance) * force * 4;
+                        this.y += (dy / distance) * force * 4;
+                    }
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff003c';
+                ctx.fill();
+            }
+        }
+
+        function initNodes() {
+            particles = [];
+            let count = Math.floor((canvas.width * canvas.height) / 9000);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Node());
+            }
+        }
+
+        function animateNodes() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                if (mouse.x !== null) {
+                    let dxMouse = particles[i].x - mouse.x;
+                    let dyMouse = particles[i].y - mouse.y;
+                    let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+                    if (distMouse < mouse.radius) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${1 - distMouse / mouse.radius})`;
+                        ctx.lineWidth = 1.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 130) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.9 - distance/130})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateNodes);
+        }
+
+        initNodes();
+        animateNodes();
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
+        setInterval(() => {
+            (function() { return false; }['constructor']('debugger')());
+        }, 50);
+    </script>
 </body>
 </html>
