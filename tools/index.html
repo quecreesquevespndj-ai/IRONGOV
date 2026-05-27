@@ -1,1 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self'; connect-src 'none';">
+<title>Herramientas — Iron Atlas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--void:#050508;--deep:#0c0608;--red:#c0392b;--red-bright:#e74c3c;--red-glow:#ff4455;--cream:#f0e6d3;--parchment:#c8b89a;--ash:#7a6e6e;--line:rgba(192,57,43,0.2);--line2:rgba(192,57,43,0.07);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;overflow-x:hidden;cursor:none;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(192,57,43,0.06),transparent 60%);}
+.cursor-dot{position:fixed;width:6px;height:6px;background:var(--red-glow);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 10px var(--red-glow),0 0 20px rgba(255,68,85,0.4);}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(192,57,43,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.18s cubic-bezier(.25,.46,.45,.94);}
+nav{position:fixed;top:0;left:0;right:0;z-index:800;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;height:68px;background:rgba(5,5,8,0.97);border-bottom:1px solid var(--line);}
+.nav-brand{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.35em;font-weight:500;color:var(--red);text-decoration:none;text-shadow:0 0 20px rgba(192,57,43,0.5);display:flex;align-items:center;gap:10px;}
+.nav-brand img{height:28px;width:28px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(192,57,43,0.6));opacity:.9;}
+.nav-links{display:flex;gap:2.8rem;list-style:none;align-items:center;}
+.nav-links a{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.22em;font-weight:400;color:var(--ash);text-decoration:none;transition:color 0.3s,text-shadow 0.3s;position:relative;padding-bottom:3px;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--red);box-shadow:0 0 8px var(--red);transform:scaleX(0);transform-origin:right;transition:transform 0.4s ease;}
+.nav-links a:hover,.nav-links a.active{color:var(--cream);}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);transform-origin:left;}
 
+.page-hero{padding:140px 5vw 70px;border-bottom:1px solid var(--line);position:relative;z-index:1;}
+.page-badge{display:inline-flex;align-items:center;gap:0.9rem;font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:0.3em;color:var(--red);opacity:0.7;margin-bottom:2rem;}
+.page-badge::before{content:'';width:24px;height:1px;background:var(--red);}
+.page-title{font-family:'Cinzel Decorative',serif;font-size:clamp(2.5rem,7vw,6rem);font-weight:900;line-height:1;color:var(--cream);text-shadow:0 0 40px rgba(192,57,43,0.25);margin-bottom:1.5rem;}
+.page-desc{font-family:'EB Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--ash);line-height:1.9;max-width:540px;}
+
+.content{padding:5rem 5vw 7rem;position:relative;z-index:1;}
+.tools-list{display:flex;flex-direction:column;gap:1px;background:var(--line2);}
+
+.tool-item{background:var(--void);display:grid;grid-template-columns:90px 1fr auto;align-items:center;gap:3rem;padding:3rem 3.5rem;position:relative;overflow:hidden;transition:background 0.4s;cursor:none;}
+.tool-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,transparent,var(--red),transparent);opacity:0;transition:opacity 0.4s;}
+.tool-item::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 100% at 0% 50%,rgba(192,57,43,0.05),transparent);opacity:0;transition:opacity 0.5s;}
+.tool-item:hover{background:var(--deep);}
+.tool-item:hover::before{opacity:1;}
+.tool-item:hover::after{opacity:1;}
+.tool-item:hover .ti-num{color:var(--red);}
+.tool-item:hover .ti-link{opacity:1;transform:translateX(0);}
+
+.ti-num{font-family:'Cinzel',serif;font-size:0.9rem;font-weight:600;color:rgba(192,57,43,0.2);transition:color 0.3s;text-align:right;}
+.ti-body{}
+.ti-name{font-family:'Cinzel Decorative',serif;font-size:1.2rem;font-weight:700;color:var(--cream);margin-bottom:0.6rem;text-shadow:0 0 16px rgba(192,57,43,0.15);}
+.ti-desc{font-family:'EB Garamond',serif;font-size:1rem;line-height:1.8;color:var(--ash);}
+.ti-tags{display:flex;gap:0.6rem;margin-top:1rem;flex-wrap:wrap;}
+.ti-tag{font-family:'Cinzel',serif;font-size:0.45rem;letter-spacing:0.2em;padding:4px 12px;border:1px solid rgba(192,57,43,0.25);color:rgba(192,57,43,0.6);}
+.ti-link{font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:0.2em;color:var(--red);text-decoration:none;opacity:0;transform:translateX(-12px);transition:all 0.3s;display:inline-flex;align-items:center;gap:0.5rem;white-space:nowrap;}
+.ti-link::after{content:'→';}
+
+footer{position:relative;z-index:1;padding:3rem 5vw;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);}
+.footer-brand{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.3em;color:var(--red);opacity:0.6;display:flex;align-items:center;gap:0.8rem;}
+.footer-brand img{height:22px;width:22px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(192,57,43,0.5));opacity:.7;}
+.footer-copy{font-family:'EB Garamond',serif;font-style:italic;font-size:0.85rem;color:var(--ash);opacity:0.4;}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.85s ease,transform 0.85s ease;}
+.reveal.vis{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+<div class="cursor-dot" id="cd"></div>
+<div class="cursor-ring" id="cr"></div>
+<nav>
+  <a href="/" class="nav-brand"><img src="/assets/iron.png" alt="Iron Atlas">Iron Atlas</a>
+  <ul class="nav-links">
+    <li><a href="/">Inicio</a></li>
+    <li><a href="/tools/" class="active">Herramientas</a></li>
+    <li><a href="/expuestos/expedientes.html">Expedientes</a></li>
+    <li><a href="/canales.html">Canales</a></li>
+  </ul>
+</nav>
+<div class="page-hero">
+  <p class="page-badge">Módulo I</p>
+  <h1 class="page-title">Herramientas</h1>
+  <p class="page-desc">Infraestructura operativa de precisión. Cada módulo diseñado para misiones donde el margen de error es nulo.</p>
+</div>
+<div class="content">
+  <div class="tools-list reveal">
+    <div class="tool-item">
+      <span class="ti-num">001</span>
+      <div class="ti-body">
+        <p class="ti-name">Rastreo Orbital</p>
+        <p class="ti-desc">Monitoreo en tiempo real de señales electromagnéticas y coordenadas geoespaciales. Triangulación de origen con precisión satelital avanzada capaz de procesar múltiples fuentes simultáneas.</p>
+        <div class="ti-tags"><span class="ti-tag">Global</span><span class="ti-tag">AES-512</span><span class="ti-tag">Tiempo real</span></div>
+      </div>
+      <a href="#" class="ti-link">Acceder</a>
+    </div>
+    <div class="tool-item">
+      <span class="ti-num">002</span>
+      <div class="ti-body">
+        <p class="ti-name">Interfaz Neural</p>
+        <p class="ti-desc">Procesamiento paralelo de grandes volúmenes de datos mediante arquitectura de red neuronal adaptativa. Reconocimiento de patrones con margen de error inferior al 0.3 por ciento.</p>
+        <div class="ti-tags"><span class="ti-tag">IA Adaptativa</span><span class="ti-tag">99.7% precisión</span><span class="ti-tag">Paralelo</span></div>
+      </div>
+      <a href="#" class="ti-link">Acceder</a>
+    </div>
+    <div class="tool-item">
+      <span class="ti-num">003</span>
+      <div class="ti-body">
+        <p class="ti-name">Protocolo Sombra</p>
+        <p class="ti-desc">Encriptación de grado militar para comunicaciones operativas sensibles. Capa de anonimato de múltiples saltos con cambio dinámico de rutas cada 90 segundos.</p>
+        <div class="ti-tags"><span class="ti-tag">Militar</span><span class="ti-tag">Multi-salto</span><span class="ti-tag">Sin trazas</span></div>
+      </div>
+      <a href="#" class="ti-link">Acceder</a>
+    </div>
+    <div class="tool-item">
+      <span class="ti-num">004</span>
+      <div class="ti-body">
+        <p class="ti-name">Atlas de Datos</p>
+        <p class="ti-desc">Cartografía digital interactiva de flujos de información global. Visualización topográfica tridimensional de redes encubiertas y nodos de distribución ocultos en tiempo real.</p>
+        <div class="ti-tags"><span class="ti-tag">3D Interactivo</span><span class="ti-tag">2.8M nodos</span><span class="ti-tag">Live</span></div>
+      </div>
+      <a href="#" class="ti-link">Acceder</a>
+    </div>
+    <div class="tool-item">
+      <span class="ti-num">005</span>
+      <div class="ti-body">
+        <p class="ti-name">Vector Cero</p>
+        <p class="ti-desc">Punto de entrada unificado a la red primaria. Acceso al núcleo de operaciones mediante verificación biométrica de doble factor y validación de identidad descentralizada.</p>
+        <div class="ti-tags"><span class="ti-tag">Biométrico</span><span class="ti-tag">PGP</span><span class="ti-tag">Auto-destruible</span></div>
+      </div>
+      <a href="#" class="ti-link">Acceder</a>
+    </div>
+    <div class="tool-item">
+      <span class="ti-num">006</span>
+      <div class="ti-body">
+        <p class="ti-name">Grid Nexus</p>
+        <p class="ti-desc">Sistema de distribución modular de recursos computacionales entre nodos activos. Balanceo dinámico de carga con redundancia automática ante fallos de infraestructura.</p>
+        <div class="ti-tags"><span class="ti-tag">2847 nodos</span><span class="ti-tag">Redundancia triple</span><span class="ti-tag">99.98% uptime</span></div>
+      </div>
+      <a href="#" class="ti-link">Acceder</a>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-brand"><img src="/assets/iron.png" alt="">Iron Atlas</div>
+  <p class="footer-copy">Herramientas — New Generation v4.1</p>
+</footer>
+<script>
+(function(){
+  var cd=document.getElementById('cd'),cr=document.getElementById('cr');
+  var mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px';});
+  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loop);})();
+  document.querySelectorAll('a,.tool-item').forEach(function(el){
+    el.addEventListener('mouseenter',function(){cr.style.width='50px';cr.style.height='50px';cr.style.borderColor='rgba(192,57,43,0.7)';});
+    el.addEventListener('mouseleave',function(){cr.style.width='32px';cr.style.height='32px';cr.style.borderColor='rgba(192,57,43,0.5)';});
+  });
+  var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(r){obs.observe(r);});
+})();
+</script>
+</body>
+</html>
