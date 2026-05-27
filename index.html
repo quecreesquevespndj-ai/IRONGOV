@@ -14,6 +14,7 @@
             --neon-red: #ff003c;
             --neon-dark-red: #990024;
             --text-light: #ffd6e0;
+            --text-muted: #a08a90;
         }
 
         * {
@@ -68,25 +69,25 @@
 
         .nav-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 900;
             color: #fff;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-shadow: 0 0 10px var(--neon-red);
         }
 
         .nav-links {
             display: flex;
-            gap: 2.5rem;
+            gap: 3rem;
         }
 
         .nav-link {
             font-family: 'Orbitron', sans-serif;
             color: var(--text-light);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 700;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             text-transform: uppercase;
             position: relative;
             transition: color 0.3s;
@@ -116,12 +117,12 @@
         .hamburger {
             display: none;
             flex-direction: column;
-            gap: 5px;
+            gap: 6px;
             cursor: pointer;
         }
 
         .hamburger span {
-            width: 25px;
+            width: 30px;
             height: 3px;
             background: var(--neon-red);
             border-radius: 2px;
@@ -136,7 +137,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10rem 2rem 5rem 2rem;
+            padding: 12rem 2rem 5rem 2rem;
         }
 
         .hero-section {
@@ -146,76 +147,115 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            max-width: 1000px;
         }
 
         .hero-logo {
-            width: 220px;
+            width: 280px;
             height: auto;
-            margin-bottom: 2rem;
-            filter: drop-shadow(0 0 25px var(--neon-red));
+            margin-bottom: 2.5rem;
+            filter: drop-shadow(0 0 30px var(--neon-red));
             animation: pulseLogo 4s infinite alternate;
         }
 
         @keyframes pulseLogo {
-            0% { transform: scale(1); filter: drop-shadow(0 0 15px var(--neon-red)); }
-            100% { transform: scale(1.05); filter: drop-shadow(0 0 35px var(--neon-red)); }
+            0% { transform: scale(1); filter: drop-shadow(0 0 20px var(--neon-red)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 45px var(--neon-red)); }
         }
 
         .hero-section h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 5.5rem);
+            font-size: clamp(3rem, 8vw, 7rem);
             font-weight: 900;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
             text-transform: uppercase;
             color: #ffffff;
-            text-shadow: 0 0 20px rgba(255, 0, 60, 0.5), 0 0 40px rgba(255, 0, 60, 0.3), 0 0 80px var(--neon-red);
-            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px rgba(255, 0, 60, 0.5), 0 0 40px rgba(255, 0, 60, 0.4), 0 0 90px var(--neon-red);
+            margin-bottom: 2rem;
         }
 
         .hero-quote {
-            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
             color: var(--text-light);
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             line-height: 1.6;
             font-style: italic;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             text-shadow: 0 0 10px rgba(255, 0, 60, 0.4);
-            border-left: 3px solid var(--neon-red);
-            border-right: 3px solid var(--neon-red);
-            padding: 0 1.5rem;
+            border-left: 4px solid var(--neon-red);
+            border-right: 4px solid var(--neon-red);
+            padding: 0 2rem;
+        }
+
+        .about-box {
+            background: rgba(15, 0, 5, 0.7);
+            border: 1px solid rgba(255, 0, 60, 0.3);
+            border-radius: 12px;
+            padding: 3rem;
+            max-width: 1000px;
+            width: 100%;
+            margin-bottom: 8rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 15px 40px rgba(255, 0, 60, 0.15), inset 0 0 20px rgba(255, 0, 60, 0.05);
+            text-align: center;
+        }
+
+        .about-box h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--neon-red);
+        }
+
+        .about-box p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
         }
 
         .grid-container {
             width: 100%;
-            max-width: 1200px;
-            margin-bottom: 5rem;
+            max-width: 1400px;
+            margin-bottom: 7rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .section-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            letter-spacing: 4px;
-            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            letter-spacing: 5px;
+            margin-bottom: 3.5rem;
             text-transform: uppercase;
             text-align: center;
             color: #ffffff;
-            text-shadow: 0 0 15px var(--neon-red);
+            text-shadow: 0 0 20px var(--neon-red);
+            border-bottom: 2px solid rgba(255, 0, 60, 0.3);
+            padding-bottom: 1rem;
+            width: fit-content;
         }
 
         .data-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
         }
 
         .card {
             background: rgba(15, 0, 5, 0.6);
             border: 1px solid rgba(255, 0, 60, 0.2);
-            border-radius: 8px;
-            padding: 1.5rem;
+            border-radius: 12px;
+            padding: 2rem;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 1.5rem;
             text-decoration: none;
             color: #ffffff;
@@ -233,7 +273,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.1), transparent);
-            transition: 0.5s;
+            transition: 0.6s;
         }
 
         .card:hover::before {
@@ -242,61 +282,100 @@
 
         .card:hover {
             border-color: var(--neon-red);
-            box-shadow: 0 10px 30px rgba(255, 0, 60, 0.2), inset 0 0 15px rgba(255, 0, 60, 0.1);
-            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 0, 60, 0.25), inset 0 0 20px rgba(255, 0, 60, 0.1);
+            transform: translateY(-8px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
 
         .card-img {
-            width: 70px;
-            height: 70px;
+            width: 85px;
+            height: 85px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(255, 0, 60, 0.3);
-            transition: border-color 0.4s, box-shadow 0.4s;
+            border: 2px solid rgba(255, 0, 60, 0.4);
+            transition: all 0.4s;
         }
 
         .card:hover .card-img {
             border-color: var(--neon-red);
-            box-shadow: 0 0 15px var(--neon-red);
+            box-shadow: 0 0 20px var(--neon-red);
         }
 
         .card-info {
             display: flex;
             flex-direction: column;
-            gap: 0.3rem;
+            gap: 0.5rem;
         }
 
         .card-name {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             font-weight: 700;
             letter-spacing: 1px;
-            transition: color 0.3s, text-shadow 0.3s;
+            transition: color 0.3s;
         }
 
         .card:hover .card-name {
             color: #ffffff;
-            text-shadow: 0 0 10px var(--neon-red);
+            text-shadow: 0 0 12px var(--neon-red);
         }
 
         .card-role {
-            font-size: 0.85rem;
+            font-size: 1rem;
             color: var(--neon-red);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             font-weight: 600;
         }
 
+        .card-desc {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .badge {
+            background: rgba(255, 0, 60, 0.1);
+            border: 1px solid rgba(255, 0, 60, 0.4);
+            color: var(--text-light);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .card:hover .badge {
+            border-color: var(--neon-red);
+            background: rgba(255, 0, 60, 0.2);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 0, 60, 0.3);
+        }
+
         .member-avatar {
-            width: 70px;
-            height: 70px;
+            width: 85px;
+            height: 85px;
             border-radius: 50%;
-            border: 2px solid rgba(255, 0, 60, 0.3);
+            border: 2px solid rgba(255, 0, 60, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: 900;
             color: var(--neon-red);
             background: rgba(255, 0, 60, 0.05);
@@ -305,9 +384,17 @@
 
         .card:hover .member-avatar {
             border-color: var(--neon-red);
-            box-shadow: 0 0 15px var(--neon-red);
+            box-shadow: 0 0 20px var(--neon-red);
             color: #fff;
             background: rgba(255, 0, 60, 0.2);
+        }
+
+        .leader-card {
+            max-width: 800px;
+            margin: 0 auto;
+            border-color: rgba(255, 0, 60, 0.6);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.15);
+            transform: scale(1.02);
         }
 
         @keyframes fadeIn {
@@ -315,7 +402,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
             .nav-links {
                 display: none;
                 position: absolute;
@@ -323,7 +410,7 @@
                 left: 0;
                 width: 100%;
                 flex-direction: column;
-                background: rgba(3, 0, 0, 0.95);
+                background: rgba(3, 0, 0, 0.98);
                 padding: 2rem 0;
                 text-align: center;
                 border-bottom: 1px solid var(--neon-red);
@@ -337,6 +424,9 @@
             .hero-quote {
                 border: none;
                 padding: 0;
+            }
+            .data-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -369,55 +459,110 @@
             <p class="hero-quote">"El sistema clasifica, oculta y controla. Nosotros extraemos, exponemos y reescribimos las reglas."</p>
         </section>
 
+        <div class="about-box">
+            <h3>¿Qué somos?</h3>
+            <p>IRON ATLAS es el ápice de la inteligencia de fuentes abiertas y la automatización ofensiva. No somos una organización tradicional; somos un ecosistema distribuido diseñado para auditar, extraer y exponer las vulnerabilidades arquitectónicas que sustentan las plataformas modernas. Desarrollamos herramientas implacables, orquestamos datos masivos y forjamos una red inquebrantable de hacktivismo cibernético avanzado.</p>
+        </div>
+
         <section class="grid-container">
-            <h2 class="section-title">Red de Alianzas</h2>
+            <h2 class="section-title">Aliados</h2>
             <div class="data-grid">
                 <a href="https://t.me/nullsechackers" class="card" target="_blank">
-                    <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="card-img">
-                    <div class="card-info">
-                        <span class="card-name">Nullsec Philippines</span>
-                        <span class="card-role">Strategic Ally</span>
+                    <div class="card-header">
+                        <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="card-img">
+                        <div class="card-info">
+                            <span class="card-name">Nullsec Philippines</span>
+                            <span class="card-role">Strategic Ally</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Fracción operativa enfocada en seguridad perimetral, análisis forense y despliegue de operaciones de red en el sudeste asiático.</p>
+                    <div class="badge-container">
+                        <span class="badge">Net-Sec</span>
+                        <span class="badge">Global Proxy</span>
                     </div>
                 </a>
                 <a href="https://t.me/HackPurgatory" class="card" target="_blank">
-                    <img src="https://files.catbox.moe/iwurbn.jpg" class="card-img">
-                    <div class="card-info">
-                        <span class="card-name">𝐇𝐀𝐂𝐊 [𝐏𝐔𝐑𝐆𝐀𝐓𝐎𝐑𝐘]™</span>
-                        <span class="card-role">Strategic Ally</span>
+                    <div class="card-header">
+                        <img src="https://files.catbox.moe/iwurbn.jpg" class="card-img">
+                        <div class="card-info">
+                            <span class="card-name">𝐇𝐀𝐂𝐊 [𝐏𝐔𝐑𝐆𝐀𝐓𝐎𝐑𝐘]™</span>
+                            <span class="card-role">Data Syndicate</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Especialistas en filtración de bases de datos profundas, ingeniería inversa de protocolos cerrados y análisis de vulnerabilidades 0-day.</p>
+                    <div class="badge-container">
+                        <span class="badge">Data Breaches</span>
+                        <span class="badge">0-Day Research</span>
                     </div>
                 </a>
                 <a href="https://t.me/zconchita" class="card" target="_blank">
-                    <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="card-img">
-                    <div class="card-info">
-                        <span class="card-name">𝐓𝐄𝐀𝐌 𝐉𝐗𝐋𝐋</span>
-                        <span class="card-role">Strategic Ally</span>
+                    <div class="card-header">
+                        <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="card-img">
+                        <div class="card-info">
+                            <span class="card-name">𝐓𝐄𝐀𝐌 𝐉𝐗𝐋𝐋</span>
+                            <span class="card-role">Tactical Vanguard</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Célula de choque dedicada al pentesting ofensivo, disrupción de servicios e inteligencia táctica contra objetivos de alta seguridad.</p>
+                    <div class="badge-container">
+                        <span class="badge">Offensive Sec</span>
+                        <span class="badge">Red Team</span>
                     </div>
                 </a>
             </div>
         </section>
 
         <section class="grid-container">
-            <h2 class="section-title">El Núcleo</h2>
-            <div class="data-grid">
-                <div class="card">
+            <h2 class="section-title">Líder</h2>
+            <div class="card leader-card">
+                <div class="card-header">
                     <div class="member-avatar">YS</div>
                     <div class="card-info">
                         <span class="card-name">Yeiler Smith</span>
-                        <span class="card-role">Core Founder & Dev</span>
+                        <span class="card-role">Fundador / Core Developer</span>
+                    </div>
+                </div>
+                <p class="card-desc">Arquitecto principal de la infraestructura de IRON ATLAS. Especialista en OSINT, ingeniería de software y creación de scripts avanzados en Python y JS para la extracción masiva de datos y automatización de procesos contra APIs seguras.</p>
+                <div class="badge-container">
+                    <span class="badge">Mastermind</span>
+                    <span class="badge">OSINT Expert</span>
+                    <span class="badge">Cybersecurity</span>
+                    <span class="badge">Python / JS Dev</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid-container">
+            <h2 class="section-title">Integrantes</h2>
+            <div class="data-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="member-avatar">NX</div>
+                        <div class="card-info">
+                            <span class="card-name">Nexus</span>
+                            <span class="card-role">API Integrations</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Ingeniero de pasarelas y sistemas asíncronos. Encargado de romper protocolos de autenticación y estructurar la interoperabilidad de nuestros bots.</p>
+                    <div class="badge-container">
+                        <span class="badge">Backend</span>
+                        <span class="badge">Fuzzing</span>
+                        <span class="badge">Network Protocol</span>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="member-avatar">NX</div>
-                    <div class="card-info">
-                        <span class="card-name">Nexus</span>
-                        <span class="card-role">API Integrations</span>
+                    <div class="card-header">
+                        <div class="member-avatar">VX</div>
+                        <div class="card-info">
+                            <span class="card-name">Vortex</span>
+                            <span class="card-role">OSINT Specialist</span>
+                        </div>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="member-avatar">VX</div>
-                    <div class="card-info">
-                        <span class="card-name">Vortex</span>
-                        <span class="card-role">OSINT Specialist</span>
+                    <p class="card-desc">Analista de inteligencia de la web profunda. Rastreo de huellas digitales, correlación de identidades y minería de metadatos confidenciales.</p>
+                    <div class="badge-container">
+                        <span class="badge">Data Mining</span>
+                        <span class="badge">Doxing</span>
+                        <span class="badge">Recon</span>
                     </div>
                 </div>
             </div>
@@ -435,7 +580,7 @@
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        let mouse = { x: null, y: null, radius: 180 };
+        let mouse = { x: null, y: null, radius: 200 };
 
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
