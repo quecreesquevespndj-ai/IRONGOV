@@ -1,852 +1,380 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; connect-src 'none';">
-<title>Iron Atlas — New Generation</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --void: #050508;
-  --deep: #0c0608;
-  --red: #c0392b;
-  --red-bright: #e74c3c;
-  --red-glow: #ff4455;
-  --red-soft: rgba(192,57,43,0.15);
-  --red-mist: rgba(231,76,60,0.06);
-  --ember: #ff6b35;
-  --cream: #f0e6d3;
-  --parchment: #c8b89a;
-  --ash: #7a6e6e;
-  --line: rgba(192,57,43,0.2);
-  --line2: rgba(192,57,43,0.07);
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRON ATLAS — NEW GENERATION</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #050508;
+            --neon-cyan: #00f0ff;
+            --neon-red: #ff0055;
+            --neon-purple: #bd00ff;
+            --text-gray: #8a8f98;
+            --card-bg: rgba(10, 10, 15, 0.7);
+        }
 
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            user-select: none; /* Bloquea selección de texto */
+            -webkit-user-drag: none;
+        }
 
-body {
-  background: var(--void);
-  color: var(--parchment);
-  font-family: 'EB Garamond', Georgia, serif;
-  overflow-x: hidden;
-  cursor: none;
-}
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
 
-.cursor-dot {
-  position: fixed; width: 6px; height: 6px;
-  background: var(--red-glow); border-radius: 50%;
-  pointer-events: none; z-index: 9999;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px var(--red-glow), 0 0 20px rgba(255,68,85,0.4);
-  transition: transform 0.05s;
-}
-.cursor-ring {
-  position: fixed; width: 32px; height: 32px;
-  border: 1px solid rgba(192,57,43,0.5);
-  border-radius: 50%; pointer-events: none; z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: all 0.18s cubic-bezier(.25,.46,.45,.94);
-}
+        /* Canvas del Fondo de Partículas Interactivo Estilo Cloudflare */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
 
-body::before {
-  content: '';
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(192,57,43,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(192,57,43,0.05) 0%, transparent 60%);
-}
+        /* Contenedor Principal */
+        .app-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 800;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 5vw; height: 68px;
-  background: linear-gradient(to bottom, rgba(5,5,8,0.98), rgba(5,5,8,0));
-  transition: background 0.5s;
-}
-nav.scrolled {
-  background: rgba(5,5,8,0.97);
-  border-bottom: 1px solid var(--line);
-}
+        /* HERO SECTION */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 0;
+            min-height: 70vh;
+        }
 
-.nav-brand {
-  font-family: 'Cinzel', serif;
-  font-size: 0.7rem; letter-spacing: 0.35em; font-weight: 500;
-  color: var(--red); text-decoration: none;
-  text-shadow: 0 0 20px rgba(192,57,43,0.5);
-  display: flex; align-items: center; gap: 10px;
-}
-.nav-brand img {
-  height: 28px; width: 28px; object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(192,57,43,0.6));
-  opacity: 0.9;
-}
+        .logo-container {
+            position: relative;
+            margin-bottom: 2rem;
+            animation: floating 4s ease-in-out infinite;
+        }
 
-.nav-links {
-  display: flex; gap: 2.8rem; list-style: none;
-  align-items: center;
-}
-.nav-links a {
-  font-family: 'Cinzel', serif; font-size: 0.6rem;
-  letter-spacing: 0.22em; font-weight: 400;
-  color: var(--ash); text-decoration: none;
-  transition: color 0.3s, text-shadow 0.3s;
-  position: relative; padding-bottom: 3px;
-}
-.nav-links a::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 1px; background: var(--red);
-  box-shadow: 0 0 8px var(--red);
-  transform: scaleX(0); transform-origin: right;
-  transition: transform 0.4s ease;
-}
-.nav-links a:hover { color: var(--cream); text-shadow: 0 0 12px rgba(192,57,43,0.4); }
-.nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
-.nav-links a.active { color: var(--red); text-shadow: 0 0 14px rgba(192,57,43,0.5); }
-.nav-links a.active::after { transform: scaleX(1); transform-origin: left; }
+        .main-logo {
+            width: 190px;
+            height: auto;
+            filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.6));
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-.hero {
-  position: relative; min-height: 100vh;
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
-  text-align: center; overflow: hidden;
-  z-index: 1;
-}
+        .main-logo:hover {
+            transform: scale(1.08) rotate(3deg);
+        }
 
-.hero-vignette {
-  position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse 75% 75% at 50% 50%, transparent 30%, rgba(5,5,8,0.7) 80%, rgba(5,5,8,0.95) 100%);
-}
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #ffffff, var(--neon-cyan), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+        }
 
-canvas#bg { position: absolute; inset: 0; z-index: 0; opacity: 0.7; }
+        .hero p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            line-height: 1.6;
+            letter-spacing: 1px;
+        }
 
-.hero-inner {
-  position: relative; z-index: 2;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 0;
-}
+        /* DIRECTORIOS / MENÚ DE ENLACES PRINCIPALES */
+        .directory-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            margin: 3rem 0;
+        }
 
-.logo-wrap {
-  position: relative; margin-bottom: 3rem;
-  display: flex; justify-content: center; align-items: center;
-}
+        .nav-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
 
-.logo-rings {
-  position: absolute; inset: -60px;
-  display: flex; justify-content: center; align-items: center;
-}
-.ring {
-  position: absolute; border-radius: 50%;
-  border: 1px solid;
-  animation: ring-spin linear infinite;
-}
-.ring:nth-child(1) {
-  width: 200px; height: 200px;
-  border-color: rgba(192,57,43,0.25);
-  animation-duration: 18s;
-}
-.ring:nth-child(2) {
-  width: 260px; height: 260px;
-  border-color: rgba(192,57,43,0.12);
-  animation-duration: 28s;
-  animation-direction: reverse;
-}
-.ring:nth-child(3) {
-  width: 320px; height: 320px;
-  border-color: rgba(192,57,43,0.06);
-  animation-duration: 40s;
-}
-@keyframes ring-spin { to { transform: rotate(360deg); } }
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
 
-.ring:nth-child(1)::before,
-.ring:nth-child(2)::before,
-.ring:nth-child(3)::before {
-  content: ''; position: absolute;
-  width: 5px; height: 5px; background: var(--red);
-  border-radius: 50%; top: -3px; left: 50%;
-  box-shadow: 0 0 12px var(--red), 0 0 24px rgba(192,57,43,0.5);
-  transform: translateX(-50%);
-}
+        .nav-btn:hover::before {
+            left: 100%;
+        }
 
-.logo-img {
-  width: 110px; height: 110px; object-fit: contain;
-  filter: drop-shadow(0 0 24px rgba(192,57,43,0.7)) drop-shadow(0 0 60px rgba(192,57,43,0.25));
-  animation: logo-breathe 4s ease-in-out infinite, logo-in 1.5s cubic-bezier(.16,1,.3,1) both;
-  position: relative; z-index: 2;
-}
-@keyframes logo-breathe {
-  0%, 100% { filter: drop-shadow(0 0 20px rgba(192,57,43,0.6)) drop-shadow(0 0 50px rgba(192,57,43,0.2)); }
-  50% { filter: drop-shadow(0 0 32px rgba(192,57,43,0.9)) drop-shadow(0 0 80px rgba(192,57,43,0.4)); }
-}
-@keyframes logo-in {
-  from { opacity: 0; transform: scale(0.7); }
-  to { opacity: 1; transform: scale(1); }
-}
+        .nav-btn:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.35);
+            transform: translateY(-5px);
+            color: var(--neon-cyan);
+        }
 
-.hero-title {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: clamp(2.4rem, 7vw, 6.5rem);
-  font-weight: 900; line-height: 1;
-  letter-spacing: 0.08em;
-  color: var(--cream);
-  text-shadow:
-    0 0 30px rgba(192,57,43,0.6),
-    0 0 80px rgba(192,57,43,0.2),
-    0 2px 4px rgba(0,0,0,0.8);
-  animation: title-in 1.6s 0.3s cubic-bezier(.16,1,.3,1) both;
-  position: relative;
-}
-@keyframes title-in {
-  from { opacity: 0; transform: translateY(30px) scale(0.96); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
+        /* SECCIÓN DE INTEGRANTES / ALIADOS (GRID MEJORADO) */
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            margin: 4rem 0 2rem 0;
+            text-transform: uppercase;
+            border-left: 4px solid var(--neon-red);
+            padding-left: 1rem;
+            text-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+        }
 
-.hero-title-line2 {
-  display: block;
-  font-size: 0.52em;
-  font-weight: 400;
-  letter-spacing: 0.6em;
-  color: var(--red);
-  text-shadow: 0 0 20px rgba(192,57,43,0.8), 0 0 50px rgba(192,57,43,0.3);
-  margin-top: 0.5rem;
-}
+        .allies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
 
-.hero-divider {
-  width: 160px; height: 1px; margin: 2.2rem 0;
-  background: linear-gradient(to right, transparent, var(--red), transparent);
-  box-shadow: 0 0 12px rgba(192,57,43,0.4);
-  animation: fade-in 1s 1s both;
-  position: relative;
-}
-.hero-divider::before, .hero-divider::after {
-  content: ''; position: absolute; top: -3px;
-  width: 7px; height: 7px; background: var(--red);
-  border-radius: 50%; box-shadow: 0 0 10px var(--red);
-}
-.hero-divider::before { left: 0; }
-.hero-divider::after { right: 0; }
+        .ally-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            text-decoration: none;
+            color: #ffffff;
+            backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-inline-start: 4px solid transparent;
+        }
 
-.hero-tagline {
-  font-family: 'EB Garamond', serif;
-  font-size: clamp(1rem, 2.2vw, 1.3rem);
-  font-style: italic; font-weight: 400;
-  color: var(--parchment); opacity: 0.75;
-  line-height: 1.9; max-width: 560px;
-  animation: fade-in 1s 1.1s both;
-}
-.hero-tagline em {
-  font-style: normal; color: var(--cream); opacity: 1;
-}
+        .ally-card:hover {
+            border-color: rgba(255, 0, 85, 0.3);
+            border-inline-start-color: var(--neon-red);
+            box-shadow: 0 15px 35px rgba(255, 0, 85, 0.15);
+            transform: scale(1.03) translateY(-2px);
+        }
 
-.hero-cta {
-  margin-top: 3rem;
-  display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center;
-  animation: fade-in 1s 1.3s both;
-}
+        .ally-img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: border-color 0.4s;
+        }
 
-.btn {
-  font-family: 'Cinzel', serif; font-size: 0.58rem;
-  letter-spacing: 0.25em; font-weight: 500;
-  padding: 13px 38px; text-decoration: none;
-  display: inline-block; transition: all 0.35s;
-  position: relative; overflow: hidden;
-}
-.btn-red {
-  background: var(--red); color: var(--cream);
-  box-shadow: 0 0 20px rgba(192,57,43,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-}
-.btn-red:hover {
-  background: var(--red-bright);
-  box-shadow: 0 0 35px rgba(192,57,43,0.7), inset 0 1px 0 rgba(255,255,255,0.15);
-  transform: translateY(-2px);
-}
-.btn-ghost {
-  color: var(--red); border: 1px solid rgba(192,57,43,0.4);
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-}
-.btn-ghost:hover {
-  border-color: var(--red);
-  background: rgba(192,57,43,0.07);
-  box-shadow: 0 0 20px rgba(192,57,43,0.15);
-  color: var(--red-bright);
-}
+        .ally-card:hover .ally-img {
+            border-color: var(--neon-red);
+        }
 
-.allies-section {
-  position: relative; z-index: 2;
-  padding: 6rem 5vw; text-align: center;
-  border-top: 1px solid var(--line2);
-}
+        .ally-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
 
-.sec-badge {
-  display: inline-flex; align-items: center; gap: 0.9rem;
-  font-family: 'Cinzel', serif; font-size: 0.55rem;
-  letter-spacing: 0.3em; color: var(--red); opacity: 0.75;
-  margin-bottom: 3.5rem; text-transform: uppercase;
-}
-.sec-badge::before, .sec-badge::after {
-  content: ''; width: 30px; height: 1px;
-  background: linear-gradient(to right, transparent, var(--red));
-}
-.sec-badge::after { background: linear-gradient(to left, transparent, var(--red)); }
+        .ally-card:hover .ally-name {
+            color: var(--neon-red);
+        }
 
-.allies-grid {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 1.5rem 2rem; max-width: 900px; margin: 0 auto;
-}
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
 
-.ally-card {
-  display: flex; align-items: center; gap: 1rem;
-  padding: 1.1rem 2rem;
-  border: 1px solid rgba(192,57,43,0.15);
-  background: rgba(192,57,43,0.03);
-  transition: all 0.35s;
-  position: relative; overflow: hidden; cursor: none;
-}
-.ally-card::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(192,57,43,0.07), transparent);
-  opacity: 0; transition: opacity 0.35s;
-}
-.ally-card::after {
-  content: ''; position: absolute;
-  bottom: 0; left: 0; right: 0; height: 1px;
-  background: var(--red); box-shadow: 0 0 8px var(--red);
-  transform: scaleX(0); transform-origin: right;
-  transition: transform 0.4s ease;
-}
-.ally-card:hover { border-color: rgba(192,57,43,0.4); }
-.ally-card:hover::before { opacity: 1; }
-.ally-card:hover::after { transform: scaleX(1); transform-origin: left; }
-.ally-card:hover .ally-name { color: var(--cream); text-shadow: 0 0 16px rgba(192,57,43,0.4); }
-
-.ally-glyph {
-  width: 36px; height: 36px; border-radius: 50%;
-  border: 1px solid rgba(192,57,43,0.3);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cinzel Decorative', serif; font-size: 0.75rem;
-  color: var(--red); flex-shrink: 0;
-  box-shadow: 0 0 12px rgba(192,57,43,0.15);
-}
-.ally-info { text-align: left; }
-.ally-name {
-  font-family: 'Cinzel', serif; font-size: 0.7rem;
-  letter-spacing: 0.12em; color: var(--parchment);
-  font-weight: 500; transition: all 0.3s;
-  display: block; margin-bottom: 2px;
-}
-.ally-role {
-  font-size: 0.7rem; font-style: italic;
-  color: var(--ash); display: block;
-}
-
-.marquee-wrap {
-  overflow: hidden; padding: 14px 0;
-  border-top: 1px solid var(--line2);
-  border-bottom: 1px solid var(--line2);
-  background: rgba(192,57,43,0.02);
-}
-.marquee-track {
-  display: flex; gap: 4rem;
-  width: max-content; animation: mq 35s linear infinite;
-}
-.marquee-track:hover { animation-play-state: paused; }
-.mq-item {
-  font-family: 'Cinzel', serif; font-size: 0.55rem;
-  letter-spacing: 0.3em; color: rgba(192,57,43,0.25);
-  white-space: nowrap; text-transform: uppercase;
-}
-.mq-sep { color: var(--red); opacity: 0.3; }
-@keyframes mq { to { transform: translateX(-50%); } }
-
-.modules-section {
-  position: relative; z-index: 1; padding: 8rem 5vw;
-}
-
-.sec-header { text-align: center; margin-bottom: 5rem; }
-.sec-title {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: clamp(1.8rem, 4vw, 3.5rem);
-  font-weight: 700; color: var(--cream);
-  text-shadow: 0 0 40px rgba(192,57,43,0.3);
-  margin-bottom: 1rem;
-}
-.sec-sub {
-  font-family: 'EB Garamond', serif; font-style: italic;
-  font-size: 1.05rem; color: var(--ash); line-height: 1.8;
-}
-
-.modules-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px; background: var(--line2);
-  max-width: 1000px; margin: 0 auto;
-}
-@media(max-width: 640px) { .modules-grid { grid-template-columns: 1fr; } }
-
-.mod-card {
-  background: var(--void); padding: 3.5rem 3rem;
-  position: relative; overflow: hidden;
-  transition: background 0.4s; cursor: none;
-  display: flex; flex-direction: column; gap: 1.2rem;
-}
-.mod-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(to right, transparent, var(--red), transparent);
-  box-shadow: 0 0 12px rgba(192,57,43,0.5);
-  transform: scaleX(0); transition: transform 0.6s ease;
-}
-.mod-card::after {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse 80% 80% at 50% 100%, rgba(192,57,43,0.05), transparent);
-  opacity: 0; transition: opacity 0.5s;
-}
-.mod-card:hover { background: var(--deep); }
-.mod-card:hover::before { transform: scaleX(1); }
-.mod-card:hover::after { opacity: 1; }
-.mod-card:hover .mod-num { color: var(--red); }
-.mod-card:hover .mod-link { opacity: 1; transform: translateX(0); }
-
-.mod-num {
-  font-family: 'Cinzel', serif; font-size: 0.5rem;
-  letter-spacing: 0.3em; color: rgba(192,57,43,0.3);
-  transition: color 0.3s;
-}
-.mod-icon {
-  width: 40px; height: 40px;
-}
-.mod-icon svg { stroke: rgba(192,57,43,0.5); stroke-width: 1; fill: none; }
-.mod-name {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 1.1rem; font-weight: 700;
-  color: var(--cream); letter-spacing: 0.03em;
-  text-shadow: 0 0 20px rgba(192,57,43,0.2);
-}
-.mod-desc {
-  font-family: 'EB Garamond', serif; font-size: 1rem;
-  line-height: 1.85; color: var(--ash); font-weight: 400;
-}
-.mod-link {
-  font-family: 'Cinzel', serif; font-size: 0.55rem;
-  letter-spacing: 0.2em; color: var(--red);
-  text-decoration: none; opacity: 0;
-  transform: translateX(-10px);
-  transition: opacity 0.3s, transform 0.3s;
-  display: inline-flex; align-items: center; gap: 0.5rem;
-}
-.mod-link::after { content: '→'; }
-
-.manifesto-band {
-  position: relative; z-index: 1;
-  padding: 7rem 5vw; text-align: center;
-  border-top: 1px solid var(--line2);
-  border-bottom: 1px solid var(--line2);
-}
-.manifesto-band::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse 70% 100% at 50% 50%, rgba(192,57,43,0.04), transparent);
-  pointer-events: none;
-}
-.manifesto-quote {
-  font-family: 'EB Garamond', serif; font-style: italic;
-  font-size: clamp(1.3rem, 3vw, 2.2rem);
-  color: var(--cream); line-height: 1.7; max-width: 750px;
-  margin: 0 auto 1.5rem;
-  text-shadow: 0 0 40px rgba(192,57,43,0.15);
-}
-.manifesto-cite {
-  font-family: 'Cinzel', serif; font-size: 0.55rem;
-  letter-spacing: 0.3em; color: var(--red); opacity: 0.6;
-}
-
-.members-section {
-  position: relative; z-index: 1;
-  padding: 8rem 5vw; text-align: center;
-}
-
-.members-grid {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 2px; background: var(--line2);
-  max-width: 900px; margin: 4rem auto 0;
-}
-
-.member-card {
-  background: var(--void); padding: 2.5rem 2rem;
-  flex: 1; min-width: 180px; max-width: 220px;
-  text-align: center; transition: background 0.35s;
-  position: relative; overflow: hidden; cursor: none;
-}
-.member-card::before {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(to right, transparent, var(--red), transparent);
-  transform: scaleX(0); transition: transform 0.4s;
-}
-.member-card:hover { background: var(--deep); }
-.member-card:hover::before { transform: scaleX(1); }
-.member-card:hover .member-initial {
-  color: var(--red); box-shadow: 0 0 24px rgba(192,57,43,0.3);
-}
-
-.member-initial {
-  width: 52px; height: 52px; border-radius: 50%;
-  border: 1px solid rgba(192,57,43,0.3);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cinzel Decorative', serif; font-size: 1.1rem;
-  color: rgba(192,57,43,0.5); margin: 0 auto 1.2rem;
-  transition: all 0.35s;
-}
-.member-name {
-  font-family: 'Cinzel', serif; font-size: 0.7rem;
-  letter-spacing: 0.12em; color: var(--parchment);
-  display: block; margin-bottom: 0.4rem;
-}
-.member-role {
-  font-family: 'EB Garamond', serif; font-style: italic;
-  font-size: 0.85rem; color: var(--ash);
-}
-
-footer {
-  position: relative; z-index: 1;
-  padding: 3rem 5vw;
-  border-top: 1px solid var(--line);
-  display: flex; justify-content: space-between;
-  align-items: center; flex-wrap: wrap; gap: 1.5rem;
-}
-.footer-brand {
-  font-family: 'Cinzel', serif; font-size: 0.65rem;
-  letter-spacing: 0.3em; color: var(--red); opacity: 0.6;
-  display: flex; align-items: center; gap: 0.8rem;
-}
-.footer-brand img {
-  height: 22px; width: 22px; object-fit: contain;
-  filter: drop-shadow(0 0 6px rgba(192,57,43,0.5));
-  opacity: 0.7;
-}
-.footer-copy {
-  font-family: 'EB Garamond', serif; font-style: italic;
-  font-size: 0.85rem; color: var(--ash); opacity: 0.4;
-}
-
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s ease, transform 0.9s ease; }
-.reveal.vis { opacity: 1; transform: translateY(0); }
-@keyframes fade-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-</style>
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; letter-spacing: 2px; }
+            .app-container { padding: 1rem; }
+            .directory-nav { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="cursor-dot" id="cd"></div>
-<div class="cursor-ring" id="cr"></div>
+    <canvas id="particle-canvas"></canvas>
 
-<nav id="nav">
-  <a href="/" class="nav-brand">
-    <img src="/assets/iron.png" alt="Iron Atlas">
-    Iron Atlas
-  </a>
-  <ul class="nav-links">
-    <li><a href="/" class="active">Inicio</a></li>
-    <li><a href="/tools/">Herramientas</a></li>
-    <li><a href="/expuestos/expedientes.html">Expedientes</a></li>
-    <li><a href="/canales.html">Canales</a></li>
-  </ul>
-</nav>
+    <div class="app-container">
+        <section class="hero">
+            <div class="logo-container">
+                <img src="/assets/iron.png" alt="IRON ATLAS LOGO" class="main-logo">
+            </div>
+            <h1>Iron Atlas</h1>
+            <p>HACTIVISTAS DE CORASON .</p>
+        </section>
 
-<section class="hero">
-  <canvas id="bg"></canvas>
-  <div class="hero-vignette"></div>
+        <h2 class="section-title" style="border-left-color: var(--neon-cyan);">Módulos del Sistema</h2>
+        <nav class="directory-nav">
+            <a href="/tools/index.html" class="nav-btn">Herramientas</a>
+            <a href="/expuestos/expedientes.html" class="nav-btn">Expedientes</a>
+            <a href="/canales.html" class="nav-btn">Canales Griegos</a>
+            <a href="/404.html" class="nav-btn">Zona de Pruebas</a>
+        </nav>
 
-  <div class="hero-inner">
-    <div class="logo-wrap">
-      <div class="logo-rings">
-        <div class="ring"></div>
-        <div class="ring"></div>
-        <div class="ring"></div>
-      </div>
-      <img src="/assets/iron.png" alt="Iron Atlas" class="logo-img">
+        <h2 class="section-title">Aliados Estratégicos</h2>
+        <div class="allies-grid">
+            <a href="https://t.me/nullsechackers" class="ally-card" target="_blank">
+                <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="ally-img">
+                <span class="ally-name">Nullsec Philippines</span>
+            </a>
+            <a href="https://t.me/HackPurgatory" class="ally-card" target="_blank">
+                <img src="https://files.catbox.moe/iwurbn.jpg" class="ally-img">
+                <span class="ally-name">𝐇𝐀𝐂𝐊 [𝐏𝐔𝐑𝐆𝐀𝐓𝐎𝐑𝐘]™</span>
+            </a>
+            <a href="https://t.me/zconchita" class="ally-card" target="_blank">
+                <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="ally-img">
+                <span class="ally-name">𝐓𝐄𝐀𝐌 𝐉𝐗𝐋𝐋</span>
+            </a>
+        </div>
     </div>
 
-    <h1 class="hero-title">
-      Iron Atlas
-      <span class="hero-title-line2">New Generation</span>
-    </h1>
+    <script>
+        // 1. EFECTO PARTÍCULAS INTERACTIVO ESTILO CLOUDFLARE OATHNET
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+        const mouse = { x: null, y: null, radius: 160 };
 
-    <div class="hero-divider"></div>
-
-    <p class="hero-tagline">
-      "La información que se oculta al pueblo<br>
-      es la cadena invisible que <em>elegimos romper.</em>"
-    </p>
-
-    <div class="hero-cta">
-      <a href="/tools/" class="btn btn-red">Acceder al Sistema</a>
-      <a href="/expuestos/expedientes.html" class="btn btn-ghost">Ver Expedientes</a>
-    </div>
-  </div>
-</section>
-
-<section class="allies-section reveal" id="allies">
-  <p class="sec-badge">Aliados de la Red</p>
-  <div class="allies-grid">
-    <div class="ally-card">
-      <div class="ally-glyph">V</div>
-      <div class="ally-info">
-        <span class="ally-name">Víctor Reyes</span>
-        <span class="ally-role">Arquitecto de Red</span>
-      </div>
-    </div>
-    <div class="ally-card">
-      <div class="ally-glyph">L</div>
-      <div class="ally-info">
-        <span class="ally-name">Luna Cifuentes</span>
-        <span class="ally-role">Analista de Inteligencia</span>
-      </div>
-    </div>
-    <div class="ally-card">
-      <div class="ally-glyph">M</div>
-      <div class="ally-info">
-        <span class="ally-name">Marcos Delgado</span>
-        <span class="ally-role">Operador de Campo</span>
-      </div>
-    </div>
-    <div class="ally-card">
-      <div class="ally-glyph">S</div>
-      <div class="ally-info">
-        <span class="ally-name">Soledad Varga</span>
-        <span class="ally-role">Cifrado y Protocolos</span>
-      </div>
-    </div>
-    <div class="ally-card">
-      <div class="ally-glyph">R</div>
-      <div class="ally-info">
-        <span class="ally-name">Rafael Ibáñez</span>
-        <span class="ally-role">Coordinador Ejecutivo</span>
-      </div>
-    </div>
-    <div class="ally-card">
-      <div class="ally-glyph">A</div>
-      <div class="ally-info">
-        <span class="ally-name">Amara Osei</span>
-        <span class="ally-role">Contacto Externo</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <span class="mq-item">Iron Atlas New Generation</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Operación en Curso</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Sistema Seguro</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Red Descentralizada</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Acceso Cifrado</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Protocolo Activo</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Iron Atlas New Generation</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Operación en Curso</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Sistema Seguro</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Red Descentralizada</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Acceso Cifrado</span><span class="mq-sep">✦</span>
-    <span class="mq-item">Protocolo Activo</span><span class="mq-sep">✦</span>
-  </div>
-</div>
-
-<section class="modules-section">
-  <div class="sec-header reveal">
-    <h2 class="sec-title">Directorios</h2>
-    <p class="sec-sub">Accede a los módulos operativos del sistema</p>
-  </div>
-  <div class="modules-grid reveal" style="transition-delay:.1s">
-
-    <div class="mod-card">
-      <p class="mod-num">I — HERRAMIENTAS</p>
-      <div class="mod-icon">
-        <svg viewBox="0 0 40 40" width="40" height="40">
-          <circle cx="20" cy="20" r="10"/><line x1="20" y1="1" x2="20" y2="10"/><line x1="20" y1="30" x2="20" y2="39"/><line x1="1" y1="20" x2="10" y2="20"/><line x1="30" y1="20" x2="39" y2="20"/>
-        </svg>
-      </div>
-      <p class="mod-name">Herramientas</p>
-      <p class="mod-desc">Infraestructura operativa de precisión. Módulos de rastreo, cifrado y análisis diseñados para misiones críticas.</p>
-      <a href="/tools/" class="mod-link">Acceder al módulo</a>
-    </div>
-
-    <div class="mod-card">
-      <p class="mod-num">II — EXPEDIENTES</p>
-      <div class="mod-icon">
-        <svg viewBox="0 0 40 40" width="40" height="40">
-          <rect x="6" y="4" width="28" height="32" rx="1"/><line x1="12" y1="13" x2="28" y2="13"/><line x1="12" y1="19" x2="28" y2="19"/><line x1="12" y1="25" x2="20" y2="25"/>
-        </svg>
-      </div>
-      <p class="mod-name">Expedientes</p>
-      <p class="mod-desc">Archivos documentados de operaciones clasificadas. Cada expediente contiene una verdad que alguien intentó enterrar.</p>
-      <a href="/expuestos/expedientes.html" class="mod-link">Acceder al módulo</a>
-    </div>
-
-    <div class="mod-card">
-      <p class="mod-num">III — CANALES</p>
-      <div class="mod-icon">
-        <svg viewBox="0 0 40 40" width="40" height="40">
-          <circle cx="20" cy="20" r="12"/><circle cx="20" cy="20" r="6"/><circle cx="20" cy="20" r="2" fill="rgba(192,57,43,0.5)" stroke="none"/>
-        </svg>
-      </div>
-      <p class="mod-name">Canales</p>
-      <p class="mod-desc">Líneas de comunicación cifradas e independientes. Cada canal opera bajo su propio protocolo de seguridad aislado.</p>
-      <a href="/canales.html" class="mod-link">Acceder al módulo</a>
-    </div>
-
-    <div class="mod-card">
-      <p class="mod-num">IV — MANIFIESTO</p>
-      <div class="mod-icon">
-        <svg viewBox="0 0 40 40" width="40" height="40">
-          <path d="M20 4 L36 36 H4 Z"/><line x1="20" y1="16" x2="20" y2="26"/><circle cx="20" cy="30" r="1.5" fill="rgba(192,57,43,0.5)" stroke="none"/>
-        </svg>
-      </div>
-      <p class="mod-name">Manifiesto</p>
-      <p class="mod-desc">El origen, los principios y la razón de ser de Iron Atlas. Todo sistema necesita un alma que lo sostenga.</p>
-      <a href="/manifiesto.html" class="mod-link">Leer el manifiesto</a>
-    </div>
-
-  </div>
-</section>
-
-<div class="manifesto-band reveal">
-  <blockquote class="manifesto-quote">
-    "No somos sombras. Somos la luz<br>que incomoda a quienes prefieren<br>la oscuridad del poder."
-  </blockquote>
-  <cite class="manifesto-cite">— Iron Atlas, Manifiesto Fundacional</cite>
-</div>
-
-<section class="members-section reveal">
-  <p class="sec-badge">El Núcleo</p>
-  <h2 class="sec-title">Integrantes</h2>
-  <p class="sec-sub" style="margin-top:.8rem">Quienes sostienen la red desde las sombras</p>
-  <div class="members-grid">
-    <div class="member-card">
-      <div class="member-initial">V</div>
-      <span class="member-name">Víctor Reyes</span>
-      <span class="member-role">Fundador</span>
-    </div>
-    <div class="member-card">
-      <div class="member-initial">L</div>
-      <span class="member-name">Luna Cifuentes</span>
-      <span class="member-role">Inteligencia</span>
-    </div>
-    <div class="member-card">
-      <div class="member-initial">M</div>
-      <span class="member-name">Marcos Delgado</span>
-      <span class="member-role">Operaciones</span>
-    </div>
-    <div class="member-card">
-      <div class="member-initial">S</div>
-      <span class="member-name">Soledad Varga</span>
-      <span class="member-role">Seguridad</span>
-    </div>
-    <div class="member-card">
-      <div class="member-initial">R</div>
-      <span class="member-name">Rafael Ibáñez</span>
-      <span class="member-role">Coordinación</span>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-brand">
-    <img src="/assets/iron.png" alt="">
-    Iron Atlas New Generation
-  </div>
-  <p class="footer-copy">Sistema cifrado · Protocolo v4.1</p>
-</footer>
-
-<script>
-(function() {
-  const cd = document.getElementById('cd');
-  const cr = document.getElementById('cr');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-
-  document.addEventListener('mousemove', function(e) {
-    mx = e.clientX; my = e.clientY;
-    cd.style.left = mx + 'px'; cd.style.top = my + 'px';
-  });
-
-  (function loop() {
-    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-    cr.style.left = rx + 'px'; cr.style.top = ry + 'px';
-    requestAnimationFrame(loop);
-  })();
-
-  var interactives = document.querySelectorAll('a, button, .ally-card, .mod-card, .member-card');
-  interactives.forEach(function(el) {
-    el.addEventListener('mouseenter', function() {
-      cr.style.width = '52px'; cr.style.height = '52px';
-      cr.style.borderColor = 'rgba(192,57,43,0.7)';
-    });
-    el.addEventListener('mouseleave', function() {
-      cr.style.width = '32px'; cr.style.height = '32px';
-      cr.style.borderColor = 'rgba(192,57,43,0.5)';
-    });
-  });
-
-  window.addEventListener('scroll', function() {
-    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
-  });
-
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) e.target.classList.add('vis');
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(function(r) { obs.observe(r); });
-
-  var canvas = document.getElementById('bg');
-  var ctx = canvas.getContext('2d');
-  var pts = [];
-
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  for (var i = 0; i < 60; i++) {
-    pts.push({
-      x: Math.random() * 2000, y: Math.random() * 1200,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: (Math.random() - 0.5) * 0.18,
-      r: Math.random() * 1 + 0.3,
-      a: Math.random() * 0.4 + 0.1
-    });
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    pts.forEach(function(p) {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0) p.x = canvas.width;
-      if (p.x > canvas.width) p.x = 0;
-      if (p.y < 0) p.y = canvas.height;
-      if (p.y > canvas.height) p.y = 0;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(192,57,43,' + p.a * 0.5 + ')';
-      ctx.fill();
-    });
-    for (var i = 0; i < pts.length; i++) {
-      for (var j = i + 1; j < pts.length; j++) {
-        var dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
-        var d = Math.sqrt(dx * dx + dy * dy);
-        if (d < 130) {
-          ctx.beginPath();
-          ctx.moveTo(pts[i].x, pts[i].y);
-          ctx.lineTo(pts[j].x, pts[j].y);
-          ctx.strokeStyle = 'rgba(192,57,43,' + (1 - d / 130) * 0.07 + ')';
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
-      }
-    }
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-</script>
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 2 + 1;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.density = (Math.random() * 30) + 15;
+                this.color = Math.random() > 0.5 ? '#00f0ff' : '#bd00ff';
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+            update() {
+                if (mouse.x !== null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.hypot(dx, dy);
+                    let forceDirectionX = dx / distance;
+                    let forceDirectionY = dy / distance;
+                    let maxDistance = mouse.radius;
+                    let force = (maxDistance - distance) / maxDistance;
+                    if (distance < mouse.radius) {
+                        this.x -= forceDirectionX * force * this.density;
+                        this.y -= forceDirectionY * force * this.density;
+                    } else {
+                        if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) * 0.1; }
+                        if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) * 0.1; }
+                    }
+                } else {
+                    if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) * 0.1; }
+                    if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) * 0.1; }
+                }
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.width * canvas.height) / 4500;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let x = Math.random() * canvas.width;
+                let y = Math.random() * canvas.height;
+                particlesArray.push(new Particle(x, y));
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].draw();
+                particlesArray[i].update();
+            }
+            requestAnimationFrame(animate);
+        }
+        initParticles();
+        animate();
+
+     
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        document.addEventListener('keydown', e => {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                (e.ctrlKey && e.key === 'U')
+            ) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+      
+        setInterval(() => {
+            (function() {
+                return false;
+            }['constructor']('debugger')());
+        }, 50);
+    </script>
 </body>
 </html>
