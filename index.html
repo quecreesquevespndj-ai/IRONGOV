@@ -10,12 +10,10 @@
     
     <style>
         :root {
-            --bg-dark: #050508;
-            --neon-cyan: #00f0ff;
-            --neon-red: #ff0055;
-            --neon-purple: #bd00ff;
-            --text-gray: #8a8f98;
-            --card-bg: rgba(10, 10, 15, 0.7);
+            --bg-dark: #030000;
+            --neon-red: #ff003c;
+            --neon-dark-red: #990024;
+            --text-light: #ffd6e0;
         }
 
         * {
@@ -23,7 +21,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
-            user-select: none; /* Bloquea selección de texto */
+            user-select: none;
             -webkit-user-drag: none;
         }
 
@@ -34,8 +32,7 @@
             min-height: 100vh;
         }
 
-        /* Canvas del Fondo de Partículas Interactivo Estilo Cloudflare */
-        #particle-canvas {
+        #bg-canvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -45,335 +42,393 @@
             pointer-events: none;
         }
 
-        /* Contenedor Principal */
-        .app-container {
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background: rgba(3, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+            box-shadow: 0 4px 30px rgba(255, 0, 60, 0.1);
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            height: 40px;
+            filter: drop-shadow(0 0 8px var(--neon-red));
+        }
+
+        .nav-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--neon-red);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-link {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--neon-red);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 8px var(--neon-red);
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--neon-red);
+            border-radius: 2px;
+            box-shadow: 0 0 5px var(--neon-red);
+        }
+
+        .main-content {
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* HERO SECTION */
-        .hero {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 8rem 2rem 2rem 2rem;
+        }
+
+        .hero-section {
             text-align: center;
-            padding: 4rem 0;
-            min-height: 70vh;
+            margin-bottom: 4rem;
+            animation: fadeIn 2s ease-out;
         }
 
-        .logo-container {
-            position: relative;
-            margin-bottom: 2rem;
-            animation: floating 4s ease-in-out infinite;
-        }
-
-        .main-logo {
-            width: 190px;
-            height: auto;
-            filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.6));
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .main-logo:hover {
-            transform: scale(1.08) rotate(3deg);
-        }
-
-        .hero h1 {
+        .hero-section h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
+            font-size: clamp(2.5rem, 6vw, 5.5rem);
             font-weight: 900;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             text-transform: uppercase;
-            background: linear-gradient(45deg, #ffffff, var(--neon-cyan), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 0, 60, 0.5), 0 0 40px rgba(255, 0, 60, 0.3), 0 0 80px var(--neon-red);
+            margin-bottom: 1.5rem;
         }
 
-        .hero p {
-            color: var(--text-gray);
-            font-size: 1.1rem;
-            max-width: 600px;
+        .hero-quote {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto;
             line-height: 1.6;
+            font-style: italic;
             letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 0, 60, 0.4);
+            border-left: 3px solid var(--neon-red);
+            border-right: 3px solid var(--neon-red);
+            padding: 0 1.5rem;
         }
 
-        /* DIRECTORIOS / MENÚ DE ENLACES PRINCIPALES */
-        .directory-nav {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
+        .allies-container {
             width: 100%;
-            margin: 3rem 0;
+            max-width: 1200px;
+            margin-top: 3rem;
         }
 
-        .nav-btn {
-            background: var(--card-bg);
-            border: 1px solid rgba(0, 240, 255, 0.15);
-            padding: 1.5rem;
-            border-radius: 12px;
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
             text-align: center;
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+
+        .allies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .ally-card {
+            background: rgba(15, 0, 5, 0.6);
+            border: 1px solid rgba(255, 0, 60, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
             text-decoration: none;
             color: #ffffff;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-size: 0.95rem;
             backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
         }
 
-        .nav-btn::before {
+        .ally-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.1), transparent);
             transition: 0.5s;
         }
 
-        .nav-btn:hover::before {
+        .ally-card:hover::before {
             left: 100%;
         }
 
-        .nav-btn:hover {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.35);
-            transform: translateY(-5px);
-            color: var(--neon-cyan);
-        }
-
-        /* SECCIÓN DE INTEGRANTES / ALIADOS (GRID MEJORADO) */
-        .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.6rem;
-            letter-spacing: 3px;
-            margin: 4rem 0 2rem 0;
-            text-transform: uppercase;
-            border-left: 4px solid var(--neon-red);
-            padding-left: 1rem;
-            text-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
-        }
-
-        .allies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 5rem;
-        }
-
-        .ally-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            text-decoration: none;
-            color: #ffffff;
-            backdrop-filter: blur(12px);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border-inline-start: 4px solid transparent;
-        }
-
         .ally-card:hover {
-            border-color: rgba(255, 0, 85, 0.3);
-            border-inline-start-color: var(--neon-red);
-            box-shadow: 0 15px 35px rgba(255, 0, 85, 0.15);
-            transform: scale(1.03) translateY(-2px);
+            border-color: var(--neon-red);
+            box-shadow: 0 10px 30px rgba(255, 0, 60, 0.2), inset 0 0 15px rgba(255, 0, 60, 0.1);
+            transform: translateY(-5px);
         }
 
         .ally-img {
-            width: 65px;
-            height: 65px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            transition: border-color 0.4s;
+            border: 2px solid rgba(255, 0, 60, 0.3);
+            transition: border-color 0.4s, box-shadow 0.4s;
         }
 
         .ally-card:hover .ally-img {
             border-color: var(--neon-red);
+            box-shadow: 0 0 15px var(--neon-red);
         }
 
         .ally-name {
+            font-family: 'Orbitron', sans-serif;
             font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: color 0.3s;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: color 0.3s, text-shadow 0.3s;
         }
 
         .ally-card:hover .ally-name {
-            color: var(--neon-red);
+            color: #ffffff;
+            text-shadow: 0 0 10px var(--neon-red);
         }
 
-        @keyframes floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; letter-spacing: 2px; }
-            .app-container { padding: 1rem; }
-            .directory-nav { grid-template-columns: 1fr; }
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background: rgba(3, 0, 0, 0.95);
+                padding: 2rem 0;
+                text-align: center;
+                border-bottom: 1px solid var(--neon-red);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hero-quote {
+                border: none;
+                padding: 0;
+            }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="bg-canvas"></canvas>
 
-    <div class="app-container">
-        <section class="hero">
-            <div class="logo-container">
-                <img src="/assets/iron.png" alt="IRON ATLAS LOGO" class="main-logo">
-            </div>
-            <h1>Iron Atlas</h1>
-            <p>HACTIVISTAS DE CORASON .</p>
+    <nav class="top-nav">
+        <a href="/" class="nav-brand">
+            <img src="/assets/iron.png" alt="IRON ATLAS" class="nav-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYwMDNjIiBzdHJva2Utd2lkdGg9IjUiLz48L3N2Zz4='">
+            <span class="nav-title">IRON ATLAS</span>
+        </a>
+        <div class="hamburger" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <a href="/tools/index.html" class="nav-link">Herramientas</a>
+            <a href="/expuestos/expedientes.html" class="nav-link">Expedientes</a>
+            <a href="/canales.html" class="nav-link">Canales</a>
+            <a href="/404.html" class="nav-link">Laboratorio</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="hero-section">
+            <h1>New Generation</h1>
+            <p class="hero-quote">"No somos una organización. Somos la anomalía que el sistema no puede parchear."</p>
         </section>
 
-        <h2 class="section-title" style="border-left-color: var(--neon-cyan);">Módulos del Sistema</h2>
-        <nav class="directory-nav">
-            <a href="/tools/index.html" class="nav-btn">Herramientas</a>
-            <a href="/expuestos/expedientes.html" class="nav-btn">Expedientes</a>
-            <a href="/canales.html" class="nav-btn">Canales Griegos</a>
-            <a href="/404.html" class="nav-btn">Zona de Pruebas</a>
-        </nav>
-
-        <h2 class="section-title">Aliados Estratégicos</h2>
-        <div class="allies-grid">
-            <a href="https://t.me/nullsechackers" class="ally-card" target="_blank">
-                <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="ally-img">
-                <span class="ally-name">Nullsec Philippines</span>
-            </a>
-            <a href="https://t.me/HackPurgatory" class="ally-card" target="_blank">
-                <img src="https://files.catbox.moe/iwurbn.jpg" class="ally-img">
-                <span class="ally-name">𝐇𝐀𝐂𝐊 [𝐏𝐔𝐑𝐆𝐀𝐓𝐎𝐑𝐘]™</span>
-            </a>
-            <a href="https://t.me/zconchita" class="ally-card" target="_blank">
-                <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="ally-img">
-                <span class="ally-name">𝐓𝐄𝐀𝐌 𝐉𝐗𝐋𝐋</span>
-            </a>
-        </div>
-    </div>
+        <section class="allies-container">
+            <h2 class="section-title">Red de Alianzas</h2>
+            <div class="allies-grid">
+                <a href="https://t.me/nullsechackers" class="ally-card" target="_blank">
+                    <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="ally-img">
+                    <span class="ally-name">Nullsec Philippines</span>
+                </a>
+                <a href="https://t.me/HackPurgatory" class="ally-card" target="_blank">
+                    <img src="https://files.catbox.moe/iwurbn.jpg" class="ally-img">
+                    <span class="ally-name">𝐇𝐀𝐂𝐊 [𝐏𝐔𝐑𝐆𝐀𝐓𝐎𝐑𝐘]™</span>
+                </a>
+                <a href="https://t.me/zconchita" class="ally-card" target="_blank">
+                    <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="ally-img">
+                    <span class="ally-name">𝐓𝐄𝐀𝐌 𝐉𝐗𝐋𝐋</span>
+                </a>
+            </div>
+        </section>
+    </main>
 
     <script>
-        // 1. EFECTO PARTÍCULAS INTERACTIVO ESTILO CLOUDFLARE OATHNET
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
-        const mouse = { x: null, y: null, radius: 160 };
+        const mobileMenuBtn = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
 
-        function resizeCanvas() {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        window.addEventListener('resize', resize);
+        resize();
 
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
-
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        class Particle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 2 + 1;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.density = (Math.random() * 30) + 15;
-                this.color = Math.random() > 0.5 ? '#00f0ff' : '#bd00ff';
+        class Node {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.vy = (Math.random() - 0.5) * 1.5;
+                this.radius = Math.random() * 2 + 1;
             }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
             draw() {
-                ctx.fillStyle = this.color;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff003c';
                 ctx.fill();
             }
-            update() {
-                if (mouse.x !== null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.hypot(dx, dy);
-                    let forceDirectionX = dx / distance;
-                    let forceDirectionY = dy / distance;
-                    let maxDistance = mouse.radius;
-                    let force = (maxDistance - distance) / maxDistance;
-                    if (distance < mouse.radius) {
-                        this.x -= forceDirectionX * force * this.density;
-                        this.y -= forceDirectionY * force * this.density;
-                    } else {
-                        if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) * 0.1; }
-                        if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) * 0.1; }
+        }
+
+        function initNodes() {
+            particles = [];
+            let count = Math.floor((canvas.width * canvas.height) / 12000);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Node());
+            }
+        }
+
+        function animateNodes() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${1 - distance/120})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
                     }
-                } else {
-                    if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) * 0.1; }
-                    if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) * 0.1; }
                 }
             }
+            requestAnimationFrame(animateNodes);
         }
 
-        function initParticles() {
-            particlesArray = [];
-            let numberOfParticles = (canvas.width * canvas.height) / 4500;
-            for (let i = 0; i < numberOfParticles; i++) {
-                let x = Math.random() * canvas.width;
-                let y = Math.random() * canvas.height;
-                particlesArray.push(new Particle(x, y));
-            }
-        }
+        initNodes();
+        animateNodes();
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].draw();
-                particlesArray[i].update();
-            }
-            requestAnimationFrame(animate);
-        }
-        initParticles();
-        animate();
-
-     
         document.addEventListener('contextmenu', e => e.preventDefault());
-        
         document.addEventListener('keydown', e => {
-            if (
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-                (e.ctrlKey && e.key === 'U')
-            ) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
                 e.preventDefault();
-                return false;
             }
         });
-
-      
         setInterval(() => {
-            (function() {
-                return false;
-            }['constructor']('debugger')());
+            (function() { return false; }['constructor']('debugger')());
         }, 50);
     </script>
 </body>
