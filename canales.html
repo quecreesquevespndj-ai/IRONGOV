@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRON ATLAS — CANALES</title>
+    <title>IRON ATLAS — 404 SYSTEM ERROR</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -13,6 +13,7 @@
             --bg-dark: #030000;
             --neon-red: #ff003c;
             --neon-dark-red: #990024;
+            --neon-cyan: #00f0ff;
             --text-light: #ffd6e0;
             --text-muted: #a08a90;
         }
@@ -137,207 +138,154 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 12rem 2rem 5rem 2rem;
+            justify-content: center;
+            padding: 8rem 2rem 5rem 2rem;
         }
 
-        .hero-section {
+        .error-container {
             text-align: center;
-            margin-bottom: 6rem;
-            animation: fadeIn 2s ease-out;
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
-            max-width: 1000px;
-        }
-
-        .hero-section h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(3rem, 8vw, 6.5rem);
-            font-weight: 900;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(255, 0, 60, 0.5), 0 0 40px rgba(255, 0, 60, 0.4), 0 0 90px var(--neon-red);
-            margin-bottom: 2rem;
-        }
-
-        .hero-quote {
-            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-            color: var(--text-light);
             max-width: 900px;
-            margin: 0 auto;
-            line-height: 1.6;
-            font-style: italic;
-            letter-spacing: 1.5px;
-            text-shadow: 0 0 10px rgba(255, 0, 60, 0.4);
-            border-left: 4px solid var(--neon-red);
-            border-right: 4px solid var(--neon-red);
-            padding: 0 2rem;
+            animation: fadeIn 1s ease-out;
         }
 
-        .grid-container {
-            width: 100%;
-            max-width: 1400px;
-            margin-bottom: 7rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 2.5rem;
-            width: 100%;
-        }
-
-        .card {
-            background: rgba(15, 0, 5, 0.6);
-            border: 1px solid rgba(255, 0, 60, 0.2);
-            border-radius: 16px;
-            padding: 3rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 1.5rem;
-            text-decoration: none;
-            color: #ffffff;
-            backdrop-filter: blur(10px);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .glitch-wrapper {
             position: relative;
-            overflow: hidden;
+            margin-bottom: 1rem;
         }
 
-        .card::before {
-            content: '';
+        .glitch-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(6rem, 15vw, 12rem);
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 10px;
+            position: relative;
+            text-shadow: 0 0 30px var(--neon-red);
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
             position: absolute;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.1), transparent);
-            transition: 0.6s;
+            opacity: 0.8;
         }
 
-        .card:hover::before {
-            left: 100%;
+        .glitch-text::before {
+            color: var(--neon-cyan);
+            z-index: -1;
+            left: 5px;
+            text-shadow: -2px 0 var(--neon-cyan);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+            clip-path: polygon(0 20%, 100% 20%, 100% 21%, 0 21%);
         }
 
-        .card:hover {
-            border-color: var(--neon-red);
-            box-shadow: 0 20px 50px rgba(255, 0, 60, 0.25), inset 0 0 30px rgba(255, 0, 60, 0.15);
-            transform: translateY(-10px);
-        }
-
-        .card-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-            width: 100%;
-        }
-
-        .channel-icon {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 0, 60, 0.5);
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
-            transition: all 0.5s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Inter', sans-serif;
-            font-size: 4.5rem;
-            font-weight: 300;
+        .glitch-text::after {
             color: var(--neon-red);
-            background: rgba(255, 0, 60, 0.05);
-            z-index: 2;
-            text-shadow: 0 0 15px var(--neon-red);
+            z-index: -2;
+            left: -5px;
+            text-shadow: -2px 0 var(--neon-red);
+            animation: glitch-anim2 3s infinite linear alternate-reverse;
+            clip-path: polygon(0 60%, 100% 60%, 100% 61%, 0 61%);
         }
 
-        .card:hover .channel-icon {
-            transform: scale(1.15);
-            border-color: #fff;
-            box-shadow: 0 0 40px var(--neon-red);
-            color: #fff;
-            background: rgba(255, 0, 60, 0.2);
-            text-shadow: 0 0 25px #fff;
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-5deg); }
+            40% { transform: skew(5deg); }
+            60% { transform: skew(-2deg); }
+            80% { transform: skew(2deg); }
+            100% { transform: skew(0deg); }
         }
 
-        .card-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+        @keyframes glitch-anim {
+            0% { clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%); transform: translate(-2px); }
+            20% { clip-path: polygon(0 15%, 100% 15%, 100% 15%, 0 15%); transform: translate(2px); }
+            40% { clip-path: polygon(0 10%, 100% 10%, 100% 20%, 0 20%); transform: translate(-2px); }
+            60% { clip-path: polygon(0 1%, 100% 1%, 100% 2%, 0 2%); transform: translate(2px); }
+            80% { clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%); transform: translate(-2px); }
+            100% { clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%); transform: translate(2px); }
         }
 
-        .card-name {
+        @keyframes glitch-anim2 {
+            0% { clip-path: polygon(0 25%, 100% 25%, 100% 30%, 0 30%); transform: translate(2px); }
+            20% { clip-path: polygon(0 3%, 100% 3%, 100% 3%, 0 3%); transform: translate(-2px); }
+            40% { clip-path: polygon(0 5%, 100% 5%, 100% 20%, 0 20%); transform: translate(2px); }
+            60% { clip-path: polygon(0 20%, 100% 20%, 100% 20%, 0 20%); transform: translate(-2px); }
+            80% { clip-path: polygon(0 40%, 100% 40%, 100% 40%, 0 40%); transform: translate(2px); }
+            100% { clip-path: polygon(0 50%, 100% 50%, 100% 50%, 0 50%); transform: translate(-2px); }
+        }
+
+        .error-subtitle {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: 3px;
-            transition: color 0.3s;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            letter-spacing: 5px;
+            color: #fff;
             text-transform: uppercase;
-        }
-
-        .card:hover .card-name {
-            color: #ffffff;
+            margin-bottom: 2rem;
             text-shadow: 0 0 15px var(--neon-red);
+            position: relative;
+            display: inline-block;
         }
 
-        .card-role {
-            font-size: 1.1rem;
-            color: var(--neon-red);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 600;
+        .error-subtitle::before, .error-subtitle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 2px;
+            background: var(--neon-red);
+            box-shadow: 0 0 10px var(--neon-red);
         }
 
-        .card-desc {
-            font-size: 1.1rem;
+        .error-subtitle::before { right: 100%; margin-right: 15px; }
+        .error-subtitle::after { left: 100%; margin-left: 15px; }
+
+        .error-desc {
+            font-size: clamp(1rem, 2vw, 1.3rem);
             color: var(--text-muted);
-            line-height: 1.7;
-            padding: 0 1rem;
-        }
-
-        .badge-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-
-        .badge {
-            background: rgba(255, 0, 60, 0.1);
-            border: 1px solid rgba(255, 0, 60, 0.4);
-            color: var(--text-light);
-            padding: 0.5rem 1rem;
+            line-height: 1.8;
+            max-width: 700px;
+            margin-bottom: 4rem;
+            letter-spacing: 1px;
+            padding: 2rem;
+            background: rgba(15, 0, 5, 0.6);
+            border: 1px solid rgba(255, 0, 60, 0.2);
             border-radius: 8px;
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 0 20px rgba(255, 0, 60, 0.05);
+            position: relative;
+        }
+
+        .error-desc::before {
+            content: '[ LOG ENTRY ]';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg-dark);
+            padding: 0 10px;
             font-family: 'Orbitron', sans-serif;
             font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-        }
-
-        .card:hover .badge {
-            border-color: var(--neon-red);
-            background: rgba(255, 0, 60, 0.2);
-            color: #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
+            color: var(--neon-red);
+            letter-spacing: 2px;
         }
 
         .action-btn {
-            margin-top: 1.5rem;
-            padding: 1rem 3rem;
-            background: transparent;
+            padding: 1.2rem 3.5rem;
+            background: rgba(255, 0, 60, 0.1);
             border: 2px solid var(--neon-red);
-            color: var(--neon-red);
+            color: #fff;
+            text-decoration: none;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -346,13 +294,27 @@
             transition: all 0.4s;
             position: relative;
             overflow: hidden;
-            z-index: 2;
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
         }
 
-        .card:hover .action-btn {
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
             background: var(--neon-red);
-            color: #fff;
-            box-shadow: 0 0 25px var(--neon-red);
+            box-shadow: 0 0 30px var(--neon-red);
             transform: scale(1.05);
         }
 
@@ -380,12 +342,8 @@
             .hamburger {
                 display: flex;
             }
-            .hero-quote {
-                border: none;
-                padding: 0;
-            }
-            .data-grid {
-                grid-template-columns: 1fr;
+            .error-subtitle::before, .error-subtitle::after {
+                display: none;
             }
         }
     </style>
@@ -406,102 +364,25 @@
         <div class="nav-links" id="nav-links">
             <a href="/tools/index.html" class="nav-link">Herramientas</a>
             <a href="/expuestos/expedientes.html" class="nav-link">Expedientes</a>
-            <a href="/canales.html" class="nav-link" style="color: #fff; text-shadow: 0 0 15px var(--neon-red);">Canales</a>
-            <a href="/404.html" class="nav-link">Laboratorio</a>
+            <a href="/canales.html" class="nav-link">Canales</a>
+            <a href="/404.html" class="nav-link" style="color: #fff; text-shadow: 0 0 15px var(--neon-red);">Laboratorio</a>
         </div>
     </nav>
 
     <main class="main-content">
-        <section class="hero-section">
-            <h1>Redes Operativas</h1>
-            <p class="hero-quote">"Descentralización táctica. Cada frecuencia es un nodo, cada nodo es un vector de ataque."</p>
-        </section>
-
-        <section class="grid-container">
-            <div class="data-grid">
-                
-                <a href="#" class="card">
-                    <div class="card-header">
-                        <div class="channel-icon">Α</div>
-                        <div class="card-info">
-                            <span class="card-name">Alpha</span>
-                            <span class="card-role">Inteligencia & OSINT</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Frecuencia principal de reconocimiento. Distribución de datos en crudo, análisis de huellas digitales y minería de metadatos de fuentes abiertas.</p>
-                    <div class="badge-container">
-                        <span class="badge">Recon</span>
-                        <span class="badge">Data Mining</span>
-                    </div>
-                    <div class="action-btn">Sintonizar</div>
-                </a>
-
-                <a href="#" class="card">
-                    <div class="card-header">
-                        <div class="channel-icon">Β</div>
-                        <div class="card-info">
-                            <span class="card-name">Beta</span>
-                            <span class="card-role">Herramientas & Desarrollo</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Núcleo de ingeniería y scripts. Discusión y despliegue de payloads, automatización de vulnerabilidades y arquitecturas de intrusión.</p>
-                    <div class="badge-container">
-                        <span class="badge">Exploits</span>
-                        <span class="badge">Automation</span>
-                    </div>
-                    <div class="action-btn">Sintonizar</div>
-                </a>
-
-                <a href="#" class="card">
-                    <div class="card-header">
-                        <div class="channel-icon">Γ</div>
-                        <div class="card-info">
-                            <span class="card-name">Gamma</span>
-                            <span class="card-role">Bases de Datos & Dumps</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Directorio de filtraciones. Intercambio de estructuras de datos extraídas de arquitecturas vulneradas e indexación de credenciales masivas.</p>
-                    <div class="badge-container">
-                        <span class="badge">Breaches</span>
-                        <span class="badge">Dumps</span>
-                    </div>
-                    <div class="action-btn">Sintonizar</div>
-                </a>
-
-                <a href="#" class="card">
-                    <div class="card-header">
-                        <div class="channel-icon">Δ</div>
-                        <div class="card-info">
-                            <span class="card-name">Delta</span>
-                            <span class="card-role">Operaciones Tácticas</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Canal de choque y acción directa. Coordinación de ataques, disrupción de servicios perimetrales y despliegues sincronizados de ofensiva.</p>
-                    <div class="badge-container">
-                        <span class="badge">Red Team</span>
-                        <span class="badge">Disruption</span>
-                    </div>
-                    <div class="action-btn">Sintonizar</div>
-                </a>
-
-                <a href="#" class="card">
-                    <div class="card-header">
-                        <div class="channel-icon">Ω</div>
-                        <div class="card-info">
-                            <span class="card-name">Omega</span>
-                            <span class="card-role">Directorio Élite</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Acceso restringido. Coordinación arquitectónica, investigación 0-day y planificación estructural. Solo por invitación criptográfica.</p>
-                    <div class="badge-container">
-                        <span class="badge">Restricted</span>
-                        <span class="badge">0-Day</span>
-                    </div>
-                    <div class="action-btn">Sintonizar</div>
-                </a>
-
+        <div class="error-container">
+            <div class="glitch-wrapper">
+                <div class="glitch-text" data-text="404">404</div>
             </div>
-        </section>
+            
+            <h2 class="error-subtitle">Anomalía Estructural</h2>
+            
+            <p class="error-desc">
+                El directorio solicitado ha sido purgado del servidor o se encuentra en un nivel de encriptación que su actual autorización no puede procesar. La ruta ha colapsado en el laberinto de la matriz. Su intento de acceso ha sido registrado en el nodo principal.
+            </p>
+
+            <a href="/" class="action-btn">Retornar al Núcleo</a>
+        </div>
     </main>
 
     <script>
@@ -538,9 +419,9 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 1.8;
-                this.vy = (Math.random() - 0.5) * 1.8;
-                this.radius = Math.random() * 2 + 1.5;
+                this.vx = (Math.random() - 0.5) * 2.5;
+                this.vy = (Math.random() - 0.5) * 2.5;
+                this.radius = Math.random() * 2.5 + 1.5;
                 this.baseX = this.x;
                 this.baseY = this.y;
             }
@@ -553,8 +434,8 @@
                     
                     if (distance < mouse.radius) {
                         let force = (mouse.radius - distance) / mouse.radius;
-                        this.x += (dx / distance) * force * 4;
-                        this.y += (dy / distance) * force * 4;
+                        this.x += (dx / distance) * force * 5;
+                        this.y += (dy / distance) * force * 5;
                     }
                 }
 
@@ -575,7 +456,7 @@
 
         function initNodes() {
             particles = [];
-            let count = Math.floor((canvas.width * canvas.height) / 9000);
+            let count = Math.floor((canvas.width * canvas.height) / 8000);
             for (let i = 0; i < count; i++) {
                 particles.push(new Node());
             }
@@ -595,7 +476,7 @@
                     if (distMouse < mouse.radius) {
                         ctx.beginPath();
                         ctx.strokeStyle = `rgba(255, 0, 60, ${1 - distMouse / mouse.radius})`;
-                        ctx.lineWidth = 1.5;
+                        ctx.lineWidth = 2;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(mouse.x, mouse.y);
                         ctx.stroke();
@@ -607,10 +488,10 @@
                     let dy = particles[i].y - particles[j].y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
                     
-                    if (distance < 130) {
+                    if (distance < 140) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.9 - distance/130})`;
-                        ctx.lineWidth = 0.6;
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.9 - distance/140})`;
+                        ctx.lineWidth = 0.8;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
                         ctx.stroke();
