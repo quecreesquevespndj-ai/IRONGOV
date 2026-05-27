@@ -244,23 +244,25 @@
 
         .data-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
             width: 100%;
         }
 
         .card {
             background: rgba(15, 0, 5, 0.6);
             border: 1px solid rgba(255, 0, 60, 0.2);
-            border-radius: 12px;
-            padding: 2rem;
+            border-radius: 16px;
+            padding: 3rem 2rem;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            text-align: center;
             gap: 1.5rem;
             text-decoration: none;
             color: #ffffff;
             backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
         }
@@ -282,28 +284,50 @@
 
         .card:hover {
             border-color: var(--neon-red);
-            box-shadow: 0 15px 40px rgba(255, 0, 60, 0.25), inset 0 0 20px rgba(255, 0, 60, 0.1);
-            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(255, 0, 60, 0.25), inset 0 0 30px rgba(255, 0, 60, 0.15);
+            transform: translateY(-10px);
         }
 
         .card-header {
             display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 1.5rem;
+            width: 100%;
         }
 
-        .card-img {
-            width: 85px;
-            height: 85px;
+        .card-img, .member-avatar {
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(255, 0, 60, 0.4);
-            transition: all 0.4s;
+            border: 3px solid rgba(255, 0, 60, 0.5);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
+            transition: all 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--neon-red);
+            background: rgba(255, 0, 60, 0.05);
+            z-index: 2;
         }
 
-        .card:hover .card-img {
-            border-color: var(--neon-red);
-            box-shadow: 0 0 20px var(--neon-red);
+        .leader-avatar {
+            width: 180px;
+            height: 180px;
+            border: 4px solid var(--neon-red);
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.5);
+        }
+
+        .card:hover .card-img, .card:hover .member-avatar {
+            transform: scale(1.1);
+            border-color: #fff;
+            box-shadow: 0 0 35px var(--neon-red);
+            color: #fff;
+            background: rgba(255, 0, 60, 0.2);
         }
 
         .card-info {
@@ -314,46 +338,48 @@
 
         .card-name {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             transition: color 0.3s;
         }
 
         .card:hover .card-name {
             color: #ffffff;
-            text-shadow: 0 0 12px var(--neon-red);
+            text-shadow: 0 0 15px var(--neon-red);
         }
 
         .card-role {
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--neon-red);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             font-weight: 600;
         }
 
         .card-desc {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
-            line-height: 1.6;
+            line-height: 1.7;
+            padding: 0 1rem;
         }
 
         .badge-container {
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
             gap: 0.8rem;
-            margin-top: 0.5rem;
+            margin-top: 1rem;
         }
 
         .badge {
             background: rgba(255, 0, 60, 0.1);
             border: 1px solid rgba(255, 0, 60, 0.4);
             color: var(--text-light);
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             letter-spacing: 1px;
             text-transform: uppercase;
             transition: all 0.3s;
@@ -363,38 +389,16 @@
             border-color: var(--neon-red);
             background: rgba(255, 0, 60, 0.2);
             color: #fff;
-            box-shadow: 0 0 10px rgba(255, 0, 60, 0.3);
-        }
-
-        .member-avatar {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 0, 60, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--neon-red);
-            background: rgba(255, 0, 60, 0.05);
-            transition: all 0.4s;
-        }
-
-        .card:hover .member-avatar {
-            border-color: var(--neon-red);
-            box-shadow: 0 0 20px var(--neon-red);
-            color: #fff;
-            background: rgba(255, 0, 60, 0.2);
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
         }
 
         .leader-card {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 900px;
+            width: 100%;
             border-color: rgba(255, 0, 60, 0.6);
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.15);
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.2);
             transform: scale(1.02);
+            padding: 4rem 2rem;
         }
 
         @keyframes fadeIn {
@@ -437,7 +441,7 @@
 
     <nav class="top-nav">
         <a href="/" class="nav-brand">
-            <span class="nav-title">IRON ATLAS NEW GENERATION</span>
+            <span class="nav-title">IRON ATLAS</span>
         </a>
         <div class="hamburger" id="mobile-menu">
             <span></span>
@@ -448,14 +452,14 @@
             <a href="/tools/index.html" class="nav-link">Herramientas</a>
             <a href="/expuestos/expedientes.html" class="nav-link">Expedientes</a>
             <a href="/canales.html" class="nav-link">Canales</a>
-            <a href="/404.html" class="nav-link">NOTICIAS</a>
+            <a href="/404.html" class="nav-link">Laboratorio</a>
         </div>
     </nav>
 
     <main class="main-content">
         <section class="hero-section">
             <img src="/assets/iron.png" alt="IRON ATLAS" class="hero-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMzAgMjBMMzAgODBMNzAgNTBaIiBmaWxsPSIjZmYwMDNjIi8+PC9zdmc+'">
-            <h1>Iron Atlas</h1>
+            <h1>New Generation</h1>
             <p class="hero-quote">"El sistema clasifica, oculta y controla. Nosotros extraemos, exponemos y reescribimos las reglas."</p>
         </section>
 
@@ -469,7 +473,7 @@
             <div class="data-grid">
                 <a href="https://t.me/nullsechackers" class="card" target="_blank">
                     <div class="card-header">
-                        <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="card-img">
+                        <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="card-img" alt="Nullsec">
                         <div class="card-info">
                             <span class="card-name">Nullsec Philippines</span>
                             <span class="card-role">Strategic Ally</span>
@@ -483,7 +487,7 @@
                 </a>
                 <a href="https://t.me/HackPurgatory" class="card" target="_blank">
                     <div class="card-header">
-                        <img src="https://files.catbox.moe/iwurbn.jpg" class="card-img">
+                        <img src="https://files.catbox.moe/iwurbn.jpg" class="card-img" alt="Hack Purgatory">
                         <div class="card-info">
                             <span class="card-name">𝐇𝐀𝐂𝐊 [𝐏𝐔𝐑𝐆𝐀𝐓𝐎𝐑𝐘]™</span>
                             <span class="card-role">Data Syndicate</span>
@@ -497,7 +501,7 @@
                 </a>
                 <a href="https://t.me/zconchita" class="card" target="_blank">
                     <div class="card-header">
-                        <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="card-img">
+                        <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="card-img" alt="Team JXLL">
                         <div class="card-info">
                             <span class="card-name">𝐓𝐄𝐀𝐌 𝐉𝐗𝐋𝐋</span>
                             <span class="card-role">Tactical Vanguard</span>
@@ -514,9 +518,9 @@
 
         <section class="grid-container">
             <h2 class="section-title">Líder</h2>
-            <div class="card leader-card">
+            <a href="#" class="card leader-card">
                 <div class="card-header">
-                    <div class="member-avatar">https://i.postimg.cc/MGtF0bFV/import.jpg</div>
+                    <img src="https://i.postimg.cc/MGtF0bFV/import.jpg" class="member-avatar leader-avatar" alt="Líder">
                     <div class="card-info">
                         <span class="card-name">Yeiler Smith</span>
                         <span class="card-role">Fundador / Core Developer</span>
@@ -529,13 +533,13 @@
                     <span class="badge">Cybersecurity</span>
                     <span class="badge">Python / JS Dev</span>
                 </div>
-            </div>
+            </a>
         </section>
 
         <section class="grid-container">
             <h2 class="section-title">Integrantes</h2>
             <div class="data-grid">
-                <div class="card">
+                <a href="#" class="card">
                     <div class="card-header">
                         <div class="member-avatar">NX</div>
                         <div class="card-info">
@@ -549,8 +553,8 @@
                         <span class="badge">Fuzzing</span>
                         <span class="badge">Network Protocol</span>
                     </div>
-                </div>
-                <div class="card">
+                </a>
+                <a href="#" class="card">
                     <div class="card-header">
                         <div class="member-avatar">VX</div>
                         <div class="card-info">
@@ -564,7 +568,7 @@
                         <span class="badge">Doxing</span>
                         <span class="badge">Recon</span>
                     </div>
-                </div>
+                </a>
             </div>
         </section>
     </main>
@@ -580,7 +584,7 @@
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        let mouse = { x: null, y: null, radius: 200 };
+        let mouse = { x: null, y: null, radius: 250 };
 
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
@@ -603,9 +607,9 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 1.5;
-                this.vy = (Math.random() - 0.5) * 1.5;
-                this.radius = Math.random() * 2 + 1;
+                this.vx = (Math.random() - 0.5) * 1.8;
+                this.vy = (Math.random() - 0.5) * 1.8;
+                this.radius = Math.random() * 2 + 1.5;
                 this.baseX = this.x;
                 this.baseY = this.y;
             }
@@ -618,8 +622,8 @@
                     
                     if (distance < mouse.radius) {
                         let force = (mouse.radius - distance) / mouse.radius;
-                        this.x += (dx / distance) * force * 3;
-                        this.y += (dy / distance) * force * 3;
+                        this.x += (dx / distance) * force * 4;
+                        this.y += (dy / distance) * force * 4;
                     }
                 }
 
@@ -640,7 +644,7 @@
 
         function initNodes() {
             particles = [];
-            let count = Math.floor((canvas.width * canvas.height) / 10000);
+            let count = Math.floor((canvas.width * canvas.height) / 9000);
             for (let i = 0; i < count; i++) {
                 particles.push(new Node());
             }
@@ -672,10 +676,10 @@
                     let dy = particles[i].y - particles[j].y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
                     
-                    if (distance < 120) {
+                    if (distance < 130) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.8 - distance/120})`;
-                        ctx.lineWidth = 0.5;
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.9 - distance/130})`;
+                        ctx.lineWidth = 0.6;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
                         ctx.stroke();
