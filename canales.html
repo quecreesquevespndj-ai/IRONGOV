@@ -1,182 +1,637 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self'; connect-src 'none';">
-<title>Canales — Iron Atlas</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-<style>
-:root{--void:#050508;--deep:#0c0608;--red:#c0392b;--red-bright:#e74c3c;--red-glow:#ff4455;--cream:#f0e6d3;--parchment:#c8b89a;--ash:#7a6e6e;--line:rgba(192,57,43,0.2);--line2:rgba(192,57,43,0.07);}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-body{background:var(--void);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;overflow-x:hidden;cursor:none;}
-body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(192,57,43,0.06),transparent 60%);}
-.cursor-dot{position:fixed;width:6px;height:6px;background:var(--red-glow);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 10px var(--red-glow),0 0 20px rgba(255,68,85,0.4);}
-.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(192,57,43,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.18s cubic-bezier(.25,.46,.45,.94);}
-nav{position:fixed;top:0;left:0;right:0;z-index:800;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;height:68px;background:rgba(5,5,8,0.97);border-bottom:1px solid var(--line);}
-.nav-brand{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.35em;font-weight:500;color:var(--red);text-decoration:none;text-shadow:0 0 20px rgba(192,57,43,0.5);display:flex;align-items:center;gap:10px;}
-.nav-brand img{height:28px;width:28px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(192,57,43,0.6));opacity:.9;}
-.nav-links{display:flex;gap:2.8rem;list-style:none;align-items:center;}
-.nav-links a{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.22em;font-weight:400;color:var(--ash);text-decoration:none;transition:color 0.3s;position:relative;padding-bottom:3px;}
-.nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--red);box-shadow:0 0 8px var(--red);transform:scaleX(0);transform-origin:right;transition:transform 0.4s ease;}
-.nav-links a:hover,.nav-links a.active{color:var(--cream);}
-.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);transform-origin:left;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRON ATLAS — CANALES</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #030000;
+            --neon-red: #ff003c;
+            --neon-dark-red: #990024;
+            --text-light: #ffd6e0;
+            --text-muted: #a08a90;
+        }
 
-.page-hero{padding:140px 5vw 70px;border-bottom:1px solid var(--line);position:relative;z-index:1;}
-.page-badge{display:inline-flex;align-items:center;gap:0.9rem;font-family:'Cinzel',serif;font-size:0.55rem;letter-spacing:0.3em;color:var(--red);opacity:0.7;margin-bottom:2rem;}
-.page-badge::before{content:'';width:24px;height:1px;background:var(--red);}
-.page-title{font-family:'Cinzel Decorative',serif;font-size:clamp(2.5rem,7vw,6rem);font-weight:900;line-height:1;color:var(--cream);text-shadow:0 0 40px rgba(192,57,43,0.25);margin-bottom:1.5rem;}
-.page-desc{font-family:'EB Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--ash);line-height:1.9;max-width:560px;}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
 
-.status-strip{position:relative;z-index:1;padding:1.5rem 5vw;border-bottom:1px solid var(--line2);display:flex;gap:5rem;align-items:center;}
-.ss-item{display:flex;flex-direction:column;gap:0.3rem;}
-.ss-label{font-family:'Cinzel',serif;font-size:0.45rem;letter-spacing:0.25em;color:rgba(192,57,43,0.35);}
-.ss-val{font-family:'EB Garamond',serif;font-size:1rem;color:var(--parchment);}
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
 
-.ch-content{padding:5rem 5vw 7rem;position:relative;z-index:1;}
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
 
-.ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line2);}
-@media(max-width:640px){.ch-grid{grid-template-columns:1fr;}}
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background: rgba(3, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+            box-shadow: 0 4px 30px rgba(255, 0, 60, 0.1);
+            z-index: 100;
+        }
 
-.ch-card{background:var(--void);padding:4rem 3.5rem;position:relative;overflow:hidden;transition:background 0.4s;cursor:none;}
-.ch-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--red),transparent);box-shadow:0 0 14px rgba(192,57,43,0.4);transform:scaleX(0);transition:transform 0.6s ease;}
-.ch-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 100%,rgba(192,57,43,0.04),transparent);opacity:0;transition:opacity 0.5s;}
-.ch-card.wide{grid-column:span 2;}
-@media(max-width:640px){.ch-card.wide{grid-column:span 1;}}
-.ch-card:hover{background:var(--deep);}
-.ch-card:hover::before{transform:scaleX(1);}
-.ch-card:hover::after{opacity:1;}
-.ch-card:hover .ch-glyph{color:var(--red);text-shadow:0 0 30px rgba(192,57,43,0.5);}
-.ch-card:hover .ch-action{opacity:1;transform:translateX(0);}
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
 
-.ch-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2.5rem;}
-.ch-glyph{font-family:'Cinzel Decorative',serif;font-size:3.5rem;font-weight:900;color:rgba(192,57,43,0.12);line-height:1;transition:all 0.5s;}
-.ch-dot{width:8px;height:8px;border-radius:50%;margin-top:0.8rem;}
-.ch-dot.on{background:#5fb080;box-shadow:0 0 10px rgba(95,176,128,0.6);}
-.ch-dot.warn{background:var(--red);box-shadow:0 0 10px rgba(192,57,43,0.6);}
-.ch-name{font-family:'Cinzel Decorative',serif;font-size:1.5rem;font-weight:700;color:var(--cream);margin-bottom:0.5rem;text-shadow:0 0 16px rgba(192,57,43,0.15);}
-.ch-code{font-family:'Cinzel',serif;font-size:0.48rem;letter-spacing:0.3em;color:rgba(192,57,43,0.4);margin-bottom:1.5rem;display:block;}
-.ch-desc{font-family:'EB Garamond',serif;font-style:italic;font-size:1rem;line-height:1.9;color:var(--ash);margin-bottom:2rem;}
-.ch-specs{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:2rem;}
-.ch-spec{font-family:'EB Garamond',serif;font-size:0.9rem;color:rgba(122,110,110,0.6);display:flex;gap:0.6rem;}
-.ch-spec em{font-style:normal;color:rgba(192,57,43,0.5);}
-.ch-action{font-family:'Cinzel',serif;font-size:0.52rem;letter-spacing:0.2em;color:var(--red);text-decoration:none;opacity:0;transform:translateX(-10px);transition:all 0.3s;display:inline-flex;align-items:center;gap:0.5rem;}
-.ch-action::after{content:'→';}
+        .nav-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--neon-red);
+        }
 
-footer{position:relative;z-index:1;padding:3rem 5vw;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);}
-.footer-brand{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.3em;color:var(--red);opacity:0.6;display:flex;align-items:center;gap:0.8rem;}
-.footer-brand img{height:22px;width:22px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(192,57,43,0.5));opacity:.7;}
-.footer-copy{font-family:'EB Garamond',serif;font-style:italic;font-size:0.85rem;color:var(--ash);opacity:0.4;}
-.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.85s ease,transform 0.85s ease;}
-.reveal.vis{opacity:1;transform:translateY(0);}
-</style>
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--neon-red);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 8px var(--neon-red);
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: var(--neon-red);
+            border-radius: 2px;
+            box-shadow: 0 0 5px var(--neon-red);
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12rem 2rem 5rem 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 6rem;
+            animation: fadeIn 2s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .hero-section h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-weight: 900;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 0, 60, 0.5), 0 0 40px rgba(255, 0, 60, 0.4), 0 0 90px var(--neon-red);
+            margin-bottom: 2rem;
+        }
+
+        .hero-quote {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            color: var(--text-light);
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-style: italic;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 10px rgba(255, 0, 60, 0.4);
+            border-left: 4px solid var(--neon-red);
+            border-right: 4px solid var(--neon-red);
+            padding: 0 2rem;
+        }
+
+        .grid-container {
+            width: 100%;
+            max-width: 1400px;
+            margin-bottom: 7rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(15, 0, 5, 0.6);
+            border: 1px solid rgba(255, 0, 60, 0.2);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.5rem;
+            text-decoration: none;
+            color: #ffffff;
+            backdrop-filter: blur(10px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.1), transparent);
+            transition: 0.6s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            border-color: var(--neon-red);
+            box-shadow: 0 20px 50px rgba(255, 0, 60, 0.25), inset 0 0 30px rgba(255, 0, 60, 0.15);
+            transform: translateY(-10px);
+        }
+
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .channel-icon {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 0, 60, 0.5);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
+            transition: all 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 300;
+            color: var(--neon-red);
+            background: rgba(255, 0, 60, 0.05);
+            z-index: 2;
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+
+        .card:hover .channel-icon {
+            transform: scale(1.15);
+            border-color: #fff;
+            box-shadow: 0 0 40px var(--neon-red);
+            color: #fff;
+            background: rgba(255, 0, 60, 0.2);
+            text-shadow: 0 0 25px #fff;
+        }
+
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .card-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            transition: color 0.3s;
+            text-transform: uppercase;
+        }
+
+        .card:hover .card-name {
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+
+        .card-role {
+            font-size: 1.1rem;
+            color: var(--neon-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .card-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            padding: 0 1rem;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            background: rgba(255, 0, 60, 0.1);
+            border: 1px solid rgba(255, 0, 60, 0.4);
+            color: var(--text-light);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .card:hover .badge {
+            border-color: var(--neon-red);
+            background: rgba(255, 0, 60, 0.2);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
+        }
+
+        .action-btn {
+            margin-top: 1.5rem;
+            padding: 1rem 3rem;
+            background: transparent;
+            border: 2px solid var(--neon-red);
+            color: var(--neon-red);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .card:hover .action-btn {
+            background: var(--neon-red);
+            color: #fff;
+            box-shadow: 0 0 25px var(--neon-red);
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background: rgba(3, 0, 0, 0.98);
+                padding: 2rem 0;
+                text-align: center;
+                border-bottom: 1px solid var(--neon-red);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hero-quote {
+                border: none;
+                padding: 0;
+            }
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="cursor-dot" id="cd"></div>
-<div class="cursor-ring" id="cr"></div>
-<nav>
-  <a href="/" class="nav-brand"><img src="/assets/iron.png" alt="Iron Atlas">Iron Atlas</a>
-  <ul class="nav-links">
-    <li><a href="/">Inicio</a></li>
-    <li><a href="/tools/">Herramientas</a></li>
-    <li><a href="/expuestos/expedientes.html">Expedientes</a></li>
-    <li><a href="/canales.html" class="active">Canales</a></li>
-  </ul>
-</nav>
-<div class="page-hero">
-  <p class="page-badge">Módulo III</p>
-  <h1 class="page-title">Canales</h1>
-  <p class="page-desc">Líneas de comunicación cifradas e independientes. Cada canal opera bajo su propio protocolo de seguridad, aislado para garantizar la integridad operativa total.</p>
-</div>
-<div class="status-strip reveal">
-  <div class="ss-item"><span class="ss-label">Canales activos</span><span class="ss-val">4 de 5</span></div>
-  <div class="ss-item"><span class="ss-label">Cifrado global</span><span class="ss-val">AES-512 activo</span></div>
-  <div class="ss-item"><span class="ss-label">Integridad</span><span class="ss-val">Verificada</span></div>
-  <div class="ss-item"><span class="ss-label">Último acceso</span><span class="ss-val">Hace 3 minutos</span></div>
-</div>
-<div class="ch-content">
-  <div class="ch-grid reveal">
-    <div class="ch-card">
-      <div class="ch-header"><span class="ch-glyph">Α</span><div class="ch-dot on"></div></div>
-      <p class="ch-name">Canal Alpha</p>
-      <span class="ch-code">Primario · AES-512 · Nivel I</span>
-      <p class="ch-desc">Canal principal de comunicaciones operativas. Soporta el mayor volumen de tráfico cifrado y actúa como columna vertebral de la red de Iron Atlas.</p>
-      <div class="ch-specs">
-        <div class="ch-spec"><em>Cifrado:</em> AES-512 + PGP</div>
-        <div class="ch-spec"><em>Disponibilidad:</em> 99.98%</div>
-        <div class="ch-spec"><em>Acceso:</em> Verificación biométrica</div>
-      </div>
-      <a href="#" class="ch-action">Conectar al canal</a>
-    </div>
-    <div class="ch-card">
-      <div class="ch-header"><span class="ch-glyph">Β</span><div class="ch-dot on"></div></div>
-      <p class="ch-name">Canal Beta</p>
-      <span class="ch-code">Secundario · Cifrado cuántico · Nivel II</span>
-      <p class="ch-desc">Canal de respaldo con cifrado cuántico experimental. Activación automática ante anomalías en el Canal Alpha. Acceso restringido a operadores nivel superior.</p>
-      <div class="ch-specs">
-        <div class="ch-spec"><em>Cifrado:</em> Post-cuántico Q-256</div>
-        <div class="ch-spec"><em>Activación:</em> Automática</div>
-        <div class="ch-spec"><em>Acceso:</em> Nivel II o superior</div>
-      </div>
-      <a href="#" class="ch-action">Conectar al canal</a>
-    </div>
-    <div class="ch-card">
-      <div class="ch-header"><span class="ch-glyph">Γ</span><div class="ch-dot on"></div></div>
-      <p class="ch-name">Canal Gamma</p>
-      <span class="ch-code">Operativo · Señal encubierta · Nivel II</span>
-      <p class="ch-desc">Canal de operaciones encubiertas en campo. Frecuencias distribuidas con cambio de ruta dinámico cada 60 segundos. Trazabilidad nula garantizada.</p>
-      <div class="ch-specs">
-        <div class="ch-spec"><em>Ruta:</em> Dinámica cada 60 segundos</div>
-        <div class="ch-spec"><em>Trazabilidad:</em> Nula</div>
-        <div class="ch-spec"><em>Saltos mínimos:</em> 9</div>
-      </div>
-      <a href="#" class="ch-action">Conectar al canal</a>
-    </div>
-    <div class="ch-card">
-      <div class="ch-header"><span class="ch-glyph">Δ</span><div class="ch-dot warn"></div></div>
-      <p class="ch-name">Canal Delta</p>
-      <span class="ch-code">Emergencia · Protocolo Rojo · Nivel III</span>
-      <p class="ch-desc">Canal de emergencia activado únicamente bajo Protocolo Rojo. Su uso activa procedimientos extremos y notificación automática a todos los nodos activos.</p>
-      <div class="ch-specs">
-        <div class="ch-spec"><em>Activación:</em> Solo protocolo rojo</div>
-        <div class="ch-spec"><em>Notificación:</em> Todos los nodos</div>
-        <div class="ch-spec"><em>Acceso:</em> Nivel III exclusivo</div>
-      </div>
-      <a href="#" class="ch-action">Acceso restringido</a>
-    </div>
-    <div class="ch-card wide">
-      <div class="ch-header"><span class="ch-glyph">Ω</span><div class="ch-dot on"></div></div>
-      <p class="ch-name">Canal Omega</p>
-      <span class="ch-code">Maestro · Nivel Máximo · Autorización central</span>
-      <p class="ch-desc">El canal maestro de Iron Atlas. Punto de convergencia de todos los flujos de información operativa. Acceso limitado a un número reducido de operadores de confianza con autorización central del núcleo. Desde Omega se coordina la totalidad de la red.</p>
-      <div class="ch-specs">
-        <div class="ch-spec"><em>Acceso:</em> Autorización central del núcleo</div>
-        <div class="ch-spec"><em>Cifrado:</em> Multicapa — 7 algoritmos simultáneos</div>
-        <div class="ch-spec"><em>Sesión:</em> Máximo 20 minutos — auto-destruible</div>
-        <div class="ch-spec"><em>Registro:</em> Cero logs — sin trazabilidad</div>
-      </div>
-      <a href="#" class="ch-action">Solicitar acceso Omega</a>
-    </div>
-  </div>
-</div>
-<footer>
-  <div class="footer-brand"><img src="/assets/iron.png" alt="">Iron Atlas</div>
-  <p class="footer-copy">Canales — New Generation v4.1</p>
-</footer>
-<script>
-(function(){
-  var cd=document.getElementById('cd'),cr=document.getElementById('cr');
-  var mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px';});
-  (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loop);})();
-  document.querySelectorAll('a,.ch-card').forEach(function(el){
-    el.addEventListener('mouseenter',function(){cr.style.width='50px';cr.style.height='50px';cr.style.borderColor='rgba(192,57,43,0.7)';});
-    el.addEventListener('mouseleave',function(){cr.style.width='32px';cr.style.height='32px';cr.style.borderColor='rgba(192,57,43,0.5)';});
-  });
-  var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
-  document.querySelectorAll('.reveal').forEach(function(r){obs.observe(r);});
-})();
-</script>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="top-nav">
+        <a href="/" class="nav-brand">
+            <span class="nav-title">IRON ATLAS</span>
+        </a>
+        <div class="hamburger" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <a href="/tools/index.html" class="nav-link">Herramientas</a>
+            <a href="/expuestos/expedientes.html" class="nav-link">Expedientes</a>
+            <a href="/canales.html" class="nav-link" style="color: #fff; text-shadow: 0 0 15px var(--neon-red);">Canales</a>
+            <a href="/404.html" class="nav-link">Laboratorio</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="hero-section">
+            <h1>Redes Operativas</h1>
+            <p class="hero-quote">"Descentralización táctica. Cada frecuencia es un nodo, cada nodo es un vector de ataque."</p>
+        </section>
+
+        <section class="grid-container">
+            <div class="data-grid">
+                
+                <a href="#" class="card">
+                    <div class="card-header">
+                        <div class="channel-icon">Α</div>
+                        <div class="card-info">
+                            <span class="card-name">Alpha</span>
+                            <span class="card-role">Inteligencia & OSINT</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Frecuencia principal de reconocimiento. Distribución de datos en crudo, análisis de huellas digitales y minería de metadatos de fuentes abiertas.</p>
+                    <div class="badge-container">
+                        <span class="badge">Recon</span>
+                        <span class="badge">Data Mining</span>
+                    </div>
+                    <div class="action-btn">Sintonizar</div>
+                </a>
+
+                <a href="#" class="card">
+                    <div class="card-header">
+                        <div class="channel-icon">Β</div>
+                        <div class="card-info">
+                            <span class="card-name">Beta</span>
+                            <span class="card-role">Herramientas & Desarrollo</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Núcleo de ingeniería y scripts. Discusión y despliegue de payloads, automatización de vulnerabilidades y arquitecturas de intrusión.</p>
+                    <div class="badge-container">
+                        <span class="badge">Exploits</span>
+                        <span class="badge">Automation</span>
+                    </div>
+                    <div class="action-btn">Sintonizar</div>
+                </a>
+
+                <a href="#" class="card">
+                    <div class="card-header">
+                        <div class="channel-icon">Γ</div>
+                        <div class="card-info">
+                            <span class="card-name">Gamma</span>
+                            <span class="card-role">Bases de Datos & Dumps</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Directorio de filtraciones. Intercambio de estructuras de datos extraídas de arquitecturas vulneradas e indexación de credenciales masivas.</p>
+                    <div class="badge-container">
+                        <span class="badge">Breaches</span>
+                        <span class="badge">Dumps</span>
+                    </div>
+                    <div class="action-btn">Sintonizar</div>
+                </a>
+
+                <a href="#" class="card">
+                    <div class="card-header">
+                        <div class="channel-icon">Δ</div>
+                        <div class="card-info">
+                            <span class="card-name">Delta</span>
+                            <span class="card-role">Operaciones Tácticas</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Canal de choque y acción directa. Coordinación de ataques, disrupción de servicios perimetrales y despliegues sincronizados de ofensiva.</p>
+                    <div class="badge-container">
+                        <span class="badge">Red Team</span>
+                        <span class="badge">Disruption</span>
+                    </div>
+                    <div class="action-btn">Sintonizar</div>
+                </a>
+
+                <a href="#" class="card">
+                    <div class="card-header">
+                        <div class="channel-icon">Ω</div>
+                        <div class="card-info">
+                            <span class="card-name">Omega</span>
+                            <span class="card-role">Directorio Élite</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Acceso restringido. Coordinación arquitectónica, investigación 0-day y planificación estructural. Solo por invitación criptográfica.</p>
+                    <div class="badge-container">
+                        <span class="badge">Restricted</span>
+                        <span class="badge">0-Day</span>
+                    </div>
+                    <div class="action-btn">Sintonizar</div>
+                </a>
+
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 250 };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Node {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 1.8;
+                this.vy = (Math.random() - 0.5) * 1.8;
+                this.radius = Math.random() * 2 + 1.5;
+                this.baseX = this.x;
+                this.baseY = this.y;
+            }
+
+            update() {
+                if (mouse.x !== null) {
+                    let dx = this.x - mouse.x;
+                    let dy = this.y - mouse.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouse.radius) {
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        this.x += (dx / distance) * force * 4;
+                        this.y += (dy / distance) * force * 4;
+                    }
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff003c';
+                ctx.fill();
+            }
+        }
+
+        function initNodes() {
+            particles = [];
+            let count = Math.floor((canvas.width * canvas.height) / 9000);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Node());
+            }
+        }
+
+        function animateNodes() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                if (mouse.x !== null) {
+                    let dxMouse = particles[i].x - mouse.x;
+                    let dyMouse = particles[i].y - mouse.y;
+                    let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+                    if (distMouse < mouse.radius) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${1 - distMouse / mouse.radius})`;
+                        ctx.lineWidth = 1.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 130) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.9 - distance/130})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateNodes);
+        }
+
+        initNodes();
+        animateNodes();
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
+        setInterval(() => {
+            (function() { return false; }['constructor']('debugger')());
+        }, 50);
+    </script>
 </body>
 </html>
