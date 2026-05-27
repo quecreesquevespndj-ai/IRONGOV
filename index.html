@@ -66,11 +66,6 @@
             text-decoration: none;
         }
 
-        .nav-logo {
-            height: 40px;
-            filter: drop-shadow(0 0 8px var(--neon-red));
-        }
-
         .nav-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.5rem;
@@ -141,14 +136,29 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 8rem 2rem 2rem 2rem;
+            padding: 10rem 2rem 5rem 2rem;
         }
 
         .hero-section {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 6rem;
             animation: fadeIn 2s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-logo {
+            width: 220px;
+            height: auto;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 25px var(--neon-red));
+            animation: pulseLogo 4s infinite alternate;
+        }
+
+        @keyframes pulseLogo {
+            0% { transform: scale(1); filter: drop-shadow(0 0 15px var(--neon-red)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 35px var(--neon-red)); }
         }
 
         .hero-section h1 {
@@ -163,7 +173,7 @@
         }
 
         .hero-quote {
-            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
             color: var(--text-light);
             max-width: 800px;
             margin: 0 auto;
@@ -176,30 +186,30 @@
             padding: 0 1.5rem;
         }
 
-        .allies-container {
+        .grid-container {
             width: 100%;
             max-width: 1200px;
-            margin-top: 3rem;
+            margin-bottom: 5rem;
         }
 
         .section-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.8rem;
             letter-spacing: 4px;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
             text-transform: uppercase;
             text-align: center;
             color: #ffffff;
             text-shadow: 0 0 15px var(--neon-red);
         }
 
-        .allies-grid {
+        .data-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
-        .ally-card {
+        .card {
             background: rgba(15, 0, 5, 0.6);
             border: 1px solid rgba(255, 0, 60, 0.2);
             border-radius: 8px;
@@ -215,7 +225,7 @@
             overflow: hidden;
         }
 
-        .ally-card::before {
+        .card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -226,17 +236,17 @@
             transition: 0.5s;
         }
 
-        .ally-card:hover::before {
+        .card:hover::before {
             left: 100%;
         }
 
-        .ally-card:hover {
+        .card:hover {
             border-color: var(--neon-red);
             box-shadow: 0 10px 30px rgba(255, 0, 60, 0.2), inset 0 0 15px rgba(255, 0, 60, 0.1);
             transform: translateY(-5px);
         }
 
-        .ally-img {
+        .card-img {
             width: 70px;
             height: 70px;
             border-radius: 50%;
@@ -245,12 +255,18 @@
             transition: border-color 0.4s, box-shadow 0.4s;
         }
 
-        .ally-card:hover .ally-img {
+        .card:hover .card-img {
             border-color: var(--neon-red);
             box-shadow: 0 0 15px var(--neon-red);
         }
 
-        .ally-name {
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .card-name {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.1rem;
             font-weight: 700;
@@ -258,9 +274,40 @@
             transition: color 0.3s, text-shadow 0.3s;
         }
 
-        .ally-card:hover .ally-name {
+        .card:hover .card-name {
             color: #ffffff;
             text-shadow: 0 0 10px var(--neon-red);
+        }
+
+        .card-role {
+            font-size: 0.85rem;
+            color: var(--neon-red);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .member-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 0, 60, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--neon-red);
+            background: rgba(255, 0, 60, 0.05);
+            transition: all 0.4s;
+        }
+
+        .card:hover .member-avatar {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 15px var(--neon-red);
+            color: #fff;
+            background: rgba(255, 0, 60, 0.2);
         }
 
         @keyframes fadeIn {
@@ -300,7 +347,6 @@
 
     <nav class="top-nav">
         <a href="/" class="nav-brand">
-            <img src="/assets/iron.png" alt="IRON ATLAS" class="nav-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmYwMDNjIiBzdHJva2Utd2lkdGg9IjUiLz48L3N2Zz4='">
             <span class="nav-title">IRON ATLAS</span>
         </a>
         <div class="hamburger" id="mobile-menu">
@@ -318,25 +364,62 @@
 
     <main class="main-content">
         <section class="hero-section">
+            <img src="/assets/iron.png" alt="IRON ATLAS" class="hero-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMzAgMjBMMzAgODBMNzAgNTBaIiBmaWxsPSIjZmYwMDNjIi8+PC9zdmc+'">
             <h1>New Generation</h1>
-            <p class="hero-quote">"No somos una organización. Somos la anomalía que el sistema no puede parchear."</p>
+            <p class="hero-quote">"El sistema clasifica, oculta y controla. Nosotros extraemos, exponemos y reescribimos las reglas."</p>
         </section>
 
-        <section class="allies-container">
+        <section class="grid-container">
             <h2 class="section-title">Red de Alianzas</h2>
-            <div class="allies-grid">
-                <a href="https://t.me/nullsechackers" class="ally-card" target="_blank">
-                    <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="ally-img">
-                    <span class="ally-name">Nullsec Philippines</span>
+            <div class="data-grid">
+                <a href="https://t.me/nullsechackers" class="card" target="_blank">
+                    <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="card-img">
+                    <div class="card-info">
+                        <span class="card-name">Nullsec Philippines</span>
+                        <span class="card-role">Strategic Ally</span>
+                    </div>
                 </a>
-                <a href="https://t.me/HackPurgatory" class="ally-card" target="_blank">
-                    <img src="https://files.catbox.moe/iwurbn.jpg" class="ally-img">
-                    <span class="ally-name">𝐇𝐀𝐂𝐊 [𝐏𝐔𝐑𝐆𝐀𝐓𝐎𝐑𝐘]™</span>
+                <a href="https://t.me/HackPurgatory" class="card" target="_blank">
+                    <img src="https://files.catbox.moe/iwurbn.jpg" class="card-img">
+                    <div class="card-info">
+                        <span class="card-name">𝐇𝐀𝐂𝐊 [𝐏𝐔𝐑𝐆𝐀𝐓𝐎𝐑𝐘]™</span>
+                        <span class="card-role">Strategic Ally</span>
+                    </div>
                 </a>
-                <a href="https://t.me/zconchita" class="ally-card" target="_blank">
-                    <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="ally-img">
-                    <span class="ally-name">𝐓𝐄𝐀𝐌 𝐉𝐗𝐋𝐋</span>
+                <a href="https://t.me/zconchita" class="card" target="_blank">
+                    <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="card-img">
+                    <div class="card-info">
+                        <span class="card-name">𝐓𝐄𝐀𝐌 𝐉𝐗𝐋𝐋</span>
+                        <span class="card-role">Strategic Ally</span>
+                    </div>
                 </a>
+            </div>
+        </section>
+
+        <section class="grid-container">
+            <h2 class="section-title">El Núcleo</h2>
+            <div class="data-grid">
+                <div class="card">
+                    <div class="member-avatar">YS</div>
+                    <div class="card-info">
+                        <span class="card-name">Yeiler Smith</span>
+                        <span class="card-role">Core Founder & Dev</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="member-avatar">NX</div>
+                    <div class="card-info">
+                        <span class="card-name">Nexus</span>
+                        <span class="card-role">API Integrations</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="member-avatar">VX</div>
+                    <div class="card-info">
+                        <span class="card-name">Vortex</span>
+                        <span class="card-role">OSINT Specialist</span>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -352,6 +435,17 @@
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
+        let mouse = { x: null, y: null, radius: 180 };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
 
         function resize() {
             canvas.width = window.innerWidth;
@@ -367,9 +461,23 @@
                 this.vx = (Math.random() - 0.5) * 1.5;
                 this.vy = (Math.random() - 0.5) * 1.5;
                 this.radius = Math.random() * 2 + 1;
+                this.baseX = this.x;
+                this.baseY = this.y;
             }
 
             update() {
+                if (mouse.x !== null) {
+                    let dx = this.x - mouse.x;
+                    let dy = this.y - mouse.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouse.radius) {
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        this.x += (dx / distance) * force * 3;
+                        this.y += (dy / distance) * force * 3;
+                    }
+                }
+
                 this.x += this.vx;
                 this.y += this.vy;
 
@@ -387,7 +495,7 @@
 
         function initNodes() {
             particles = [];
-            let count = Math.floor((canvas.width * canvas.height) / 12000);
+            let count = Math.floor((canvas.width * canvas.height) / 10000);
             for (let i = 0; i < count; i++) {
                 particles.push(new Node());
             }
@@ -400,6 +508,20 @@
                 particles[i].update();
                 particles[i].draw();
                 
+                if (mouse.x !== null) {
+                    let dxMouse = particles[i].x - mouse.x;
+                    let dyMouse = particles[i].y - mouse.y;
+                    let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+                    if (distMouse < mouse.radius) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${1 - distMouse / mouse.radius})`;
+                        ctx.lineWidth = 1.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+
                 for (let j = i; j < particles.length; j++) {
                     let dx = particles[i].x - particles[j].x;
                     let dy = particles[i].y - particles[j].y;
@@ -407,7 +529,7 @@
                     
                     if (distance < 120) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 0, 60, ${1 - distance/120})`;
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.8 - distance/120})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
