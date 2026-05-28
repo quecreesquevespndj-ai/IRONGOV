@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRON ATLAS — 404 SYSTEM ERROR</title>
+    <title>IRON ATLAS — FRECUENCIAS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -12,8 +12,6 @@
         :root {
             --bg-dark: #030000;
             --neon-red: #ff003c;
-            --neon-dark-red: #990024;
-            --neon-cyan: #00f0ff;
             --text-light: #ffd6e0;
             --text-muted: #a08a90;
         }
@@ -53,7 +51,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 1.5rem 3rem;
-            background: rgba(3, 0, 0, 0.7);
+            background: rgba(3, 0, 0, 0.85);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255, 0, 60, 0.3);
@@ -138,182 +136,269 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 8rem 2rem 5rem 2rem;
+            padding: 12rem 2rem 5rem 2rem;
         }
 
-        .error-container {
+        .hero-section {
             text-align: center;
+            margin-bottom: 6rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
-            max-width: 900px;
-            animation: fadeIn 1s ease-out;
+            max-width: 1000px;
+            animation: fadeIn 1.5s ease-out;
         }
 
-        .glitch-wrapper {
-            position: relative;
-            margin-bottom: 1rem;
+        .hero-logo {
+            width: 260px;
+            height: auto;
+            margin-bottom: 2.5rem;
+            filter: drop-shadow(0 0 30px var(--neon-red));
+            animation: pulseLogo 3s infinite alternate;
         }
 
-        .glitch-text {
+        @keyframes pulseLogo {
+            0% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(255, 0, 60, 0.6)); }
+            100% { transform: scale(1.08); filter: drop-shadow(0 0 50px var(--neon-red)); }
+        }
+
+        .hero-section h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(6rem, 15vw, 12rem);
+            font-size: clamp(2.8rem, 7vw, 6rem);
             font-weight: 900;
+            letter-spacing: 8px;
+            text-transform: uppercase;
             color: #ffffff;
-            letter-spacing: 10px;
-            position: relative;
-            text-shadow: 0 0 30px var(--neon-red);
-            animation: glitch-skew 1s infinite linear alternate-reverse;
-        }
-
-        .glitch-text::before,
-        .glitch-text::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.8;
-        }
-
-        .glitch-text::before {
-            color: var(--neon-cyan);
-            z-index: -1;
-            left: 5px;
-            text-shadow: -2px 0 var(--neon-cyan);
-            animation: glitch-anim 2.5s infinite linear alternate-reverse;
-            clip-path: polygon(0 20%, 100% 20%, 100% 21%, 0 21%);
-        }
-
-        .glitch-text::after {
-            color: var(--neon-red);
-            z-index: -2;
-            left: -5px;
-            text-shadow: -2px 0 var(--neon-red);
-            animation: glitch-anim2 3s infinite linear alternate-reverse;
-            clip-path: polygon(0 60%, 100% 60%, 100% 61%, 0 61%);
-        }
-
-        @keyframes glitch-skew {
-            0% { transform: skew(0deg); }
-            20% { transform: skew(-5deg); }
-            40% { transform: skew(5deg); }
-            60% { transform: skew(-2deg); }
-            80% { transform: skew(2deg); }
-            100% { transform: skew(0deg); }
-        }
-
-        @keyframes glitch-anim {
-            0% { clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%); transform: translate(-2px); }
-            20% { clip-path: polygon(0 15%, 100% 15%, 100% 15%, 0 15%); transform: translate(2px); }
-            40% { clip-path: polygon(0 10%, 100% 10%, 100% 20%, 0 20%); transform: translate(-2px); }
-            60% { clip-path: polygon(0 1%, 100% 1%, 100% 2%, 0 2%); transform: translate(2px); }
-            80% { clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%); transform: translate(-2px); }
-            100% { clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%); transform: translate(2px); }
-        }
-
-        @keyframes glitch-anim2 {
-            0% { clip-path: polygon(0 25%, 100% 25%, 100% 30%, 0 30%); transform: translate(2px); }
-            20% { clip-path: polygon(0 3%, 100% 3%, 100% 3%, 0 3%); transform: translate(-2px); }
-            40% { clip-path: polygon(0 5%, 100% 5%, 100% 20%, 0 20%); transform: translate(2px); }
-            60% { clip-path: polygon(0 20%, 100% 20%, 100% 20%, 0 20%); transform: translate(-2px); }
-            80% { clip-path: polygon(0 40%, 100% 40%, 100% 40%, 0 40%); transform: translate(2px); }
-            100% { clip-path: polygon(0 50%, 100% 50%, 100% 50%, 0 50%); transform: translate(-2px); }
-        }
-
-        .error-subtitle {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.5rem, 3vw, 2.5rem);
-            letter-spacing: 5px;
-            color: #fff;
-            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(255, 0, 60, 0.5), 0 0 40px rgba(255, 0, 60, 0.4), 0 0 90px var(--neon-red);
             margin-bottom: 2rem;
-            text-shadow: 0 0 15px var(--neon-red);
-            position: relative;
-            display: inline-block;
         }
 
-        .error-subtitle::before, .error-subtitle::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 40px;
-            height: 2px;
-            background: var(--neon-red);
-            box-shadow: 0 0 10px var(--neon-red);
-        }
-
-        .error-subtitle::before { right: 100%; margin-right: 15px; }
-        .error-subtitle::after { left: 100%; margin-left: 15px; }
-
-        .error-desc {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            color: var(--text-muted);
-            line-height: 1.8;
-            max-width: 700px;
-            margin-bottom: 4rem;
-            letter-spacing: 1px;
-            padding: 2rem;
-            background: rgba(15, 0, 5, 0.6);
-            border: 1px solid rgba(255, 0, 60, 0.2);
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-            box-shadow: inset 0 0 20px rgba(255, 0, 60, 0.05);
-            position: relative;
-        }
-
-        .error-desc::before {
-            content: '[ LOG ENTRY ]';
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: var(--bg-dark);
-            padding: 0 10px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
-            color: var(--neon-red);
+        .hero-quote {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            color: var(--text-light);
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-style: italic;
             letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 0, 60, 0.4);
+            border-left: 4px solid var(--neon-red);
+            border-right: 4px solid var(--neon-red);
+            padding: 0 2rem;
+            position: relative;
         }
 
-        .action-btn {
-            padding: 1.2rem 3.5rem;
-            background: rgba(255, 0, 60, 0.1);
-            border: 2px solid var(--neon-red);
-            color: #fff;
-            text-decoration: none;
+        .hero-quote::before, .hero-quote::after {
+            content: '///';
+            position: absolute;
+            color: var(--neon-red);
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.4s;
+            font-size: 1rem;
+            font-style: normal;
+            opacity: 0.5;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .hero-quote::before { left: -40px; }
+        .hero-quote::after { right: -40px; }
+
+        .grid-container {
+            width: 100%;
+            max-width: 1400px;
+            margin-bottom: 7rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(15, 0, 5, 0.8), rgba(3, 0, 0, 0.95));
+            border: 1px solid rgba(255, 0, 60, 0.2);
+            border-radius: 16px;
+            padding: 3.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.5rem;
+            text-decoration: none;
+            color: #ffffff;
+            backdrop-filter: blur(10px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUpFade 0.8s ease forwards;
         }
 
-        .action-btn::before {
+        .card:nth-child(1) { animation-delay: 0.1s; border-color: rgba(255, 0, 60, 0.6); box-shadow: 0 0 20px rgba(255, 0, 60, 0.15); }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideUpFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.4), transparent);
-            transition: 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.15), transparent);
+            transition: 0.6s;
         }
 
-        .action-btn:hover::before {
+        .card:hover::before {
             left: 100%;
         }
 
-        .action-btn:hover {
+        .card:hover {
+            border-color: var(--neon-red);
+            box-shadow: 0 20px 50px rgba(255, 0, 60, 0.3), inset 0 0 30px rgba(255, 0, 60, 0.15);
+            transform: translateY(-12px) scale(1.02);
+            z-index: 10;
+        }
+
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .channel-icon {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 0, 60, 0.4);
+            box-shadow: 0 0 25px rgba(255, 0, 60, 0.2);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 5rem;
+            font-weight: 300;
+            color: var(--neon-red);
+            background: rgba(255, 0, 60, 0.05);
+            z-index: 2;
+            text-shadow: 0 0 20px var(--neon-red);
+        }
+
+        .card:nth-child(1) .channel-icon {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 40px rgba(255, 0, 60, 0.4);
+            background: rgba(255, 0, 60, 0.1);
+        }
+
+        .card:hover .channel-icon {
+            transform: scale(1.15) rotate(5deg);
+            border-color: #fff;
+            box-shadow: 0 0 45px var(--neon-red);
+            color: #fff;
+            background: rgba(255, 0, 60, 0.25);
+            text-shadow: 0 0 30px #fff;
+        }
+
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .card-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            transition: color 0.3s;
+            text-transform: uppercase;
+        }
+
+        .card:hover .card-name {
+            color: #ffffff;
+            text-shadow: 0 0 20px var(--neon-red);
+        }
+
+        .card-role {
+            font-size: 1.1rem;
+            color: var(--neon-red);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
+
+        .card-desc {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            padding: 0 1rem;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            background: rgba(255, 0, 60, 0.05);
+            border: 1px solid rgba(255, 0, 60, 0.3);
+            color: var(--text-light);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .card:hover .badge {
+            border-color: var(--neon-red);
+            background: rgba(255, 0, 60, 0.2);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
+        }
+
+        .action-btn {
+            margin-top: 1.5rem;
+            padding: 1.2rem 3.5rem;
+            background: transparent;
+            border: 2px solid var(--neon-red);
+            color: var(--neon-red);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            border-radius: 6px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .card:hover .action-btn {
             background: var(--neon-red);
+            color: #fff;
             box-shadow: 0 0 30px var(--neon-red);
             transform: scale(1.05);
         }
@@ -342,8 +427,15 @@
             .hamburger {
                 display: flex;
             }
-            .error-subtitle::before, .error-subtitle::after {
+            .hero-quote {
+                border: none;
+                padding: 0;
+            }
+            .hero-quote::before, .hero-quote::after {
                 display: none;
+            }
+            .data-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -364,25 +456,103 @@
         <div class="nav-links" id="nav-links">
             <a href="/tools/index.html" class="nav-link">Herramientas</a>
             <a href="/expuestos/expedientes.html" class="nav-link">Expedientes</a>
-            <a href="/canales.html" class="nav-link">Canales</a>
-            <a href="/404.html" class="nav-link" style="color: #fff; text-shadow: 0 0 15px var(--neon-red);">Laboratorio</a>
+            <a href="/canales.html" class="nav-link" style="color: #fff; text-shadow: 0 0 15px var(--neon-red);">Canales</a>
+            <a href="/404.html" class="nav-link">Laboratorio</a>
         </div>
     </nav>
 
     <main class="main-content">
-        <div class="error-container">
-            <div class="glitch-wrapper">
-                <div class="glitch-text" data-text="404">404</div>
-            </div>
-            
-            <h2 class="error-subtitle">Anomalía Estructural</h2>
-            
-            <p class="error-desc">
-                El directorio solicitado ha sido purgado del servidor o se encuentra en un nivel de encriptación que su actual autorización no puede procesar. La ruta ha colapsado en el laberinto de la matriz. Su intento de acceso ha sido registrado en el nodo principal.
-            </p>
+        <section class="hero-section">
+            <img src="/assets/iron.png" alt="IRON ATLAS" class="hero-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMzAgMjBMMzAgODBMNzAgNTBaIiBmaWxsPSIjZmYwMDNjIi8+PC9zdmc+'">
+            <h1>Frecuencias</h1>
+            <p class="hero-quote">Nodos de interconexión encriptados. Únete a las transmisiones y sincroniza con el núcleo central.</p>
+        </section>
 
-            <a href="/" class="action-btn">Retornar al Núcleo</a>
-        </div>
+        <section class="grid-container">
+            <div class="data-grid">
+                
+                <a href="https://t.me/+-dgGPQBAmghmZTY5" target="_blank" class="card">
+                    <div class="card-header">
+                        <div class="channel-icon">Φ</div>
+                        <div class="card-info">
+                            <span class="card-name">Iron Atlas Main</span>
+                            <span class="card-role">Frecuencia Cero</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Acceso directo al núcleo central de operaciones. Sincronización de bases de datos, despliegue de directrices y comunicación sin filtros.</p>
+                    <div class="badge-container">
+                        <span class="badge">Main Hub</span>
+                        <span class="badge">Encrypted</span>
+                    </div>
+                    <div class="action-btn">Conectar Nodo</div>
+                </a>
+
+                <a href="#" class="card">
+                    <div class="card-header">
+                        <div class="channel-icon">Α</div>
+                        <div class="card-info">
+                            <span class="card-name">Alpha Node</span>
+                            <span class="card-role">Inteligencia & OSINT</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Centro de distribución de datos en crudo, análisis de huellas digitales y minería táctica de metadatos extraídos de fuentes públicas.</p>
+                    <div class="badge-container">
+                        <span class="badge">Recon</span>
+                        <span class="badge">Data Mining</span>
+                    </div>
+                    <div class="action-btn">Conectar Nodo</div>
+                </a>
+
+                <a href="#" class="card">
+                    <div class="card-header">
+                        <div class="channel-icon">Β</div>
+                        <div class="card-info">
+                            <span class="card-name">Beta Forge</span>
+                            <span class="card-role">Desarrollo de Arsenal</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Cámara de ingeniería y codificación. Discusión de arquitecturas de intrusión, automatización de scripts y despliegue de payloads.</p>
+                    <div class="badge-container">
+                        <span class="badge">Exploits</span>
+                        <span class="badge">Automation</span>
+                    </div>
+                    <div class="action-btn">Conectar Nodo</div>
+                </a>
+
+                <a href="#" class="card">
+                    <div class="card-header">
+                        <div class="channel-icon">Γ</div>
+                        <div class="card-info">
+                            <span class="card-name">Gamma Vault</span>
+                            <span class="card-role">Filtraciones & Dumps</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">El abismo de la información. Intercambio masivo de credenciales, bases de datos expuestas y estructuras indexadas extraídas de brechas de seguridad.</p>
+                    <div class="badge-container">
+                        <span class="badge">Breaches</span>
+                        <span class="badge">Dumps</span>
+                    </div>
+                    <div class="action-btn">Conectar Nodo</div>
+                </a>
+
+                <a href="#" class="card">
+                    <div class="card-header">
+                        <div class="channel-icon">Δ</div>
+                        <div class="card-info">
+                            <span class="card-name">Delta Strike</span>
+                            <span class="card-role">Operaciones de Red</span>
+                        </div>
+                    </div>
+                    <p class="card-desc">Coordinación de acción directa. Disrupción de arquitecturas perimetrales y orquestación de ataques sincronizados a gran escala.</p>
+                    <div class="badge-container">
+                        <span class="badge">Red Team</span>
+                        <span class="badge">Disruption</span>
+                    </div>
+                    <div class="action-btn">Conectar Nodo</div>
+                </a>
+
+            </div>
+        </section>
     </main>
 
     <script>
@@ -419,9 +589,9 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 2.5;
-                this.vy = (Math.random() - 0.5) * 2.5;
-                this.radius = Math.random() * 2.5 + 1.5;
+                this.vx = (Math.random() - 0.5) * 1.8;
+                this.vy = (Math.random() - 0.5) * 1.8;
+                this.radius = Math.random() * 2 + 1.5;
                 this.baseX = this.x;
                 this.baseY = this.y;
             }
@@ -434,8 +604,8 @@
                     
                     if (distance < mouse.radius) {
                         let force = (mouse.radius - distance) / mouse.radius;
-                        this.x += (dx / distance) * force * 5;
-                        this.y += (dy / distance) * force * 5;
+                        this.x += (dx / distance) * force * 4;
+                        this.y += (dy / distance) * force * 4;
                     }
                 }
 
@@ -456,7 +626,7 @@
 
         function initNodes() {
             particles = [];
-            let count = Math.floor((canvas.width * canvas.height) / 8000);
+            let count = Math.floor((canvas.width * canvas.height) / 9000);
             for (let i = 0; i < count; i++) {
                 particles.push(new Node());
             }
@@ -476,7 +646,7 @@
                     if (distMouse < mouse.radius) {
                         ctx.beginPath();
                         ctx.strokeStyle = `rgba(255, 0, 60, ${1 - distMouse / mouse.radius})`;
-                        ctx.lineWidth = 2;
+                        ctx.lineWidth = 1.5;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(mouse.x, mouse.y);
                         ctx.stroke();
@@ -488,10 +658,10 @@
                     let dy = particles[i].y - particles[j].y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
                     
-                    if (distance < 140) {
+                    if (distance < 130) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.9 - distance/140})`;
-                        ctx.lineWidth = 0.8;
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.9 - distance/130})`;
+                        ctx.lineWidth = 0.6;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
                         ctx.stroke();
