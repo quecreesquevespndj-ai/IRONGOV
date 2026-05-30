@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRON ATLAS — ARSENAL</title>
+    <title>IRON ATLAS — EN MANTENIMIENTO</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -31,6 +31,8 @@
             color: #ffffff;
             overflow-x: hidden;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         #bg-canvas {
@@ -133,228 +135,66 @@
             position: relative;
             z-index: 2;
             width: 100%;
-            min-height: 100vh;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 12rem 2rem 5rem 2rem;
+            padding: 8rem 2rem 5rem 2rem;
         }
 
-        .hero-section {
+        .maintenance-section {
             text-align: center;
-            margin-bottom: 6rem;
             animation: fadeIn 2s ease-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             width: 100%;
             max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
         }
 
-        .hero-section h1 {
+        .maintenance-icon {
+            font-size: 4rem;
+            color: var(--neon-red);
+            text-shadow: 0 0 20px var(--neon-red);
+            animation: pulse 2s infinite;
+        }
+
+        .maintenance-section h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-size: clamp(2rem, 5vw, 4.5rem);
             font-weight: 900;
             letter-spacing: 6px;
             text-transform: uppercase;
             color: #ffffff;
             text-shadow: 0 0 20px rgba(255, 0, 60, 0.5), 0 0 40px rgba(255, 0, 60, 0.4), 0 0 90px var(--neon-red);
-            margin-bottom: 2rem;
         }
 
-        .hero-quote {
-            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+        .maintenance-subtitle {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1rem, 2vw, 1.5rem);
             color: var(--text-light);
-            max-width: 900px;
-            margin: 0 auto;
-            line-height: 1.6;
-            font-style: italic;
-            letter-spacing: 1.5px;
-            text-shadow: 0 0 10px rgba(255, 0, 60, 0.4);
-            border-left: 4px solid var(--neon-red);
-            border-right: 4px solid var(--neon-red);
-            padding: 0 2rem;
-        }
-
-        .grid-container {
-            width: 100%;
-            max-width: 1400px;
-            margin-bottom: 7rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 2.5rem;
-            width: 100%;
-        }
-
-        .card {
-            background: rgba(15, 0, 5, 0.6);
-            border: 1px solid rgba(255, 0, 60, 0.2);
-            border-radius: 16px;
-            padding: 3rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 1.5rem;
-            text-decoration: none;
-            color: #ffffff;
-            backdrop-filter: blur(10px);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.1), transparent);
-            transition: 0.6s;
-        }
-
-        .card:hover::before {
-            left: 100%;
-        }
-
-        .card:hover {
-            border-color: var(--neon-red);
-            box-shadow: 0 20px 50px rgba(255, 0, 60, 0.25), inset 0 0 30px rgba(255, 0, 60, 0.15);
-            transform: translateY(-10px);
-        }
-
-        .card-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-            width: 100%;
-        }
-
-        .tool-icon {
-            width: 120px;
-            height: 120px;
-            border-radius: 20%;
-            border: 3px solid rgba(255, 0, 60, 0.5);
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
-            transition: all 0.5s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--neon-red);
-            background: rgba(255, 0, 60, 0.05);
-            z-index: 2;
-        }
-
-        .card:hover .tool-icon {
-            transform: scale(1.1) rotate(5deg);
-            border-color: #fff;
-            box-shadow: 0 0 35px var(--neon-red);
-            color: #fff;
-            background: rgba(255, 0, 60, 0.2);
-        }
-
-        .card-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .card-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            transition: color 0.3s;
-        }
-
-        .card:hover .card-name {
-            color: #ffffff;
-            text-shadow: 0 0 15px var(--neon-red);
-        }
-
-        .card-role {
-            font-size: 1.1rem;
-            color: var(--neon-red);
+            letter-spacing: 4px;
             text-transform: uppercase;
-            letter-spacing: 3px;
             font-weight: 600;
-        }
-
-        .card-desc {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-            padding: 0 1rem;
-        }
-
-        .badge-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-
-        .badge {
-            background: rgba(255, 0, 60, 0.1);
-            border: 1px solid rgba(255, 0, 60, 0.4);
-            color: var(--text-light);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-        }
-
-        .card:hover .badge {
-            border-color: var(--neon-red);
-            background: rgba(255, 0, 60, 0.2);
-            color: #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
-        }
-
-        .action-btn {
-            margin-top: 1.5rem;
-            padding: 1rem 2.5rem;
-            background: transparent;
-            border: 2px solid var(--neon-red);
-            color: var(--neon-red);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            border-top: 1px solid rgba(255, 0, 60, 0.3);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+            padding: 1rem 2rem;
+            background: rgba(255, 0, 60, 0.05);
+            backdrop-filter: blur(5px);
             border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
-            z-index: 2;
-        }
-
-        .card:hover .action-btn {
-            background: var(--neon-red);
-            color: #fff;
-            box-shadow: 0 0 20px var(--neon-red);
         }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 40px var(--neon-red); }
+            100% { transform: scale(1); opacity: 0.8; }
         }
 
         @media (max-width: 1024px) {
@@ -375,13 +215,6 @@
             }
             .hamburger {
                 display: flex;
-            }
-            .hero-quote {
-                border: none;
-                padding: 0;
-            }
-            .data-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -408,30 +241,10 @@
     </nav>
 
     <main class="main-content">
-        <section class="hero-section">
-            <h1>Arsenal</h1>
-            <p class="hero-quote">"El conocimiento es público. El acceso es simplemente una cuestión de sintaxis exacta."</p>
-        </section>
-
-        <section class="grid-container">
-            <div class="data-grid">
-                <a href="#" class="card">
-                    <div class="card-header">
-                        <div class="tool-icon">DK</div>
-                        <div class="card-info">
-                            <span class="card-name">Advanced Dorking</span>
-                            <span class="card-role">Motor de Búsqueda Lógica</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Herramienta de extracción pasiva estructurada mediante operadores avanzados. Diseñada para descubrir endpoints expuestos, bases de datos sin indexar, credenciales filtradas y directorios vulnerables en arquitecturas públicas.</p>
-                    <div class="badge-container">
-                        <span class="badge">Google Dorks</span>
-                        <span class="badge">Exploit-DB</span>
-                        <span class="badge">Recon</span>
-                    </div>
-                    <div class="action-btn">Inicializar Módulo</div>
-                </a>
-            </div>
+        <section class="maintenance-section">
+            <div class="maintenance-icon">⚠</div>
+            <h1>EN MANTENIMIENTO</h1>
+            <div class="maintenance-subtitle">Las herramientas estarán disponibles muy pronto...</div>
         </section>
     </main>
 
