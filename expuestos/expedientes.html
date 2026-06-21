@@ -7,31 +7,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-    
+   
     <style>
         :root {
             --bg-dark: #030000;
             --neon-red: #ff003c;
-            --neon-dark-red: #990024;
+            --neon-cyan: #00f0ff;
             --text-light: #ffd6e0;
             --text-muted: #a08a90;
-            
-            --bd-color: #ff003c;
-            --bw-color: #a0a0a0;
-            --bc-color: #00f0ff;
-            --bp-color: #bd00ff;
-            --bg-color: #ffb700;
         }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
             user-select: none;
-            -webkit-user-drag: none;
         }
-
         body {
             background-color: var(--bg-dark);
             color: #ffffff;
@@ -40,101 +31,33 @@
             display: flex;
             flex-direction: column;
         }
-
         #bg-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             z-index: 1;
             pointer-events: none;
         }
 
         .top-nav {
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1.5rem 3rem;
-            background: rgba(3, 0, 0, 0.8);
+            background: rgba(3, 0, 0, 0.85);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
-            box-shadow: 0 4px 30px rgba(255, 0, 60, 0.1);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.4);
             z-index: 100;
         }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            text-decoration: none;
-        }
-
-        .nav-title {
+        .nav-brand .nav-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.9rem;
             font-weight: 900;
-            color: #fff;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px var(--neon-red);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 3rem;
-        }
-
-        .nav-link {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            position: relative;
-            transition: color 0.3s;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--neon-red);
-            transition: width 0.3s ease;
-            box-shadow: 0 0 8px var(--neon-red);
-        }
-
-        .nav-link:hover {
-            color: #ffffff;
+            letter-spacing: 4px;
             text-shadow: 0 0 15px var(--neon-red);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 6px;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            width: 30px;
-            height: 3px;
-            background: var(--neon-red);
-            border-radius: 2px;
-            box-shadow: 0 0 5px var(--neon-red);
         }
 
         .main-content {
@@ -142,91 +65,149 @@
             z-index: 2;
             width: 100%;
             flex-grow: 1;
+            padding: 9rem 2rem 4rem;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            padding: 8rem 2rem 5rem 2rem;
         }
 
-        .maintenance-section {
+        .header {
             text-align: center;
-            animation: fadeIn 2s ease-out;
-            width: 100%;
-            max-width: 1000px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
+            margin-bottom: 2.5rem;
         }
-
-        .maintenance-icon {
-            font-size: 4rem;
-            color: var(--neon-red);
-            text-shadow: 0 0 20px var(--neon-red);
-            animation: pulse 2s infinite;
-        }
-
-        .maintenance-section h1 {
+        .header h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2rem, 5vw, 4.5rem);
+            font-size: clamp(2.5rem, 6vw, 5rem);
             font-weight: 900;
             letter-spacing: 6px;
             text-transform: uppercase;
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(255, 0, 60, 0.5), 0 0 40px rgba(255, 0, 60, 0.4), 0 0 90px var(--neon-red);
+            text-shadow: 0 0 20px var(--neon-red),
+                         0 0 40px var(--neon-red);
+            animation: glow 2s ease-in-out infinite alternate;
         }
 
-        .maintenance-subtitle {
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 1.1rem 1.5rem 1.1rem 3.5rem;
+            background: rgba(10, 0, 5, 0.7);
+            border: 2px solid var(--neon-red);
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
+            transition: all 0.3s;
+        }
+        #searchInput:focus {
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.6);
+            border-color: var(--neon-cyan);
+        }
+        .search-icon {
+            position: absolute;
+            left: 1.4rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon-red);
+            font-size: 1.4rem;
+        }
+
+        .expedientes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .expediente-card {
+            background: rgba(15, 0, 8, 0.85);
+            border: 1px solid var(--neon-red);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
+        }
+        .expediente-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 0 35px rgba(255, 0, 60, 0.5);
+            border-color: var(--neon-cyan);
+        }
+        .expediente-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--neon-red), var(--neon-cyan));
+            animation: scanline 4s linear infinite;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255,0,60,0.3);
+        }
+
+        .card-body {
+            padding: 1.4rem;
+            text-align: center;
+        }
+        .card-body h3 {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1rem, 2vw, 1.5rem);
+            color: var(--neon-cyan);
+            margin-bottom: 0.4rem;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+        .card-body .username {
             color: var(--text-light);
-            letter-spacing: 4px;
-            text-transform: uppercase;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        .card-body .id {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .btn-ver {
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            background: transparent;
+            color: white;
+            border: 2px solid var(--neon-red);
+            border-radius: 50px;
             font-weight: 600;
-            border-top: 1px solid rgba(255, 0, 60, 0.3);
-            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
-            padding: 1rem 2rem;
-            background: rgba(255, 0, 60, 0.05);
-            backdrop-filter: blur(5px);
-            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-ver:hover {
+            background: var(--neon-red);
+            box-shadow: 0 0 20px var(--neon-red);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes glow {
+            from { text-shadow: 0 0 20px var(--neon-red); }
+            to { text-shadow: 0 0 40px var(--neon-red), 0 0 60px var(--neon-red); }
+        }
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(400%); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 40px var(--neon-red); }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-
-        @media (max-width: 1024px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                flex-direction: column;
-                background: rgba(3, 0, 0, 0.98);
-                padding: 2rem 0;
-                text-align: center;
-                border-bottom: 1px solid var(--neon-red);
-            }
-            .nav-links.active {
-                display: flex;
-            }
-            .hamburger {
-                display: flex;
-            }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
         }
     </style>
 </head>
 <body>
-
     <canvas id="bg-canvas"></canvas>
 
     <nav class="top-nav">
@@ -234,48 +215,90 @@
             <span class="nav-title">IRON ATLAS</span>
         </a>
         <div class="hamburger" id="mobile-menu">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </div>
         <div class="nav-links" id="nav-links">
             <a href="/tools/index.html" class="nav-link">Herramientas</a>
-            <a href="/expuestos/expedientes.html" class="nav-link" style="color: #fff; text-shadow: 0 0 15px var(--neon-red);">Expedientes</a>
+            <a href="#" class="nav-link" style="color:#fff; text-shadow:0 0 15px var(--neon-red);">Expedientes</a>
             <a href="/canales.html" class="nav-link">Canales</a>
             <a href="/redes.html" class="nav-link">Redes Sociales</a>
         </div>
     </nav>
 
     <main class="main-content">
-        <section class="maintenance-section">
-            <div class="maintenance-icon">⚠</div>
-            <h1>EN ACTUALIZACIÓN </h1>
-            <div class="maintenance-subtitle">Los expedientes estarán disponibles muy pronto...</div>
-        </section>
+        <div class="header">
+            <h1>EXPEDIENTES</h1>
+        </div>
+
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Buscar por ID, nombre o usuario...">
+        </div>
+
+        <div class="expedientes-grid" id="expedientesGrid">
+            <!-- Las 8 tarjetas se generan con JavaScript -->
+        </div>
     </main>
 
     <script>
-        const mobileMenuBtn = document.getElementById('mobile-menu');
-        const navLinks = document.getElementById('nav-links');
+        // Datos de ejemplo (todos iguales por ahora)
+        const expedientes = [
+            { id: "IA-001", nombre: "Usuario Atlas", username: "@ironatlas_user", img: "https://picsum.photos/id/64/600/400" },
+            { id: "IA-002", nombre: "Usuario Atlas", username: "@ironatlas_user", img: "https://picsum.photos/id/64/600/400" },
+            { id: "IA-003", nombre: "Usuario Atlas", username: "@ironatlas_user", img: "https://picsum.photos/id/64/600/400" },
+            { id: "IA-004", nombre: "Usuario Atlas", username: "@ironatlas_user", img: "https://picsum.photos/id/64/600/400" },
+            { id: "IA-005", nombre: "Usuario Atlas", username: "@ironatlas_user", img: "https://picsum.photos/id/64/600/400" },
+            { id: "IA-006", nombre: "Usuario Atlas", username: "@ironatlas_user", img: "https://picsum.photos/id/64/600/400" },
+            { id: "IA-007", nombre: "Usuario Atlas", username: "@ironatlas_user", img: "https://picsum.photos/id/64/600/400" },
+            { id: "IA-008", nombre: "Usuario Atlas", username: "@ironatlas_user", img: "https://picsum.photos/id/64/600/400" }
+        ];
 
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+        function crearTarjeta(exp) {
+            const card = document.createElement('div');
+            card.className = 'expediente-card';
+            card.innerHTML = `
+                <img src="${exp.img}" alt="${exp.nombre}" class="card-image">
+                <div class="card-body">
+                    <h3>${exp.id}</h3>
+                    <div class="username">${exp.nombre}</div>
+                    <div class="id">${exp.username}</div>
+                    <button class="btn-ver" onclick="verExpediente('${exp.id}')">VER EXPEDIENTE</button>
+                </div>
+            `;
+            return card;
+        }
+
+        function renderExpedientes(filtered) {
+            const grid = document.getElementById('expedientesGrid');
+            grid.innerHTML = '';
+            filtered.forEach(exp => grid.appendChild(crearTarjeta(exp)));
+        }
+
+        // Búsqueda
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = expedientes.filter(exp => 
+                exp.id.toLowerCase().includes(term) ||
+                exp.nombre.toLowerCase().includes(term) ||
+                exp.username.toLowerCase().includes(term)
+            );
+            renderExpedientes(filtered);
         });
 
+        // Función para redirigir (cambia el nombre del archivo según necesites)
+        window.verExpediente = function(id) {
+            // Ejemplo: redirige a release.html (puedes cambiar por release-001.html, etc.)
+            window.location.href = `release.html?id=${id}`;
+        };
+
+        // Render inicial
+        renderExpedientes(expedientes);
+
+        // ===== CANVAS ANIMADO (mejorado) =====
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        let mouse = { x: null, y: null, radius: 250 };
-
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
-
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
+        let mouse = { x: null, y: null, radius: 220 };
 
         function resize() {
             canvas.width = window.innerWidth;
@@ -288,33 +311,26 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 1.8;
-                this.vy = (Math.random() - 0.5) * 1.8;
-                this.radius = Math.random() * 2 + 1.5;
-                this.baseX = this.x;
-                this.baseY = this.y;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.radius = Math.random() * 2.2 + 1.3;
             }
-
             update() {
-                if (mouse.x !== null) {
+                if (mouse.x) {
                     let dx = this.x - mouse.x;
                     let dy = this.y - mouse.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < mouse.radius) {
-                        let force = (mouse.radius - distance) / mouse.radius;
-                        this.x += (dx / distance) * force * 4;
-                        this.y += (dy / distance) * force * 4;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < mouse.radius) {
+                        let force = (mouse.radius - dist) / mouse.radius;
+                        this.x += (dx / dist) * force * 5;
+                        this.y += (dy / dist) * force * 5;
                     }
                 }
-
                 this.x += this.vx;
                 this.y += this.vy;
-
                 if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
-
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -325,64 +341,48 @@
 
         function initNodes() {
             particles = [];
-            let count = Math.floor((canvas.width * canvas.height) / 9000);
-            for (let i = 0; i < count; i++) {
-                particles.push(new Node());
-            }
+            const count = Math.floor((canvas.width * canvas.height) / 7000);
+            for (let i = 0; i < count; i++) particles.push(new Node());
         }
 
-        function animateNodes() {
+        function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
             for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-                
-                if (mouse.x !== null) {
-                    let dxMouse = particles[i].x - mouse.x;
-                    let dyMouse = particles[i].y - mouse.y;
-                    let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-                    if (distMouse < mouse.radius) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 0, 60, ${1 - distMouse / mouse.radius})`;
-                        ctx.lineWidth = 1.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(mouse.x, mouse.y);
-                        ctx.stroke();
-                    }
-                }
+                const p = particles[i];
+                p.update();
+                p.draw();
 
-                for (let j = i; j < particles.length; j++) {
-                    let dx = particles[i].x - particles[j].x;
-                    let dy = particles[i].y - particles[j].y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 130) {
+                // Conexiones
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 140) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.9 - distance/130})`;
-                        ctx.lineWidth = 0.6;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${1 - dist/140})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
                         ctx.stroke();
                     }
                 }
             }
-            requestAnimationFrame(animateNodes);
+            requestAnimationFrame(animate);
         }
+
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
 
         initNodes();
-        animateNodes();
+        animate();
 
-
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', e => {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-            }
+        // Menú móvil
+        document.getElementById('mobile-menu').addEventListener('click', () => {
+            document.getElementById('nav-links').classList.toggle('active');
         });
-        setInterval(() => {
-            (function() { return false; }['constructor']('debugger')());
-        }, 50);
     </script>
 </body>
 </html>
