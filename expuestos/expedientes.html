@@ -181,8 +181,7 @@
         .expediente-card:hover {
             transform: translateY(-20px) scale(1.08);
             border-color: var(--neon-cyan);
-            box-shadow: 0 40px 80px rgba(255, 0, 60, 0.5), 
-                        0 0 60px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 40px 80px rgba(255, 0, 60, 0.5), 0 0 60px rgba(0, 240, 255, 0.3);
         }
         .card-image-container {
             position: relative;
@@ -234,7 +233,18 @@
         .card-username {
             color: var(--text-light);
             font-size: 1.2rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+        .card-file {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: rgba(255, 0, 60, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 1.2rem;
+            border: 1px solid rgba(255, 0, 60, 0.2);
         }
         .btn-ver {
             padding: 1rem 2.8rem;
@@ -289,7 +299,7 @@
     
     <nav class="top-nav">
         <a href="/" class="nav-brand">
-            <span class="nav-title"></span>
+            <span class="nav-title">IRON ATLAS NG</span>
         </a>
         <div class="hamburger" id="mobile-menu">
             <span></span>
@@ -308,25 +318,71 @@
         <div class="header">
             <h1>EXPEDIENTES</h1>
         </div>
-
         <div class="search-container">
             <span class="search-icon">🔍</span>
             <input type="text" id="searchInput" placeholder="Buscar por ID, nombre o usuario...">
         </div>
-
         <div class="expedientes-grid" id="expedientesGrid"></div>
     </main>
 
     <script>
         const expedientes = [
-            { id: "8551203026", nombre: "🇨🇴Yei777🍀", username: "@yei777moneyyy", foto: "https://i.postimg.cc/FzbtfDFs/photo-2025-11-25-07-01-55.jpg" },
-            { id: "8353760780", nombre: "メ RELEASE CORLEONE メ", username: "@ReleaseG0D", foto: "https://i.postimg.cc/pXYwBGf9/release.jpg" },
-            { id: "1609732536", nombre: "Yuranys🐛", username: "@Yuranyss", foto: "https://i.postimg.cc/nrKP0rQS/yuranisssssssssssss.jpg" },
-            { id: "8491972019", nombre: "𝐳𝐩𝐞𝐪𝐧𝐨 𝙤𝙣", username: "@zconchita", foto: "https://i.postimg.cc/ZnTx4Q5c/Captura-de-pantalla-2026-04-08-004755.png" },
-            { id: "5231380522", nombre: ".40 glock edición especial 👹", username: "@HBxPP2000", foto: "https://i.postimg.cc/VsSMM2cJ/40GLOCK.jpg" },
-            { id: "8477619369", nombre: "Dev ביצוע", username: "@devcrackpy", foto: "https://i.postimg.cc/Rh8NpC5q/DEV.jpg" },
-            { id: "8768231510", nombre: "MR-/BAN HELL", username: "@mrban01", foto: "https://i.postimg.cc/NFh0RJ1n/mrban.jpg" },
-            { id: "7952283528", nombre: "Hector Lopez", username: "@oihechl", foto: "https://i.postimg.cc/XNFqnWW3/hector.jpg" }
+            { 
+                id: "8551203026", 
+                nombre: "🇨🇴Yei777🍀", 
+                username: "@yei777moneyyy", 
+                foto: "https://i.postimg.cc/FzbtfDFs/photo-2025-11-25-07-01-55.jpg",
+                archivo: "release.html"
+            },
+            { 
+                id: "8353760780", 
+                nombre: "メ RELEASE CORLEONE メ", 
+                username: "@ReleaseG0D", 
+                foto: "https://i.postimg.cc/pXYwBGf9/release.jpg",
+                archivo: "corleone.html"
+            },
+            { 
+                id: "1609732536", 
+                nombre: "Yuranys🐛", 
+                username: "@Yuranyss", 
+                foto: "https://i.postimg.cc/nrKP0rQS/yuranisssssssssssss.jpg",
+                archivo: "yuranys.html"
+            },
+            { 
+                id: "8491972019", 
+                nombre: "𝐳𝐩𝐞𝐪𝐧𝐨 𝙤𝙣", 
+                username: "@zconchita", 
+                foto: "https://i.postimg.cc/ZnTx4Q5c/Captura-de-pantalla-2026-04-08-004755.png",
+                archivo: "zpeqno.html"
+            },
+            { 
+                id: "5231380522", 
+                nombre: ".40 glock edición especial 👹", 
+                username: "@HBxPP2000", 
+                foto: "https://i.postimg.cc/VsSMM2cJ/40GLOCK.jpg",
+                archivo: "glock.html"
+            },
+            { 
+                id: "8477619369", 
+                nombre: "Dev ביצוע", 
+                username: "@devcrackpy", 
+                foto: "https://i.postimg.cc/Rh8NpC5q/DEV.jpg",
+                archivo: "dev.html"
+            },
+            { 
+                id: "8768231510", 
+                nombre: "MR-/BAN HELL", 
+                username: "@mrban01", 
+                foto: "https://i.postimg.cc/NFh0RJ1n/mrban.jpg",
+                archivo: "mrban.html"
+            },
+            { 
+                id: "7952283528", 
+                nombre: "Hector Lopez", 
+                username: "@oihechl", 
+                foto: "https://i.postimg.cc/XNFqnWW3/hector.jpg",
+                archivo: "hector.html"
+            }
         ];
 
         function crearTarjeta(exp) {
@@ -341,7 +397,8 @@
                     <div class="card-id">${exp.id}</div>
                     <div class="card-name">${exp.nombre}</div>
                     <div class="card-username">${exp.username}</div>
-                    <button class="btn-ver" onclick="verExpediente('${exp.id}')">VER EXPEDIENTE</button>
+                    <div class="card-file">📁 ${exp.archivo}</div>
+                    <button class="btn-ver" onclick="verExpediente('${exp.archivo}')">VER EXPEDIENTE</button>
                 </div>
             `;
             return card;
@@ -355,7 +412,7 @@
 
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const term = e.target.value.toLowerCase();
-            const filtered = expedientes.filter(exp => 
+            const filtered = expedientes.filter(exp =>
                 exp.id.toLowerCase().includes(term) ||
                 exp.nombre.toLowerCase().includes(term) ||
                 exp.username.toLowerCase().includes(term)
@@ -363,13 +420,14 @@
             renderExpedientes(filtered);
         });
 
-        window.verExpediente = function(id) {
-            if (!id) return;
-            window.location.href = `expediente-${id}.html`;
+        window.verExpediente = function(archivo) {
+            if (!archivo) return;
+            window.location.href = archivo;
         };
 
         renderExpedientes(expedientes);
 
+        // Canvas Background (mantengo el mismo animado)
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
