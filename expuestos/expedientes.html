@@ -478,4 +478,484 @@
         }, 60);
     </script>
 </body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRON ATLAS — EXPEDIENTES</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #030000;
+            --neon-red: #ff003c;
+            --neon-cyan: #00f0ff;
+            --text-light: #ffd6e0;
+            --text-muted: #a08a90;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background: rgba(3, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.4);
+            box-shadow: 0 4px 30px rgba(255, 0, 60, 0.15);
+            z-index: 100;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+        .nav-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+        .nav-link {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--neon-red);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 8px var(--neon-red);
+        }
+        .nav-link:hover {
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: var(--neon-red);
+            border-radius: 2px;
+            box-shadow: 0 0 5px var(--neon-red);
+        }
+        .main-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            min-height: 100vh;
+            padding: 10rem 2rem 6rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 900;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--neon-red), 0 0 40px var(--neon-red), 0 0 80px var(--neon-red);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        .search-container {
+            width: 100%;
+            max-width: 620px;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 1.2rem 1.5rem 1.2rem 4rem;
+            background: rgba(10, 0, 5, 0.75);
+            border: 2px solid var(--neon-red);
+            border-radius: 50px;
+            color: white;
+            font-size: 1.15rem;
+            outline: none;
+            box-shadow: 0 0 25px rgba(255, 0, 60, 0.4);
+            transition: all 0.4s;
+        }
+        #searchInput:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.6);
+        }
+        .search-icon {
+            position: absolute;
+            left: 1.6rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon-red);
+            font-size: 1.5rem;
+        }
+        .expedientes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 1450px;
+        }
+        .expediente-card {
+            background: rgba(15, 0, 5, 0.75);
+            border: 1px solid rgba(255, 0, 60, 0.4);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+        .expediente-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: 0.7s;
+        }
+        .expediente-card:hover::before {
+            left: 200%;
+        }
+        .expediente-card:hover {
+            transform: translateY(-15px) scale(1.04);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 25px 60px rgba(255, 0, 60, 0.35), inset 0 0 40px rgba(0, 240, 255, 0.1);
+        }
+        .card-image {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--neon-red);
+            transition: all 0.6s;
+        }
+        .expediente-card:hover .card-image {
+            transform: scale(1.08);
+            filter: brightness(1.15) contrast(1.1);
+        }
+        .card-body {
+            padding: 1.8rem 1.5rem;
+            text-align: center;
+        }
+        .card-id {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.35rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 12px var(--neon-cyan);
+            margin-bottom: 0.4rem;
+        }
+        .card-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.3rem;
+        }
+        .card-username {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+        }
+        .btn-ver {
+            padding: 0.85rem 2.4rem;
+            background: transparent;
+            color: #fff;
+            border: 2px solid var(--neon-red);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-transform: uppercase;
+        }
+        .btn-ver:hover {
+            background: var(--neon-red);
+            box-shadow: 0 0 25px var(--neon-red);
+            transform: scale(1.05);
+        }
+        .scanline {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-red), transparent);
+            animation: scan 4s linear infinite;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 20px var(--neon-red), 0 0 40px var(--neon-red); }
+            to { text-shadow: 0 0 40px var(--neon-red), 0 0 70px var(--neon-red), 0 0 100px var(--neon-red); }
+        }
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(800%); }
+        }
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background: rgba(3, 0, 0, 0.98);
+                padding: 2rem 0;
+                text-align: center;
+                border-bottom: 1px solid var(--neon-red);
+            }
+            .nav-links.active { display: flex; }
+            .hamburger { display: flex; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    
+    <nav class="top-nav">
+        <a href="/" class="nav-brand">
+            <span class="nav-title">IRON ATLAS NG</span>
+        </a>
+        <div class="hamburger" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <a href="/tools/index.html" class="nav-link">Herramientas</a>
+            <a href="/expuestos/expedientes.html" class="nav-link" style="color:#fff;text-shadow:0 0 15px var(--neon-red);">Expedientes</a>
+            <a href="/canales.html" class="nav-link">Canales</a>
+            <a href="/redes.html" class="nav-link">Redes Sociales</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="header">
+            <h1>EXPEDIENTES</h1>
+        </div>
+
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Buscar por ID, nombre o usuario...">
+        </div>
+
+        <div class="expedientes-grid" id="expedientesGrid"></div>
+    </main>
+
+    <script>
+        const expedientes = [
+            { id: "IA-001", nombre: "Shadow Requiem", username: "@shadow_req" },
+            { id: "IA-002", nombre: "Void Phantom", username: "@voidph4ntom" },
+            { id: "IA-003", nombre: "Neon Ghost", username: "@neon_ghost404" },
+            { id: "IA-004", nombre: "Cipher Zero", username: "@cipher_0x00" },
+            { id: "IA-005", nombre: "Raven Protocol", username: "@raven_pr0t0c0l" },
+            { id: "IA-006", nombre: "Eclipse Knight", username: "@eclipse_kn1ght" },
+            { id: "IA-007", nombre: "Nova Fracture", username: "@nova_fracture" },
+            { id: "IA-008", nombre: "Specter Blade", username: "@specter_bl4de" }
+        ];
+
+        const photo = "https://i.postimg.cc/FzbtfDFs/photo-2025-11-25-07-01-55.jpg";
+
+        function crearTarjeta(exp) {
+            const card = document.createElement('div');
+            card.className = 'expediente-card';
+            card.innerHTML = `
+                <div class="scanline"></div>
+                <img src="${photo}" alt="Expediente" class="card-image">
+                <div class="card-body">
+                    <div class="card-id">${exp.id}</div>
+                    <div class="card-name">${exp.nombre}</div>
+                    <div class="card-username">${exp.username}</div>
+                    <button class="btn-ver" onclick="verExpediente('${exp.id}')">VER EXPEDIENTE</button>
+                </div>
+            `;
+            return card;
+        }
+
+        function renderExpedientes(filtered) {
+            const grid = document.getElementById('expedientesGrid');
+            grid.innerHTML = '';
+            filtered.forEach(exp => grid.appendChild(crearTarjeta(exp)));
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            const filtered = expedientes.filter(exp => 
+                exp.id.toLowerCase().includes(term) ||
+                exp.nombre.toLowerCase().includes(term) ||
+                exp.username.toLowerCase().includes(term)
+            );
+            renderExpedientes(filtered);
+        });
+
+        window.verExpediente = function(id) {
+            if (!id) return;
+            window.location.href = `expediente-${id}.html`;
+        };
+
+        renderExpedientes(expedientes);
+
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 240 };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Node {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 2.2;
+                this.vy = (Math.random() - 0.5) * 2.2;
+                this.radius = Math.random() * 2.4 + 1.4;
+            }
+            update() {
+                if (mouse.x !== null) {
+                    let dx = this.x - mouse.x;
+                    let dy = this.y - mouse.y;
+                    let dist = Math.hypot(dx, dy);
+                    if (dist < mouse.radius && dist > 0) {
+                        let force = (mouse.radius - dist) / mouse.radius;
+                        this.x += (dx / dist) * force * 5.5;
+                        this.y += (dy / dist) * force * 5.5;
+                    }
+                }
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.save();
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#ff003c';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff003c';
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.floor((canvas.width * canvas.height) / 6500);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Node());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.update();
+                p.draw();
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < 145) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.85 - dist/145})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('mousemove', function(e) {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', function() {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        initParticles();
+        animate();
+
+        document.getElementById('mobile-menu').addEventListener('click', function() {
+            document.getElementById('nav-links').classList.toggle('active');
+        });
+
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+                (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
+        setInterval(function() {
+            (function() { return false; }['constructor']('debugger')());
+        }, 60);
+    </script>
+</body>
 </html>
