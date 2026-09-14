@@ -1,764 +1,1260 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRON ATLAS NEW GENERATION</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-dark: #030000;
-            --neon-red: #ff003c;
-            --neon-dark-red: #990024;
-            --text-light: #ffd6e0;
-            --text-muted: #a08a90;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://i.postimg.cc https://files.catbox.moe; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests;">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#030000">
+<title>IRON ATLAS NEW GENERATION</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-dark:#030000;
+  --neon-red:#ff003c;
+  --neon-dark-red:#990024;
+  --text-light:#ffd6e0;
+  --text-muted:#a08a90;
+  --card-bg:rgba(15,0,5,0.7);
+  --pad:clamp(1rem,3vw,3rem);
+  --radius:clamp(14px,1.6vw,22px);
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',system-ui,sans-serif;user-select:none;-webkit-user-drag:none;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  background:var(--bg-dark);
+  color:#fff;
+  overflow-x:hidden;
+  min-height:100vh;
+  min-height:100dvh;
+  line-height:1.5;
+}
+img{max-width:100%;height:auto;display:block;}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            user-select: none;
-            -webkit-user-drag: none;
-        }
+.scroll-progress{
+  position:fixed;
+  top:0;left:0;
+  height:3px;
+  width:0%;
+  background:linear-gradient(90deg,var(--neon-dark-red),var(--neon-red),#fff);
+  box-shadow:0 0 12px var(--neon-red),0 0 24px var(--neon-red);
+  z-index:200;
+  transition:width .1s linear;
+  will-change:width;
+}
 
-        body {
-            background-color: var(--bg-dark);
-            color: #ffffff;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
+#bg-canvas{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  z-index:0;
+  pointer-events:none;
+  display:block;
+}
+.bg-fallback{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(255,0,60,0.15),transparent 55%),
+    radial-gradient(circle at 80% 70%,rgba(255,0,60,0.1),transparent 55%);
+}
+.scanlines{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,0,60,0.035) 0px,rgba(255,0,60,0.035) 1px,transparent 1px,transparent 3px);
+  mix-blend-mode:overlay;
+  animation:scanShift 12s linear infinite;
+}
+@keyframes scanShift{
+  0%{background-position:0 0;}
+  100%{background-position:0 100vh;}
+}
+.vignette{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 0%,transparent 45%,rgba(3,0,0,0.8) 100%);
+}
 
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-            pointer-events: none;
-        }
+.top-nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:clamp(0.6rem,1.6vw,1.1rem) clamp(0.8rem,3vw,3rem);
+  background:rgba(3,0,0,0.72);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,0,60,0.25);
+  z-index:100;
+  transition:padding .35s ease,background .35s ease,box-shadow .35s ease;
+  padding-top:calc(clamp(0.6rem,1.6vw,1.1rem) + env(safe-area-inset-top,0px));
+}
+.top-nav.scrolled{
+  padding-top:calc(clamp(0.4rem,1.2vw,0.7rem) + env(safe-area-inset-top,0px));
+  padding-bottom:clamp(0.4rem,1.2vw,0.7rem);
+  background:rgba(3,0,0,0.94);
+  box-shadow:0 6px 30px rgba(255,0,60,0.35);
+}
+.nav-brand{
+  display:flex;align-items:center;gap:.6rem;
+  text-decoration:none;
+  transition:transform .35s cubic-bezier(.2,.9,.3,1.4);
+}
+.nav-brand:hover{transform:scale(1.06);}
+.nav-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1rem,2.4vw,1.6rem);
+  font-weight:900;
+  color:#fff;
+  letter-spacing:clamp(2px,0.5vw,3px);
+  text-shadow:0 0 10px var(--neon-red),0 0 25px rgba(255,0,60,.6);
+  animation:flicker 4s infinite alternate;
+}
+@keyframes flicker{
+  0%,100%{opacity:1;}
+  48%{opacity:1;}
+  50%{opacity:.72;text-shadow:0 0 25px #fff,0 0 60px var(--neon-red);}
+  52%{opacity:1;}
+}
+.nav-links{display:flex;gap:clamp(1rem,2.4vw,3rem);}
+.nav-link{
+  font-family:'Orbitron',sans-serif;
+  color:var(--text-light);
+  text-decoration:none;
+  font-size:clamp(.7rem,1.1vw,.95rem);
+  font-weight:700;
+  letter-spacing:clamp(1px,.3vw,2px);
+  text-transform:uppercase;
+  position:relative;
+  padding:.35rem 0;
+  transition:color .3s,transform .3s;
+}
+.nav-link::after{
+  content:'';
+  position:absolute;
+  bottom:-2px;left:0;
+  width:100%;height:2px;
+  background:var(--neon-red);
+  transform:scaleX(0);
+  transform-origin:right;
+  transition:transform .4s cubic-bezier(.2,.9,.3,1.4);
+  box-shadow:0 0 8px var(--neon-red);
+}
+.nav-link:hover{color:#fff;transform:translateY(-2px);text-shadow:0 0 12px var(--neon-red);}
+.nav-link:hover::after{transform:scaleX(1);transform-origin:left;}
+.hamburger{
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  padding:8px;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  z-index:101;
+}
+.hamburger span{
+  display:block;
+  width:26px;height:3px;
+  background:var(--neon-red);
+  border-radius:2px;
+  box-shadow:0 0 8px var(--neon-red);
+  transition:transform .35s,opacity .35s;
+}
+.hamburger.active span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+.hamburger.active span:nth-child(2){opacity:0;}
+.hamburger.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
 
-        .top-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 3rem;
-            background: rgba(3, 0, 0, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
-            box-shadow: 0 4px 30px rgba(255, 0, 60, 0.1);
-            z-index: 100;
-        }
+.main-content{
+  position:relative;
+  z-index:5;
+  width:100%;
+  max-width:1400px;
+  margin:0 auto;
+  padding:clamp(6.5rem,12vw,11rem) clamp(1rem,3vw,2rem) 6rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
 
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            text-decoration: none;
-        }
+.hero-section{
+  text-align:center;
+  margin-bottom:clamp(3rem,7vw,6rem);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:100%;
+  max-width:1000px;
+}
+.hero-logo-wrap{
+  position:relative;
+  margin-bottom:clamp(1.5rem,4vw,2.5rem);
+  animation:float3d 7s ease-in-out infinite;
+  will-change:transform;
+}
+@keyframes float3d{
+  0%,100%{transform:translate3d(0,0,0) rotateX(0) rotateY(0);}
+  50%{transform:translate3d(0,-16px,0) rotateX(6deg) rotateY(-6deg);}
+}
+.hero-logo-wrap::before,
+.hero-logo-wrap::after{
+  content:'';
+  position:absolute;
+  inset:-20px;
+  border-radius:50%;
+  border:2px solid rgba(255,0,60,.45);
+  animation:ringPulse 3.4s ease-out infinite;
+  pointer-events:none;
+}
+.hero-logo-wrap::after{animation-delay:1.7s;}
+@keyframes ringPulse{
+  0%{transform:scale(.75);opacity:1;}
+  100%{transform:scale(1.85);opacity:0;}
+}
+.hero-logo{
+  width:clamp(150px,30vw,280px);
+  filter:drop-shadow(0 0 30px var(--neon-red));
+  animation:pulseLogo 4s infinite alternate;
+  position:relative;
+  z-index:2;
+}
+@keyframes pulseLogo{
+  0%{filter:drop-shadow(0 0 18px var(--neon-red));}
+  100%{filter:drop-shadow(0 0 50px var(--neon-red)) drop-shadow(0 0 90px rgba(255,0,60,.6));}
+}
+.hero-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(2rem,8vw,6.5rem);
+  font-weight:900;
+  letter-spacing:clamp(2px,1vw,6px);
+  text-transform:uppercase;
+  color:#fff;
+  margin-bottom:clamp(1rem,3vw,2rem);
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  line-height:1.05;
+}
+.hero-title .letter{
+  display:inline-block;
+  text-shadow:0 0 18px rgba(255,0,60,.6),0 0 40px rgba(255,0,60,.45),0 0 80px var(--neon-red);
+  animation:letterIn .7s cubic-bezier(.2,.9,.3,1.4) both,letterGlow 3.5s ease-in-out infinite;
+  will-change:transform,opacity;
+}
+@keyframes letterIn{
+  0%{opacity:0;transform:translateY(60px) rotateX(-80deg);}
+  100%{opacity:1;transform:translateY(0) rotateX(0);}
+}
+@keyframes letterGlow{
+  0%,100%{text-shadow:0 0 18px rgba(255,0,60,.6),0 0 40px rgba(255,0,60,.45),0 0 80px var(--neon-red);}
+  50%{text-shadow:0 0 25px #fff,0 0 55px var(--neon-red),0 0 110px var(--neon-red);}
+}
+.hero-title .space{width:.3em;}
+.hero-quote{
+  font-size:clamp(.95rem,2.2vw,1.5rem);
+  color:var(--text-light);
+  max-width:900px;
+  margin:0 auto;
+  font-style:italic;
+  letter-spacing:.5px;
+  text-shadow:0 0 10px rgba(255,0,60,.4);
+  border-left:4px solid var(--neon-red);
+  border-right:4px solid var(--neon-red);
+  padding:0 clamp(1rem,2.5vw,2rem);
+  animation:borderPulse 3.4s infinite alternate;
+}
+@keyframes borderPulse{
+  0%{border-color:rgba(255,0,60,.35);}
+  100%{border-color:var(--neon-red);}
+}
 
-        .nav-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px var(--neon-red);
-        }
+.about-box{
+  background:var(--card-bg);
+  border:1px solid rgba(255,0,60,.3);
+  border-radius:var(--radius);
+  padding:clamp(1.5rem,4vw,3rem);
+  max-width:1000px;
+  width:100%;
+  margin-bottom:clamp(4rem,8vw,8rem);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  box-shadow:0 20px 50px rgba(255,0,60,.2),inset 0 0 30px rgba(255,0,60,.05);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  contain:layout paint;
+  transition:box-shadow .5s;
+}
+.about-box::before{
+  content:'';
+  position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent,rgba(255,0,60,.14),transparent 30%);
+  animation:rotateGlow 14s linear infinite;
+  pointer-events:none;
+  will-change:transform;
+}
+@keyframes rotateGlow{
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
+}
+.about-box:hover{box-shadow:0 30px 80px rgba(255,0,60,.4),inset 0 0 50px rgba(255,0,60,.1);}
+.about-box h3{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1.3rem,3vw,2rem);
+  color:#fff;
+  margin-bottom:1rem;
+  text-transform:uppercase;
+  letter-spacing:clamp(2px,.5vw,3px);
+  text-shadow:0 0 16px var(--neon-red);
+  position:relative;
+  z-index:2;
+}
+.about-box p{
+  font-size:clamp(.95rem,1.6vw,1.15rem);
+  line-height:1.7;
+  color:var(--text-muted);
+  position:relative;
+  z-index:2;
+}
 
-        .nav-links {
-            display: flex;
-            gap: 3rem;
-        }
+.grid-container{
+  width:100%;
+  margin-bottom:clamp(4rem,8vw,7rem);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  content-visibility:auto;
+  contain-intrinsic-size:1px 800px;
+}
+.section-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1.4rem,4vw,2.4rem);
+  letter-spacing:clamp(2px,.8vw,5px);
+  margin-bottom:clamp(2rem,4vw,3.5rem);
+  text-transform:uppercase;
+  text-align:center;
+  color:#fff;
+  text-shadow:0 0 22px var(--neon-red);
+  border-bottom:2px solid rgba(255,0,60,.3);
+  padding-bottom:.8rem;
+  width:fit-content;
+  position:relative;
+  overflow:hidden;
+}
+.section-title::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:-100%;
+  width:100%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--neon-red),transparent);
+  animation:slideLine 3.4s infinite;
+}
+@keyframes slideLine{
+  0%{left:-100%;}
+  100%{left:100%;}
+}
+.data-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));
+  gap:clamp(1.2rem,2.6vw,2.5rem);
+  width:100%;
+}
+.card{
+  background:var(--card-bg);
+  border:1px solid rgba(255,0,60,.22);
+  border-radius:var(--radius);
+  padding:clamp(1.6rem,3vw,2.6rem) clamp(1rem,2vw,1.8rem);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:1.1rem;
+  text-decoration:none;
+  color:#fff;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  transition:transform .35s cubic-bezier(.2,.9,.3,1.4),box-shadow .5s,border-color .5s;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(255,0,60,.12);
+  contain:layout paint;
+  transform:translateZ(0);
+}
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;left:-100%;
+  width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,0,60,.18),transparent);
+  transition:left .8s;
+  pointer-events:none;
+}
+.card:hover::before{left:100%;}
+.card::after{
+  content:'';
+  position:absolute;
+  inset:-2px;
+  border-radius:inherit;
+  background:conic-gradient(from var(--angle,0deg),transparent 0deg,rgba(255,0,60,.5) 90deg,transparent 180deg,rgba(255,0,60,.5) 270deg,transparent 360deg);
+  opacity:0;
+  transition:opacity .5s;
+  z-index:-1;
+  animation:rotateBorder 4s linear infinite;
+  pointer-events:none;
+}
+@property --angle{syntax:'<angle>';initial-value:0deg;inherits:false;}
+@keyframes rotateBorder{
+  to{--angle:360deg;}
+}
+.card:hover::after{opacity:1;}
+.card:hover{
+  border-color:var(--neon-red);
+  box-shadow:0 22px 55px rgba(255,0,60,.35),inset 0 0 40px rgba(255,0,60,.15);
+  transform:translateY(-8px);
+}
+.card-header{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1rem;
+  width:100%;
+}
+.card-img,.member-avatar{
+  width:clamp(90px,18vw,140px);
+  height:clamp(90px,18vw,140px);
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid rgba(255,0,60,.5);
+  box-shadow:0 0 22px rgba(255,0,60,.35);
+  transition:transform .5s cubic-bezier(.2,.9,.3,1.4),box-shadow .5s,border-color .5s;
+  background:rgba(255,0,60,.05);
+  animation:avatarPulse 4.5s infinite alternate;
+  will-change:transform;
+}
+@keyframes avatarPulse{
+  0%{box-shadow:0 0 18px rgba(255,0,60,.28);}
+  100%{box-shadow:0 0 40px rgba(255,0,60,.6);}
+}
+.leader-avatar{
+  width:clamp(120px,22vw,180px);
+  height:clamp(120px,22vw,180px);
+  border:4px solid var(--neon-red);
+  box-shadow:0 0 40px rgba(255,0,60,.6);
+}
+.card:hover .card-img,
+.card:hover .member-avatar{
+  transform:scale(1.12) rotate(6deg);
+  border-color:#fff;
+  box-shadow:0 0 50px var(--neon-red);
+}
+.card-info{display:flex;flex-direction:column;gap:.35rem;}
+.card-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1rem,2vw,1.45rem);
+  font-weight:700;
+  letter-spacing:1.5px;
+  transition:text-shadow .3s;
+}
+.card:hover .card-name{
+  text-shadow:0 0 18px var(--neon-red),0 0 35px var(--neon-red);
+}
+.card-role{
+  font-size:clamp(.8rem,1.4vw,1rem);
+  color:var(--neon-red);
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  font-weight:600;
+}
+.card-desc{
+  font-size:clamp(.85rem,1.4vw,1rem);
+  color:var(--text-muted);
+  line-height:1.65;
+  padding:0 .5rem;
+  transition:color .3s;
+}
+.card:hover .card-desc{color:var(--text-light);}
+.badge-container{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:.5rem;
+  margin-top:.6rem;
+}
+.badge{
+  background:rgba(255,0,60,.1);
+  border:1px solid rgba(255,0,60,.4);
+  color:var(--text-light);
+  padding:.35rem .8rem;
+  border-radius:8px;
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(.6rem,1vw,.75rem);
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  transition:transform .4s cubic-bezier(.2,.9,.3,1.4),box-shadow .4s,background .4s;
+}
+.card:hover .badge{
+  border-color:var(--neon-red);
+  background:rgba(255,0,60,.25);
+  color:#fff;
+  box-shadow:0 0 15px rgba(255,0,60,.5);
+  transform:translateY(-3px);
+}
+.leader-card{
+  max-width:900px;
+  width:100%;
+  border-color:rgba(255,0,60,.6);
+  box-shadow:0 0 35px rgba(255,0,60,.3);
+  padding:clamp(2rem,4vw,3.5rem) clamp(1rem,2vw,2rem);
+  animation:leaderGlow 4s infinite alternate;
+}
+@keyframes leaderGlow{
+  0%{box-shadow:0 0 25px rgba(255,0,60,.22);}
+  100%{box-shadow:0 0 70px rgba(255,0,60,.55);}
+}
 
-        .nav-link {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            position: relative;
-            transition: color 0.3s;
-        }
+.reveal{
+  opacity:0;
+  transform:translate3d(0,60px,0) scale(.94);
+  transition:opacity .9s cubic-bezier(.2,.9,.3,1.2),transform .9s cubic-bezier(.2,.9,.3,1.2);
+  will-change:opacity,transform;
+}
+.reveal.visible{
+  opacity:1;
+  transform:translate3d(0,0,0) scale(1);
+}
 
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--neon-red);
-            transition: width 0.3s ease;
-            box-shadow: 0 0 8px var(--neon-red);
-        }
+.telegram-fab{
+  position:fixed;
+  left:clamp(1rem,2.5vw,1.8rem);
+  bottom:calc(clamp(1rem,2.5vw,1.8rem) + env(safe-area-inset-bottom,0px));
+  z-index:150;
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+  padding:.7rem 1.1rem .7rem .7rem;
+  background:linear-gradient(135deg,#0088cc,#00b3ff);
+  border:2px solid rgba(255,255,255,.35);
+  border-radius:50px;
+  color:#fff;
+  font-family:'Orbitron',sans-serif;
+  font-weight:700;
+  font-size:clamp(.75rem,1.4vw,.95rem);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  box-shadow:0 8px 30px rgba(0,136,204,.5),0 0 60px rgba(0,179,255,.35);
+  transition:transform .4s cubic-bezier(.2,.9,.3,1.4),box-shadow .4s,background .4s;
+  animation:fabPulse 3s ease-in-out infinite;
+  will-change:transform;
+}
+@keyframes fabPulse{
+  0%,100%{transform:translateY(0) scale(1);}
+  50%{transform:translateY(-6px) scale(1.03);}
+}
+.telegram-fab::before{
+  content:'';
+  position:absolute;
+  inset:-6px;
+  border-radius:50px;
+  border:2px solid rgba(0,179,255,.6);
+  animation:fabRing 2.4s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes fabRing{
+  0%{transform:scale(.9);opacity:1;}
+  100%{transform:scale(1.25);opacity:0;}
+}
+.telegram-fab::after{
+  content:'Unirse al canal';
+  position:absolute;
+  left:calc(100% + 12px);
+  top:50%;
+  transform:translateY(-50%) translateX(-8px);
+  background:rgba(3,0,0,.95);
+  color:var(--text-light);
+  padding:.5rem .9rem;
+  border-radius:8px;
+  border:1px solid var(--neon-red);
+  font-size:.75rem;
+  letter-spacing:1px;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s,transform .3s;
+  box-shadow:0 0 20px rgba(255,0,60,.4);
+}
+.telegram-fab:hover::after{opacity:1;transform:translateY(-50%) translateX(0);}
+.telegram-fab:hover{
+  transform:translateY(-4px) scale(1.06);
+  box-shadow:0 12px 45px rgba(0,136,204,.7),0 0 90px rgba(0,179,255,.5);
+}
+.telegram-fab:active{transform:translateY(-2px) scale(1.02);}
+.telegram-fab .tg-icon{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  box-shadow:0 0 15px rgba(0,179,255,.7);
+}
+.telegram-fab .tg-icon svg{
+  width:22px;
+  height:22px;
+  fill:#0088cc;
+}
+.telegram-fab .tg-label{
+  display:inline-block;
+  text-shadow:0 0 8px rgba(0,0,0,.4);
+}
+@media (max-width:520px){
+  .telegram-fab{padding:.6rem;border-radius:50%;}
+  .telegram-fab .tg-label{display:none;}
+  .telegram-fab::after{left:auto;right:calc(100% + 12px);}
+}
 
-        .nav-link:hover {
-            color: #ffffff;
-            text-shadow: 0 0 15px var(--neon-red);
-        }
+.ripple{
+  position:fixed;
+  border:2px solid var(--neon-red);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  box-shadow:0 0 20px var(--neon-red);
+  animation:rippleOut .8s ease-out forwards;
+  will-change:transform,opacity;
+  transform:translate(-50%,-50%);
+}
+@keyframes rippleOut{
+  0%{width:0;height:0;opacity:1;}
+  100%{width:320px;height:320px;opacity:0;}
+}
 
-        .nav-link:hover::after {
-            width: 100%;
-        }
+.to-top{
+  position:fixed;
+  bottom:calc(1.5rem + env(safe-area-inset-bottom,0px));
+  right:1.5rem;
+  width:48px;height:48px;
+  border-radius:50%;
+  background:rgba(255,0,60,.15);
+  border:1.5px solid var(--neon-red);
+  color:var(--neon-red);
+  font-size:1.4rem;
+  cursor:pointer;
+  z-index:99;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity .35s,transform .35s,background .3s;
+  pointer-events:none;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.to-top.show{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.to-top:hover{
+  background:var(--neon-red);
+  color:#fff;
+  box-shadow:0 0 25px var(--neon-red);
+}
 
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 6px;
-            cursor: pointer;
-        }
+@media (hover:hover) and (pointer:fine){
+  .card:hover{
+    transform:translateY(-10px) rotateX(2deg) rotateY(-2deg);
+  }
+}
 
-        .hamburger span {
-            width: 30px;
-            height: 3px;
-            background: var(--neon-red);
-            border-radius: 2px;
-            box-shadow: 0 0 5px var(--neon-red);
-        }
+@media (max-width:900px){
+  .nav-links{
+    position:fixed;
+    top:0;right:0;
+    height:100dvh;
+    width:min(78vw,320px);
+    flex-direction:column;
+    background:rgba(3,0,0,.97);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+    padding:6rem 2rem 2rem;
+    gap:1.6rem;
+    border-left:1px solid var(--neon-red);
+    box-shadow:-15px 0 50px rgba(255,0,60,.3);
+    transform:translate3d(100%,0,0);
+    transition:transform .4s cubic-bezier(.2,.9,.3,1.2);
+    z-index:99;
+  }
+  .nav-links.active{transform:translate3d(0,0,0);}
+  .nav-link{
+    font-size:1.1rem;
+    padding:.6rem 0;
+    border-bottom:1px solid rgba(255,0,60,.15);
+  }
+  .hamburger{display:flex;}
+  .to-top{width:42px;height:42px;right:1rem;bottom:calc(5.5rem + env(safe-area-inset-bottom,0px));}
+  .telegram-fab{bottom:calc(1rem + env(safe-area-inset-bottom,0px));}
+}
 
-        .main-content {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 12rem 2rem 5rem 2rem;
-        }
+@media (max-width:480px){
+  .main-content{padding-top:6rem;}
+  .hero-quote{border-left-width:3px;border-right-width:3px;padding:0 .8rem;}
+  .data-grid{gap:1rem;}
+  .card{padding:1.4rem 1rem;}
+  .badge{font-size:.6rem;padding:.3rem .6rem;}
+  .scanlines{display:none;}
+}
 
-        .hero-section {
-            text-align: center;
-            margin-bottom: 6rem;
-            animation: fadeIn 2s ease-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        .hero-logo {
-            width: 280px;
-            height: auto;
-            margin-bottom: 2.5rem;
-            filter: drop-shadow(0 0 30px var(--neon-red));
-            animation: pulseLogo 4s infinite alternate;
-        }
-
-        @keyframes pulseLogo {
-            0% { transform: scale(1); filter: drop-shadow(0 0 20px var(--neon-red)); }
-            100% { transform: scale(1.05); filter: drop-shadow(0 0 45px var(--neon-red)); }
-        }
-
-        .hero-section h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(3rem, 8vw, 7rem);
-            font-weight: 900;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(255, 0, 60, 0.5), 0 0 40px rgba(255, 0, 60, 0.4), 0 0 90px var(--neon-red);
-            margin-bottom: 2rem;
-        }
-
-        .hero-quote {
-            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-            color: var(--text-light);
-            max-width: 900px;
-            margin: 0 auto;
-            line-height: 1.6;
-            font-style: italic;
-            letter-spacing: 1.5px;
-            text-shadow: 0 0 10px rgba(255, 0, 60, 0.4);
-            border-left: 4px solid var(--neon-red);
-            border-right: 4px solid var(--neon-red);
-            padding: 0 2rem;
-        }
-
-        .about-box {
-            background: rgba(15, 0, 5, 0.7);
-            border: 1px solid rgba(255, 0, 60, 0.3);
-            border-radius: 12px;
-            padding: 3rem;
-            max-width: 1000px;
-            width: 100%;
-            margin-bottom: 8rem;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 15px 40px rgba(255, 0, 60, 0.15), inset 0 0 20px rgba(255, 0, 60, 0.05);
-            text-align: center;
-        }
-
-        .about-box h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            color: #fff;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px var(--neon-red);
-        }
-
-        .about-box p {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-        }
-
-        .grid-container {
-            width: 100%;
-            max-width: 1400px;
-            margin-bottom: 7rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            letter-spacing: 5px;
-            margin-bottom: 3.5rem;
-            text-transform: uppercase;
-            text-align: center;
-            color: #ffffff;
-            text-shadow: 0 0 20px var(--neon-red);
-            border-bottom: 2px solid rgba(255, 0, 60, 0.3);
-            padding-bottom: 1rem;
-            width: fit-content;
-        }
-
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-            width: 100%;
-        }
-
-        .card {
-            background: rgba(15, 0, 5, 0.6);
-            border: 1px solid rgba(255, 0, 60, 0.2);
-            border-radius: 16px;
-            padding: 3rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 1.5rem;
-            text-decoration: none;
-            color: #ffffff;
-            backdrop-filter: blur(10px);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.1), transparent);
-            transition: 0.6s;
-        }
-
-        .card:hover::before {
-            left: 100%;
-        }
-
-        .card:hover {
-            border-color: var(--neon-red);
-            box-shadow: 0 20px 50px rgba(255, 0, 60, 0.25), inset 0 0 30px rgba(255, 0, 60, 0.15);
-            transform: translateY(-10px);
-        }
-
-        .card-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-            width: 100%;
-        }
-
-        .card-img, .member-avatar {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid rgba(255, 0, 60, 0.5);
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.3);
-            transition: all 0.5s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--neon-red);
-            background: rgba(255, 0, 60, 0.05);
-            z-index: 2;
-        }
-
-        .leader-avatar {
-            width: 180px;
-            height: 180px;
-            border: 4px solid var(--neon-red);
-            box-shadow: 0 0 30px rgba(255, 0, 60, 0.5);
-        }
-
-        .card:hover .card-img, .card:hover .member-avatar {
-            transform: scale(1.1);
-            border-color: #fff;
-            box-shadow: 0 0 35px var(--neon-red);
-            color: #fff;
-            background: rgba(255, 0, 60, 0.2);
-        }
-
-        .card-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .card-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            transition: color 0.3s;
-        }
-
-        .card:hover .card-name {
-            color: #ffffff;
-            text-shadow: 0 0 15px var(--neon-red);
-        }
-
-        .card-role {
-            font-size: 1.1rem;
-            color: var(--neon-red);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 600;
-        }
-
-        .card-desc {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-            padding: 0 1rem;
-        }
-
-        .badge-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-
-        .badge {
-            background: rgba(255, 0, 60, 0.1);
-            border: 1px solid rgba(255, 0, 60, 0.4);
-            color: var(--text-light);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-        }
-
-        .card:hover .badge {
-            border-color: var(--neon-red);
-            background: rgba(255, 0, 60, 0.2);
-            color: #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
-        }
-
-        .leader-card {
-            max-width: 900px;
-            width: 100%;
-            border-color: rgba(255, 0, 60, 0.6);
-            box-shadow: 0 0 30px rgba(255, 0, 60, 0.2);
-            transform: scale(1.02);
-            padding: 4rem 2rem;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 1024px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                flex-direction: column;
-                background: rgba(3, 0, 0, 0.98);
-                padding: 2rem 0;
-                text-align: center;
-                border-bottom: 1px solid var(--neon-red);
-            }
-            .nav-links.active {
-                display: flex;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .hero-quote {
-                border: none;
-                padding: 0;
-            }
-            .data-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  .scanlines,.telegram-fab{animation:none !important;}
+  #bg-canvas{display:none;}
+}
+</style>
 </head>
 <body>
 
-    <canvas id="bg-canvas"></canvas>
+<div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+<div class="bg-fallback" aria-hidden="true"></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="scanlines" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
 
-    <nav class="top-nav">
-        <a href="/" class="nav-brand">
-            <span class="nav-title">IRON ATLAS NG</span>
-        </a>
-        <div class="hamburger" id="mobile-menu">
-            <span></span>
-            <span></span>
-            <span></span>
+<nav class="top-nav" id="top-nav">
+  <a href="/" class="nav-brand" aria-label="Inicio">
+    <span class="nav-title">IRON ATLAS NG</span>
+  </a>
+  <button class="hamburger" id="mobile-menu" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="nav-links">
+    <a href="/tools/index.html" class="nav-link">Herramientas</a>
+    <a href="/expuestos/expedientes.html" class="nav-link">Expedientes</a>
+    <a href="/canales.html" class="nav-link">Canales</a>
+    <a href="/redes.html" class="nav-link">Redes Sociales</a>
+  </div>
+</nav>
+
+<a href="https://t.me/+ju-GBV9i4QUwZjNh" class="telegram-fab" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" aria-label="Unirse al canal de Telegram">
+  <span class="tg-icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+    </svg>
+  </span>
+  <span class="tg-label">Join Telegram</span>
+</a>
+
+<main class="main-content" id="main-content">
+  <section class="hero-section">
+    <div class="hero-logo-wrap">
+      <img src="/assets/iron.png" alt="IRON ATLAS" class="hero-logo" id="hero-logo" width="280" height="280" decoding="async" fetchpriority="high">
+    </div>
+    <h1 class="hero-title" id="hero-title">Iron Atlas</h1>
+    <p class="hero-quote">"El sistema clasifica, oculta y controla. Nosotros extraemos, exponemos y reescribimos las reglas."</p>
+  </section>
+
+  <div class="about-box reveal">
+    <h3>¿Qué somos?</h3>
+    <p>Somos el eco que rompe el silencio gubernamental, la sombra que digitaliza sus mentiras y las expone al mundo, hackers con una sola causa: desmantelar la corrupción del poder y las fuerzas armadas que la protegen, porque la verdad no pide permiso para ser libre.</p>
+  </div>
+
+  <section class="grid-container">
+    <h2 class="section-title reveal">Aliados</h2>
+    <div class="data-grid">
+      <a href="https://t.me/nullsechackers" class="card reveal" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">
+        <div class="card-header">
+          <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="card-img" alt="Nullsec" loading="lazy" decoding="async" width="140" height="140" fetchpriority="low">
+          <div class="card-info">
+            <span class="card-name">Nullsec Philippines</span>
+            <span class="card-role">Exploits</span>
+          </div>
         </div>
-        <div class="nav-links" id="nav-links">
-            <a href="/tools/index.html" class="nav-link">Herramientas</a>
-            <a href="/expuestos/expedientes.html" class="nav-link">Expedientes</a>
-            <a href="/canales.html" class="nav-link">Canales</a>
-            <a href="/redes.html" class="nav-link">Redes Sociales</a>
+        <p class="card-desc">Filtración de Leaks, DDos y muchas otras más.</p>
+        <div class="badge-container">
+          <span class="badge">DDoS</span>
+          <span class="badge">LEAKERS</span>
         </div>
-    </nav>
-
-    <main class="main-content">
-        <section class="hero-section">
-            <img src="/assets/iron.png" alt="IRON ATLAS" class="hero-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMzAgMjBMMzAgODBMNzAgNTBaIiBmaWxsPSIjZmYwMDNjIi8+PC9zdmc+'">
-            <h1>Iron Atlas</h1>
-
-            <p class="hero-quote">"El sistema clasifica, oculta y controla. Nosotros extraemos, exponemos y reescribimos las reglas."</p>
-        </section>
-
-        <div class="about-box">
-            <h3>¿Qué somos?</h3>
-            <p>Somos el eco que rompe el silencio gubernamental, la sombra que digitaliza sus mentiras y las expone al mundo, hackers con una sola causa: desmantelar la corrupción del poder y las fuerzas armadas que la protegen, porque la verdad no pide permiso para ser libre.</p>
+      </a>
+      <a href="https://hackpurgatory.org/" class="card reveal" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">
+        <div class="card-header">
+          <img src="https://files.catbox.moe/iwurbn.jpg" class="card-img" alt="Hack Purgatory" loading="lazy" decoding="async" width="140" height="140" fetchpriority="low">
+          <div class="card-info">
+            <span class="card-name">𝐇𝐀𝐂𝐊 [𝐏𝐔𝐑𝐆𝐀𝐓𝐎𝐑𝐘]™</span>
+            <span class="card-role">Sindicato</span>
+          </div>
         </div>
+        <p class="card-desc">luchar contra las organizaciones ilegales dentro de ellas que promueven actos ilegales, ventas ilegales, contenido inapropiado, toxicidad y más.</p>
+        <div class="badge-container">
+          <span class="badge">Limpieza</span>
+          <span class="badge">Hacking</span>
+        </div>
+      </a>
+      <a href="https://www.jxll.org/" class="card reveal" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">
+        <div class="card-header">
+          <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="card-img" alt="Team JXLL" loading="lazy" decoding="async" width="140" height="140" fetchpriority="low">
+          <div class="card-info">
+            <span class="card-name">𝐓𝐄𝐀𝐌 𝐉𝐗𝐋𝐋</span>
+            <span class="card-role">Hacking</span>
+          </div>
+        </div>
+        <p class="card-desc">Enfocado en HACKING, Análisis de vulnerabilidadesentre otras más.</p>
+        <div class="badge-container">
+          <span class="badge">seguridad Ofensiva</span>
+          <span class="badge">Red Team</span>
+        </div>
+      </a>
+    </div>
+  </section>
 
-        <section class="grid-container">
-            <h2 class="section-title">Aliados</h2>
-            <div class="data-grid">
-                <a href="https://t.me/nullsechackers" class="card" target="_blank">
-                    <div class="card-header">
-                        <img src="https://i.postimg.cc/mPCTw51J/nullsec.jpg" class="card-img" alt="Nullsec">
-                        <div class="card-info">
-                            <span class="card-name">Nullsec Philippines</span>
-                            <span class="card-role">Exploits</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Filtración de Leaks, DDos y muchas otras más.</p>
-                    <div class="badge-container">
-                        <span class="badge">DDoS</span>
-                        <span class="badge">LEAKERS</span>
-                    </div>
-                </a>
-                <a href="https://hackpurgatory.org/" class="card" target="_blank">
-                    <div class="card-header">
-                        <img src="https://i.postimg.cc/TPK0qPZZ/hackpurgatory.jpg" class="card-img" alt="Hack Purgatory">
-                        <div class="card-info">
-                            <span class="card-name">𝐇𝐀𝐂𝐊 [𝐏𝐔𝐑𝐆𝐀𝐓𝐎𝐑𝐘]™</span>
-                            <span class="card-role">Sindicato</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">luchar contra las organizaciones ilegales dentro de ellas que promueven actos ilegales, ventas ilegales, contenido inapropiado, toxicidad y más.</p>
-                    <div class="badge-container">
-                        <span class="badge">Limpieza</span>
-                        <span class="badge">Hacking</span>
-                    </div>
-                </a>
-                <a href="https://www.jxll.org/" class="card" target="_blank">
-                    <div class="card-header">
-                        <img src="https://i.postimg.cc/3yq9xnnX/teamjxll.jpg" class="card-img" alt="Team JXLL">
-                        <div class="card-info">
-                            <span class="card-name">𝐓𝐄𝐀𝐌 𝐉𝐗𝐋𝐋</span>
-                            <span class="card-role">Hacking</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Enfocado en HACKING, Análisis de vulnerabilidadesentre otras más.</p>
-                    <div class="badge-container">
-                        <span class="badge">seguridad Ofensiva</span>
-                        <span class="badge">Red Team</span>
-                    </div>
-                </a>
-            </div>
-        </section>
+  <section class="grid-container">
+    <h2 class="section-title reveal">Líder</h2>
+    <a href="#" class="card leader-card reveal">
+      <div class="card-header">
+        <img src="https://i.postimg.cc/MGtF0bFV/import.jpg" class="member-avatar leader-avatar" alt="Líder" loading="lazy" decoding="async" width="180" height="180" fetchpriority="low">
+        <div class="card-info">
+          <span class="card-name"> 𝙄𝙈𝙋𝙊𝙍𝙏 𝙍𝙀𝙎𝙌𝙐𝙀𝙎𝙏</span>
+          <span class="card-role">@import_404</span>
+        </div>
+      </div>
+      <p class="card-desc">Enfocado en la búsqueda y explotación de Vulnerabilidades , dessarrollo de apis y automatizaciones.</p>
+      <div class="badge-container">
+        <span class="badge">Programación</span>
+        <span class="badge">Osint</span>
+        <span class="badge">Cybersecurity</span>
+        <span class="badge">vulnerabilidades Web</span>
+      </div>
+    </a>
+  </section>
 
-        <section class="grid-container">
-            <h2 class="section-title">Líder</h2>
-            <a href="#" class="card leader-card">
-                <div class="card-header">
-                    <img src="https://i.postimg.cc/MGtF0bFV/import.jpg" class="member-avatar leader-avatar" alt="Líder">
-                    <div class="card-info">
-                        <span class="card-name"> 𝙄𝙈𝙋𝙊𝙍𝙏 𝙍𝙀𝙎𝙌𝙐𝙀𝙎𝙏</span>
-                        <span class="card-role">@import_404</span>
-                    </div>
-                </div>
-                <p class="card-desc">Enfocado en la búsqueda y explotación de Vulnerabilidades , dessarrollo de apis y automatizaciones.</p>
-                <div class="badge-container">
-                    <span class="badge">Programación</span>
-                    <span class="badge">Osint</span>
-                    <span class="badge">Cybersecurity</span>
-                    <span class="badge">vulnerabilidades Web</span>
-                </div>
-            </a>
-        </section>
+  <section class="grid-container">
+    <h2 class="section-title reveal">Integrantes</h2>
+    <div class="data-grid">
+      <a href="#" class="card reveal">
+        <div class="card-header">
+          <img src="https://i.postimg.cc/MKy9xJ8b/poppe.jpg" class="member-avatar leader-avatar" alt="Poppe" loading="lazy" decoding="async" width="180" height="180" fetchpriority="low">
+          <div class="card-info">
+            <span class="card-name">╰ცզקơקקɛ╮</span>
+            <span class="card-role">@BqPoppe</span>
+          </div>
+        </div>
+        <p class="card-desc">Encargado de la gestión de Billetes G5 con una muy buena calidad.</p>
+        <div class="badge-container">
+          <span class="badge">Banking</span>
+          <span class="badge">Billetes G5</span>
+          <span class="badge">Mercado Negro</span>
+        </div>
+      </a>
+      <a href="#" class="card reveal">
+        <div class="card-header">
+          <img src="https://i.postimg.cc/mD2v12Bd/kabra.png" class="member-avatar leader-avatar" alt="Kabra" loading="lazy" decoding="async" width="180" height="180" fetchpriority="low">
+          <div class="card-info">
+            <span class="card-name">𝐋𝐚 𝐤𝐚𝐛𝐫𝐚⁶⁶⁶</span>
+            <span class="card-role">@la_kabra_666</span>
+          </div>
+        </div>
+        <p class="card-desc">Analista profunda en Redes y situciones Organizacionales .</p>
+        <div class="badge-container">
+          <span class="badge">Administración</span>
+          <span class="badge">sucesor</span>
+        </div>
+      </a>
+      <a href="#" class="card reveal">
+        <div class="card-header">
+          <img src="https://i.postimg.cc/3JnnWCd8/waller.jpg" class="member-avatar leader-avatar" alt="WallerMiner" loading="lazy" decoding="async" width="180" height="180" fetchpriority="low">
+          <div class="card-info">
+            <span class="card-name">𝖂𝖆𝖑𝖑𝖊𝖗𝕸𝖎𝖓𝖊𝖗</span>
+            <span class="card-role">@yjuandkoz00039</span>
+          </div>
+        </div>
+        <p class="card-desc">Reconocimiento de vulnerabilidadesy su explotación</p>
+        <div class="badge-container">
+          <span class="badge">Pentester</span>
+          <span class="badge">hacking</span>
+        </div>
+      </a>
+      <a href="#" class="card reveal">
+        <div class="card-header">
+          <img src="https://i.postimg.cc/Jhcy4KhV/mau.jpg" class="member-avatar leader-avatar" alt="Lupo" loading="lazy" decoding="async" width="180" height="180" fetchpriority="low">
+          <div class="card-info">
+            <span class="card-name">♤ 𝐋𝐮𝐩𝐨𝐨𝟕𝟕𝟕 ♤ ᴹᴬᵁ</span>
+            <span class="card-role">@MAUU_LUPO777</span>
+          </div>
+        </div>
+        <p class="card-desc">Gestión de materiales fisicos y digitales</p>
+        <div class="badge-container">
+          <span class="badge">Reconocimiento</span>
+          <span class="badge">Material Físico</span>
+        </div>
+      </a>
+      <a href="#" class="card reveal">
+        <div class="card-header">
+          <img src="https://i.postimg.cc/1t73fdh0/𝓈𝓁𝒾𝓉𝑒.jpg" class="member-avatar leader-avatar" alt="Slite" loading="lazy" decoding="async" width="180" height="180" fetchpriority="low">
+          <div class="card-info">
+            <span class="card-name">𝓈𝓁𝒾𝓉𝑒 </span>
+            <span class="card-role">@Slite888</span>
+          </div>
+        </div>
+        <p class="card-desc">Encargado de temas Bancarios y criptomonedas</p>
+        <div class="badge-container">
+          <span class="badge">Cripto</span>
+          <span class="badge">Bancking</span>
+        </div>
+      </a>
+      <a href="#" class="card reveal">
+        <div class="card-header">
+          <img src="https://i.postimg.cc/nVsDq4Rb/Babuldino.jpg" class="member-avatar leader-avatar" alt="Balduino" loading="lazy" decoding="async" width="180" height="180" fetchpriority="low">
+          <div class="card-info">
+            <span class="card-name">𝘽𝙖𝙡𝙙𝙪𝙞𝙣𝙤</span>
+            <span class="card-role">@Balduinno</span>
+          </div>
+        </div>
+        <p class="card-desc">Enfocado en hacking, Bancos , entre otras</p>
+        <div class="badge-container">
+          <span class="badge">hacking</span>
+          <span class="badge">Bancking</span>
+        </div>
+      </a>
+    </div>
+  </section>
+</main>
 
-        <section class="grid-container">
-            <h2 class="section-title">Integrantes</h2>
-            <div class="data-grid">
-                <a href="#" class="card">
-                    <div class="card-header">
-                           <img src="https://i.postimg.cc/MKy9xJ8b/poppe.jpg" class="member-avatar leader-avatar" alt="Líder">
-                        <div class="card-info">
-                            <span class="card-name">╰ცզקơקקɛ╮</span>
-                            <span class="card-role">@BqPoppe</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Encargado de la gestión de Billetes G5 con una muy buena calidad.</p>
-                    <div class="badge-container">
-                        <span class="badge">Banking</span>
-                        <span class="badge">Billetes G5</span>
-                        <span class="badge">Mercado Negro</span>
-                    </div>
-                </a>
-                <a href="#" class="card">
-                    <div class="card-header">
-                           <img src="https://i.postimg.cc/mD2v12Bd/kabra.png" class="member-avatar leader-avatar" alt="Líder">
-                        <div class="card-info">
-                            <span class="card-name">𝐋𝐚 𝐤𝐚𝐛𝐫𝐚⁶⁶⁶</span>
-                            <span class="card-role">@la_kabra_666</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Analista profunda en Redes y situciones Organizacionales .</p>
-                    <div class="badge-container">
-                        <span class="badge">Administración</span>
-                        <span class="badge">sucesor</span>
-                    </div>
+<button class="to-top" id="to-top" aria-label="Volver arriba">↑</button>
 
-                          </a>
-                <a href="#" class="card">
-                    <div class="card-header">
-                           <img src="https://i.postimg.cc/3JnnWCd8/waller.jpg" class="member-avatar leader-avatar" alt="Líder">
-                        <div class="card-info">
-                            <span class="card-name">𝖂𝖆𝖑𝖑𝖊𝖗𝕸𝖎𝖓𝖊𝖗</span>
-                            <span class="card-role">@yjuandkoz00039</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Reconocimiento de vulnerabilidadesy su explotación</p>
-                    <div class="badge-container">
-                        <span class="badge">Pentester</span>
-                        <span class="badge">hacking</span>
-                    </div> 
-                  </a>
-                <a href="#" class="card">
-                    <div class="card-header">
-                           <img src="https://i.postimg.cc/Jhcy4KhV/mau.jpg" class="member-avatar leader-avatar" alt="Líder">
-                        <div class="card-info">
-                            <span class="card-name">♤ 𝐋𝐮𝐩𝐨𝐨𝟕𝟕𝟕 ♤ ᴹᴬᵁ</span>
-                            <span class="card-role">@MAUU_LUPO777</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Gestión de materiales fisicos y digitales</p>
-                    <div class="badge-container">
-                        <span class="badge">Reconocimiento</span>
-                        <span class="badge">Material Físico</span>
-                    </div>  
-                 </a>
-                <a href="#" class="card">
-                    <div class="card-header">
-                           <img src="https://i.postimg.cc/1t73fdh0/𝓈𝓁𝒾𝓉𝑒.jpg" class="member-avatar leader-avatar" alt="Líder">
-                        <div class="card-info">
-                            <span class="card-name">𝓈𝓁𝒾𝓉𝑒 </span>
-                            <span class="card-role">@Slite888</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Encargado de temas Bancarios y criptomonedas</p>
-                    <div class="badge-container">
-                        <span class="badge">Cripto</span>
-                        <span class="badge">Bancking</span>
-                    </div>  
-                     </a>
-                <a href="#" class="card">
-                    <div class="card-header">
-                           <img src="https://i.postimg.cc/nVsDq4Rb/Babuldino.jpg" class="member-avatar leader-avatar" alt="Líder">
-                        <div class="card-info">
-                            <span class="card-name">𝘽𝙖𝙡𝙙𝙪𝙞𝙣𝙤</span>
-                            <span class="card-role">@Balduinno</span>
-                        </div>
-                    </div>
-                    <p class="card-desc">Enfocado en hacking, Bancos , entre otras</p>
-                    <div class="badge-container">
-                        <span class="badge">hacking</span>
-                        <span class="badge">Bancking</span>
-                    </div>                  
-                    
-                </a>
-            </div>
-        </section>
-    </main>
+<script>
+(function () {
+  'use strict';
 
-    <script>
-        const mobileMenuBtn = document.getElementById('mobile-menu');
-        const navLinks = document.getElementById('nav-links');
+  try { if (window.top !== window.self) { window.top.location = window.self.location; } } catch (e) { document.documentElement.style.display = 'none'; }
 
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
+  const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMzAgMjBMMzAgODBMNzAgNTBaIiBmaWxsPSIjZmYwMDNjIi8+PC9zdmc+';
+  const heroLogo = document.getElementById('hero-logo');
+  if (heroLogo) heroLogo.addEventListener('error', function () { this.src = FALLBACK_LOGO; }, { once: true });
 
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: null, y: null, radius: 250 };
+  const heroTitle = document.getElementById('hero-title');
+  if (heroTitle) {
+    const text = heroTitle.textContent.trim();
+    heroTitle.textContent = '';
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const span = document.createElement('span');
+      if (ch === ' ') {
+        span.className = 'letter space';
+        span.textContent = '\u00A0';
+      } else {
+        span.className = 'letter';
+        span.textContent = ch;
+      }
+      span.style.animationDelay = (0.05 * i) + 's, ' + (0.25 + 0.05 * i) + 's';
+      frag.appendChild(span);
+    }
+    heroTitle.appendChild(frag);
+  }
 
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
+  const mobileMenuBtn = document.getElementById('mobile-menu');
+  const navLinksEl = document.getElementById('nav-links');
+  if (mobileMenuBtn && navLinksEl) {
+    mobileMenuBtn.addEventListener('click', function () {
+      const open = navLinksEl.classList.toggle('active');
+      mobileMenuBtn.classList.toggle('active', open);
+      mobileMenuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    navLinksEl.addEventListener('click', function (e) {
+      if (e.target.classList.contains('nav-link')) {
+        navLinksEl.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
 
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
+  const topNav = document.getElementById('top-nav');
+  const toTop = document.getElementById('to-top');
+  const scrollProgress = document.getElementById('scroll-progress');
+  let ticking = false;
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(function () {
+        const y = window.scrollY;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = max > 0 ? (y / max) * 100 : 0;
+        if (scrollProgress) scrollProgress.style.width = pct + '%';
+        if (topNav) topNav.classList.toggle('scrolled', y > 40);
+        if (toTop) toTop.classList.toggle('show', y > 600);
+        ticking = false;
+      });
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (toTop) toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
         }
-        window.addEventListener('resize', resize);
-        resize();
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    revealEls.forEach(function (el) { obs.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('visible'); });
+  }
 
-        class Node {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 1.8;
-                this.vy = (Math.random() - 0.5) * 1.8;
-                this.radius = Math.random() * 2 + 1.5;
-                this.baseX = this.x;
-                this.baseY = this.y;
-            }
-
-            update() {
-                if (mouse.x !== null) {
-                    let dx = this.x - mouse.x;
-                    let dy = this.y - mouse.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < mouse.radius) {
-                        let force = (mouse.radius - distance) / mouse.radius;
-                        this.x += (dx / distance) * force * 4;
-                        this.y += (dy / distance) * force * 4;
-                    }
-                }
-
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = '#ff003c';
-                ctx.fill();
-            }
-        }
-
-        function initNodes() {
-            particles = [];
-            let count = Math.floor((canvas.width * canvas.height) / 9000);
-            for (let i = 0; i < count; i++) {
-                particles.push(new Node());
-            }
-        }
-
-        function animateNodes() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-                
-                if (mouse.x !== null) {
-                    let dxMouse = particles[i].x - mouse.x;
-                    let dyMouse = particles[i].y - mouse.y;
-                    let distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-                    if (distMouse < mouse.radius) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 0, 60, ${1 - distMouse / mouse.radius})`;
-                        ctx.lineWidth = 1.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(mouse.x, mouse.y);
-                        ctx.stroke();
-                    }
-                }
-
-                for (let j = i; j < particles.length; j++) {
-                    let dx = particles[i].x - particles[j].x;
-                    let dy = particles[i].y - particles[j].y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 130) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 0, 60, ${0.9 - distance/130})`;
-                        ctx.lineWidth = 0.6;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animateNodes);
-        }
-
-        initNodes();
-        animateNodes();
-
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', e => {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-            }
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (supportsHover && !prefersReduced) {
+    document.querySelectorAll('.card').forEach(function (card) {
+      let raf = 0;
+      card.addEventListener('mousemove', function (e) {
+        if (raf) return;
+        raf = requestAnimationFrame(function () {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const cx = rect.width / 2;
+          const cy = rect.height / 2;
+          const rx = ((y - cy) / cy) * -6;
+          const ry = ((x - cx) / cx) * 6;
+          card.style.transform = 'translateY(-10px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+          raf = 0;
         });
-        setInterval(() => {
-            (function() { return false; }['constructor']('debugger')());
-        }, 50);
-    </script>
+      });
+      card.addEventListener('mouseleave', function () {
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
+        card.style.transform = '';
+      });
+    });
+  }
+
+  if (!prefersReduced) {
+    document.addEventListener('click', function (e) {
+      const t = e.target;
+      if (t.closest('a, button, .telegram-fab')) return;
+      const ripple = document.createElement('div');
+      ripple.className = 'ripple';
+      ripple.style.left = e.clientX + 'px';
+      ripple.style.top = e.clientY + 'px';
+      document.body.appendChild(ripple);
+      setTimeout(function () { ripple.remove(); }, 800);
+    });
+  }
+
+  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  document.addEventListener('keydown', function (e) {
+    const k = e.key;
+    if (k === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (k === 'I' || k === 'J' || k === 'C')) ||
+        (e.ctrlKey && k === 'U')) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  });
+
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas || prefersReduced) return;
+  const ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) return;
+
+  const cores = navigator.hardwareConcurrency || 2;
+  const mem = navigator.deviceMemory || 4;
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+  const lowEnd = cores <= 4 || mem <= 3 || isMobile;
+
+  let W = 0, H = 0;
+  let particles = [];
+  let running = true;
+  let lastTime = performance.now();
+  let mouse = { x: -9999, y: -9999, active: false };
+
+  const CONFIG = lowEnd
+    ? { count: 18, maxDist: 100, speed: 0.32, linkWidth: 0.5, dotMin: 0.8, dotMax: 1.6, radius: 130 }
+    : { count: 60, maxDist: 145, speed: 0.48, linkWidth: 0.8, dotMin: 1, dotMax: 2.4, radius: 190 };
+
+  function resize() {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, lowEnd ? 1 : 1.75);
+    canvas.width = Math.floor(W * dpr);
+    canvas.height = Math.floor(H * dpr);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    initParticles();
+  }
+
+  function initParticles() {
+    const target = lowEnd ? CONFIG.count : Math.min(CONFIG.count, Math.floor((W * H) / 24000));
+    particles = [];
+    for (let i = 0; i < target; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * CONFIG.speed,
+        vy: (Math.random() - 0.5) * CONFIG.speed,
+        r: CONFIG.dotMin + Math.random() * (CONFIG.dotMax - CONFIG.dotMin)
+      });
+    }
+  }
+
+  function step(now) {
+    if (!running) return;
+    const dt = Math.min((now - lastTime) / 16.667, 2.5);
+    lastTime = now;
+
+    ctx.clearRect(0, 0, W, H);
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+
+      if (mouse.active) {
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const d2 = dx * dx + dy * dy;
+        const r2 = CONFIG.radius * CONFIG.radius;
+        if (d2 < r2 && d2 > 0.0001) {
+          const d = Math.sqrt(d2);
+          const f = (CONFIG.radius - d) / CONFIG.radius;
+          p.x += (dx / d) * f * 1.2 * dt;
+          p.y += (dy / d) * f * 1.2 * dt;
+        }
+      }
+
+      if (p.x < -20) p.x = W + 20;
+      else if (p.x > W + 20) p.x = -20;
+      if (p.y < -20) p.y = H + 20;
+      else if (p.y > H + 20) p.y = -20;
+    }
+
+    ctx.lineWidth = CONFIG.linkWidth;
+    for (let i = 0; i < particles.length; i++) {
+      const a = particles[i];
+      for (let j = i + 1; j < particles.length; j++) {
+        const b = particles[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < CONFIG.maxDist * CONFIG.maxDist) {
+          const d = Math.sqrt(d2);
+          const alpha = (1 - d / CONFIG.maxDist) * 0.5;
+          ctx.strokeStyle = 'rgba(255,0,60,' + alpha.toFixed(3) + ')';
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    ctx.fillStyle = 'rgba(255,0,60,0.85)';
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, 6.28318);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  let resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 200);
+  }, { passive: true });
+
+  window.addEventListener('mousemove', function (e) {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.active = true;
+  }, { passive: true });
+  window.addEventListener('mouseleave', function () {
+    mouse.active = false;
+    mouse.x = -9999;
+    mouse.y = -9999;
+  });
+  window.addEventListener('touchmove', function (e) {
+    if (e.touches.length) {
+      mouse.x = e.touches[0].clientX;
+      mouse.y = e.touches[0].clientY;
+      mouse.active = true;
+    }
+  }, { passive: true });
+  window.addEventListener('touchend', function () {
+    mouse.active = false;
+  }, { passive: true });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      running = false;
+    } else {
+      running = true;
+      lastTime = performance.now();
+      requestAnimationFrame(step);
+    }
+  });
+
+  if ('getBattery' in navigator) {
+    navigator.getBattery().then(function (b) {
+      function update() {
+        if (b.level < 0.15 && !b.charging) {
+          running = false;
+        } else if (!document.hidden) {
+          running = true;
+          lastTime = performance.now();
+          requestAnimationFrame(step);
+        }
+      }
+      b.addEventListener('levelchange', update);
+      b.addEventListener('chargingchange', update);
+    }).catch(function () {});
+  }
+
+  resize();
+  requestAnimationFrame(step);
+
+  const observer = new MutationObserver(function (mutations) {
+    for (let i = 0; i < mutations.length; i++) {
+      const m = mutations[i];
+      if (m.type === 'childList') {
+        for (let j = 0; j < m.addedNodes.length; j++) {
+          const node = m.addedNodes[j];
+          if (node.nodeType === 1 && node.tagName === 'SCRIPT' && !node.hasAttribute('data-allowed')) {
+            node.remove();
+          }
+        }
+      }
+    }
+  });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
 </body>
 </html>
